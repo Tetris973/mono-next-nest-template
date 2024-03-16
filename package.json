@@ -1,0 +1,19 @@
+{
+  "name": "mono-react-nest-template",
+  "version": "1.0.0",
+  "description": "A template for a monorepo with a React frontend and a NestJS backend",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm run --parallel dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Cedric OLENDER",
+  "license": "MIT",
+  "json-comments": {
+    "tips": "Please install the JsonComments plugin to enable commenting functionality for JSON files, see: https://github.com/zhangfisher/json_comments_extension",
+    "package.json": {
+      "scripts.dev": "Runs dev from server and web in parallel"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+# This pnpm-workspace.yaml file configures our pnpm workspace to manage multiple packages.
+# It allows for shared dependency management.
+
+packages:
+# Each subdirectory inside 'apps' is treated as a
+# separate package, each with its own dependencies and scripts.
+  - 'apps/*'  
