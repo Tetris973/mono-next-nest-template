@@ -14,6 +14,9 @@
     "tips": "Please install the JsonComments plugin to enable commenting functionality for JSON files, see: https://github.com/zhangfisher/json_comments_extension",
     "package.json": {
       "scripts.dev": "Runs dev from server and web in parallel"
+    },
+    "apps/backend/package.json": {
+      "scripts.start:dev": "cross-env is used for setting NODE_ENV without bugs on multiple platforms (Windows, linux, MacOs)"
     }
   }
 }
