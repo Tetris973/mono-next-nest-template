@@ -4,4 +4,5 @@
 export default () => ({
   // Use port 4000 for development as frontend uses 3000
   port: parseInt(process.env.PORT || '4000', 10),
+  jwtSecret: process.env.JWT_SECRET,
 });

@@ -6,6 +6,7 @@ import {
   Min,
   Max,
   IsOptional,
+  Length,
 } from 'class-validator';
 
 enum Environment {
@@ -26,6 +27,9 @@ class EnvironmentVariables {
   @Min(0)
   @Max(65535)
   PORT: number;
+
+  @Length(32)
+  JWT_SECRET: string;
 }
 
 /**
