@@ -4,6 +4,7 @@
   "description": "A template for a monorepo with a React frontend and a NestJS backend",
   "main": "index.js",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "pnpm run --parallel dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,10 +14,17 @@
   "json-comments": {
     "tips": "Please install the JsonComments plugin to enable commenting functionality for JSON files, see: https://github.com/zhangfisher/json_comments_extension",
     "package.json": {
-      "scripts.dev": "Runs dev from server and web in parallel"
+      "scripts.dev": "Runs dev from server and web in parallel",
+      "scripts.preinstall": "to prevent from installing packages without pnpm"
     },
     "apps/backend/package.json": {
       "scripts.start:dev": "cross-env is used for setting NODE_ENV without bugs on multiple platforms (Windows, linux, MacOs)"
+    },
+    "apps/server/package.json": {
+      "scripts.preinstall": "to prevent from installing packages without pnpm"
+    },
+    "apps/web/package.json": {
+      "scripts.preinstall": "to prevent from installing packages without pnpm"
     }
   }
 }
