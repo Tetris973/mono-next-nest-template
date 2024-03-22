@@ -9,13 +9,13 @@ export class UsersService {
   private readonly users = [
     {
       userId: 1,
-      username: 'john',
-      password: '$2b$10$B/4yfVILWji1BYE3nH.XQudsJtZY5CWN185QMcfuzhPlSNcftdleC',
+      username: 'tetris973',
+      password: '$2b$10$KQklnlzZ/dLdNW5/I5INjODDWVUQeDRSRKmKUJVU/iOpSVfG2ZVuG',
     },
     {
       userId: 2,
-      username: 'maria',
-      password: '$2b$10$OsvQBaOwam2CWPtee/KfoevNi8rxJbWwCDNjzPnwM2GWkHFmqvzwa',
+      username: 'default-user',
+      password: '$2b$10$KQklnlzZ/dLdNW5/I5INjODDWVUQeDRSRKmKUJVU/iOpSVfG2ZVuG',
     },
   ];
 

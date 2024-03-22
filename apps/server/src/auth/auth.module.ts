@@ -4,8 +4,10 @@ import { AuthController } from './auth.controller';
 import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { LocalStrategy } from './passport/local.strategy';
+import { JwtStrategy } from './passport/jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './auth.guard';
+import { JwtAuthGuard } from './passport/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -23,8 +25,10 @@ import { AuthGuard } from './auth.guard';
     AuthService,
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
-    } /* Bind the Auth Guard globaly so all endpoint use it by default */,
+      useClass: JwtAuthGuard,
+    } /* Bind the JwtAuth Guard globaly so all endpoint use it by default */,
+    LocalStrategy,
+    JwtStrategy,
   ],
   controllers: [AuthController],
 })
