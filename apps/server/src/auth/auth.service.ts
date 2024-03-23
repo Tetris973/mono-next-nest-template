@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private userService: UserService,
     private jwtService: JwtService,
   ) {}
 
@@ -17,7 +17,7 @@ export class AuthService {
   // TODO: update the return type
   async validateCredentials(username: string, pass: string): Promise<any> {
     // TODO: exclude passwd from the query or strip it from the result
-    const user = await this.usersService.findOne(username);
+    const user = await this.userService.findOne(username);
     if (!user) {
       return null;
     }

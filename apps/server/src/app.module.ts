@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import config from './config/configuration';
 import { validate } from './config/env.validation';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { UsersModule } from './users/users.module';
       isGlobal: true, // Enable use module globally without import in each module
     }),
     AuthModule,
-    UsersModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
