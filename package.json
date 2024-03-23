@@ -21,7 +21,8 @@
       "scripts.start:dev": "cross-env is used for setting NODE_ENV without bugs on multiple platforms (Windows, linux, MacOs)"
     },
     "apps/server/package.json": {
-      "scripts.preinstall": "to prevent from installing packages without pnpm"
+      "scripts.preinstall": "to prevent from installing packages without pnpm",
+      "dependencies.@nestjs/mapped-types": "TODO: replace this dependcy by swagger when it will be used, as it can cause problems"
     },
     "apps/web/package.json": {
       "scripts.preinstall": "to prevent from installing packages without pnpm"

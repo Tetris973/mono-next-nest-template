@@ -24,6 +24,7 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Get('profile')
   // TODO: Replace 'any' with the actual request type that conatins a user property
   getProfile(@Request() req: any) {
