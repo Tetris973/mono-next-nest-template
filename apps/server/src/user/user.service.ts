@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Role } from '@server/auth/role.enum';
 
 // This should be a real class/interface representing a user entity
 // TODO: replace this with a real entity class from Prisma
@@ -13,16 +14,23 @@ export class UserService {
       userId: 1,
       username: 'tetris973',
       password: '$2b$10$KQklnlzZ/dLdNW5/I5INjODDWVUQeDRSRKmKUJVU/iOpSVfG2ZVuG',
+      roles: [Role.Admin],
     },
     {
       userId: 2,
       username: 'default-user',
       password: '$2b$10$KQklnlzZ/dLdNW5/I5INjODDWVUQeDRSRKmKUJVU/iOpSVfG2ZVuG',
+      roles: [Role.User],
     },
   ];
 
   create(createUserDto: CreateUserDto) {
-    this.users.push({ ...createUserDto, userId: this.users.length + 1 });
+    const { confirmPassword, ...userData } = createUserDto;
+    this.users.push({
+      ...userData,
+      userId: this.users.length + 1,
+      roles: [Role.User],
+    });
     const createdUser = this.users[this.users.length - 1];
     if (createdUser.password) {
       const { password, ...result } = createdUser;
