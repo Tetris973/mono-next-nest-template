@@ -2,10 +2,14 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { UserService } from '../../user/user.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private userService: UserService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -25,7 +29,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * The model we've implemented here in our sample code is a fast, "stateless JWT" model, where each API call is immediately authorized based on the presence of a valid JWT, and a small bit of information about the requester (its userId and username) is available in our Request pipeline.
    */
   async validate(payload: any) {
-    // For example, we could do a database lookup in our validate() method to extract more information about the user
-    return { userId: payload.sub, username: payload.username };
+    const userInfo = this.userService.findOne(payload.sub);
+    return {
+      userId: payload.sub,
+      username: payload.username,
+      roles: userInfo.roles,
+    };
   }
 }

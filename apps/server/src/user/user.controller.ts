@@ -13,11 +13,14 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Role } from '@server/auth/role.enum';
+import { Roles } from '@server/auth/roles.decorator';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Roles(Role.Admin)
   @HttpCode(HttpStatus.CREATED)
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -27,18 +30,21 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Get()
   findAll() {
-    return this.userService.findAll();
+    const users = this.userService.findAll();
+    const result = users.map(({ roles, ...rest }) => rest);
+    return result;
   }
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
   findOne(@Param('id') id: string) {
     const user = this.userService.findOne(+id);
-    console.log('get user by id', user);
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    return user;
+    const { roles, ...rest } = user;
+    return rest;
   }
 
+  @Roles(Role.Admin)
   @HttpCode(HttpStatus.OK)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
@@ -48,6 +54,7 @@ export class UserController {
     return updatedData;
   }
 
+  @Roles(Role.Admin)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   remove(@Param('id') id: string) {
