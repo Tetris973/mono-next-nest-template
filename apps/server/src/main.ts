@@ -1,7 +1,7 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +12,14 @@ async function bootstrap() {
       whitelist: true,
       // Transform the request body to the DTO instance
       transform: true,
+    }),
+  );
+  app.useGlobalInterceptors(
+    // Set serialization for all outgoing response DTO
+    // Returned object from controller that is not transformed to DTO will be transformer to {}
+    new ClassSerializerInterceptor(app.get(Reflector), {
+      strategy: 'excludeAll', // All DTO properties must be explicitly included otherwise it will be excluded
+      excludeExtraneousValues: true, // Remove properties that are not in the DTO
     }),
   );
   const config = app.get(ConfigService);

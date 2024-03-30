@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../../user/user.service';
+import { IJwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -28,12 +29,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * This is also the place we may decide to do further token validation, such as looking up the userId in a list of revoked tokens, enabling us to perform token revocation.
    * The model we've implemented here in our sample code is a fast, "stateless JWT" model, where each API call is immediately authorized based on the presence of a valid JWT, and a small bit of information about the requester (its userId and username) is available in our Request pipeline.
    */
-  async validate(payload: any) {
-    const userInfo = this.userService.findOne(payload.sub);
-    return {
-      userId: payload.sub,
-      username: payload.username,
-      roles: userInfo.roles,
-    };
+  async validate(payload: IJwtPayload) {
+    const user = await this.userService.findOne({ id: payload.sub });
+    if (!user)
+      throw new Error('Unexpected error, user not found during JWT validation');
+    return user;
   }
 }

@@ -1,0 +1,39 @@
+# Defines the different containers that will run.
+services:
+  # Define a service named postgres that will run the container image.
+  postgres:
+    # The image used to create the container.
+    # Use the official postgres image.
+    image: postgres
+    # Set a name for the database container instead of default generated name.
+    container_name: local_pgdb
+    # The container will always restart if it stops. Useful for realiability of database services.
+    restart: always
+    env_file:
+      # Loads the environment variables for inside the container from the specified file.
+      - .env.production.local
+      - .env.development.local # Latest file will override the previous one.
+    volumes:
+      # Mounts a volume named postgres (define below) at /var/lib/postgresql/data inside the container.
+      # This is done so that the data persists even if the container is stopped or removed.
+      - postgres:/var/lib/postgresql/data
+    ports:
+      # Maps the host port (left) to the container port (right) 5432 is default port for postgres.
+      - '5432:5432'
+
+  # web-based PostgreSQL management tool.
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: local_pgadmin4
+    restart: always
+    ports:
+      - '5050:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+volumes:
+  # Defines a volume named postgres, used in the postgres service.
+  postgres: # The volume can be configured or used by many services.
+  pgadmin-data:
