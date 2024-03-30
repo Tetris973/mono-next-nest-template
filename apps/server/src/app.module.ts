@@ -6,6 +6,7 @@ import config from './config/configuration';
 import { validate } from './config/env.validation';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserModule } from './user/user.module';
       load: [config], // Loaded env variable after parse
       isGlobal: true, // Enable use module globally without import in each module
     }),
+    PrismaModule,
     AuthModule,
     UserModule,
   ],

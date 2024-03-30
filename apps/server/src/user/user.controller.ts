@@ -13,51 +13,61 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Role } from '@server/auth/role.enum';
+import { Role } from '@prisma/client';
 import { Roles } from '@server/auth/roles.decorator';
+import { UserDto } from './dto/user.dto';
+import { plainToClass } from 'class-transformer';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Roles(Role.Admin)
+  @Roles(Role.ADMIN)
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
+    const { confirmPassword, ...userData } = createUserDto;
+    const user = await this.userService.create(userData);
+    return plainToClass(UserDto, user);
   }
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  findAll() {
-    const users = this.userService.findAll();
-    const result = users.map(({ roles, ...rest }) => rest);
-    return result;
+  async findAll(): Promise<UserDto[]> {
+    const users = await this.userService.findMany({
+      orderBy: {
+        id: 'asc',
+      },
+    });
+    return users.map((user) => plainToClass(UserDto, user));
   }
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    const user = this.userService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<UserDto> {
+    const user = await this.userService.findOne({ id: Number(id) });
     if (!user) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    const { roles, ...rest } = user;
-    return rest;
+    return plainToClass(UserDto, user);
   }
 
-  @Roles(Role.Admin)
+  @Roles(Role.ADMIN)
   @HttpCode(HttpStatus.OK)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    const updatedData = this.userService.update(+id, updateUserDto);
-    if (!updatedData)
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    return updatedData;
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<UserDto> {
+    const user = await this.userService.update({
+      where: { id: Number(id) },
+      data: updateUserDto,
+    });
+    return plainToClass(UserDto, user);
   }
 
-  @Roles(Role.Admin)
+  @Roles(Role.ADMIN)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  remove(@Param('id') id: string): void {
+    this.userService.delete({ id: Number(id) });
   }
 }

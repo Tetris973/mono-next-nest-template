@@ -4,12 +4,16 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Request,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './passport/local-auth.guard';
 import { Public } from './public.decorator';
+import { CurrentUser } from './user.decorator';
+import { User } from '@prisma/client';
+import { UserDto } from '@server/user/dto/user.dto';
+import { plainToClass } from 'class-transformer';
+import { JwtDto } from './dto/jwt.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -18,16 +22,15 @@ export class AuthController {
   @Public() // skip the JWT auth but not the local auth
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
-  @Post('login') // TODO: Use a DTO with class-validator rules instead of a Record<string, any>
-  async login(@Request() req: any) {
-    console.log('AUTH CONTROLLER: REQ.SAFE_USER ', req.user);
-    return this.authService.login(req.user);
+  @Post('login')
+  async login(@CurrentUser() user: User): Promise<JwtDto> {
+    const res = await this.authService.login(user);
+    return plainToClass(JwtDto, res);
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('profile')
-  // TODO: Replace 'any' with the actual request type that conatins a user property
-  getProfile(@Request() req: any) {
-    return req.user;
+  getProfile(@CurrentUser() user: User) {
+    return plainToClass(UserDto, user);
   }
 }
