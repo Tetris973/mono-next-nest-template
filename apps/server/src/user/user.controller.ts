@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
@@ -11,7 +10,6 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from '@prisma/client';
 import { Roles } from '@server/auth/roles.decorator';
@@ -21,15 +19,6 @@ import { plainToClass } from 'class-transformer';
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Roles(Role.ADMIN)
-  @HttpCode(HttpStatus.CREATED)
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
-    const { confirmPassword, ...userData } = createUserDto;
-    const user = await this.userService.create(userData);
-    return plainToClass(UserDto, user);
-  }
 
   @HttpCode(HttpStatus.OK)
   @Get()

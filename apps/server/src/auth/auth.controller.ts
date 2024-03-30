@@ -1,5 +1,6 @@
 import {
   Controller,
+  Body,
   Post,
   Get,
   HttpCode,
@@ -14,10 +15,19 @@ import { User } from '@prisma/client';
 import { UserDto } from '@server/user/dto/user.dto';
 import { plainToClass } from 'class-transformer';
 import { JwtDto } from './dto/jwt.dto';
+import { CreateUserDto } from '@server/user/dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+
+  @Public()
+  @HttpCode(HttpStatus.CREATED)
+  @Post('signup')
+  async signup(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
+    const newUser = await this.authService.signup(createUserDto);
+    return plainToClass(UserDto, newUser);
+  }
 
   @Public() // skip the JWT auth but not the local auth
   @HttpCode(HttpStatus.OK)
