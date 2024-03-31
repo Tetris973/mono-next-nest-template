@@ -15,7 +15,9 @@ import { User } from '@prisma/client';
 import { UserDto } from '@server/user/dto/user.dto';
 import { plainToClass } from 'class-transformer';
 import { JwtDto } from './dto/jwt.dto';
+import { ApiBody } from '@nestjs/swagger';
 import { CreateUserDto } from '@server/user/dto/create-user.dto';
+import { LogInUserDto } from '@server/user/dto/log-in-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -29,6 +31,7 @@ export class AuthController {
     return plainToClass(UserDto, newUser);
   }
 
+  @ApiBody({ type: LogInUserDto })
   @Public() // skip the JWT auth but not the local auth
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
