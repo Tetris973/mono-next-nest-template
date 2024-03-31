@@ -33,6 +33,11 @@
     },
     "apps/web/package.json": {
       "scripts.preinstall": "to prevent from installing packages without pnpm"
+    },
+    "apps/server/nest-cli.json": {
+      "compilerOptions.plugins[0].name": "Swagger plugin to automatically infer ApiProperty from DTO, class-validator, comments over properties and endpoints",
+      "compilerOptions.plugins[0].options.classValidatorShim": "Use class-validator validation decorator to document swagger API",
+      "compilerOptions.plugins[0].options.introspectComments": "Generate API description and example from js comments"
     }
   }
 }

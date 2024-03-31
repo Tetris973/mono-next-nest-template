@@ -4,8 +4,8 @@ import {
   MaxLength,
   MinLength,
   IsStrongPassword,
-  IsIn,
   ValidateIf,
+  IsEmpty,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -24,12 +24,13 @@ export class CreateUserDto {
   })
   readonly password: string;
 
-  // This is a custom validation rule that checks if the confirmPassword field is equal to the password field
-  // The IsIn decorator with empty array is used to always fail the validation, because the confirmPassword value is never IN the empty array
-  // The ValidateIf decorator is used to only run IsIn validation if the password field is not equal to the confirmPassword field
-  @IsIn([], {
-    message: 'Password do not match',
-  })
+  // This is a custom validation rule that checks if the confirmPassword field is equal to the password field.
+  // The IsEmpty & IsNotEMpty decorators are used to always fail the validation.
+  // The ValidateIf decorator is used to only run the other validations if the password field is not equal to the confirmPassword field
+  // Change history:
+  // - The IsIn decorator was replaced with IsEmpty & IsNotmepty decorators because it wasn't showing correct type in swagger
+  @IsEmpty({ message: 'password do not match' }) // IsEmpty & IsNotEMpty are required! do not remove
+  @IsNotEmpty({ message: 'password do not match' })
   @ValidateIf((o) => o.password !== o.confirmPassword)
   readonly confirmPassword: string;
 }
