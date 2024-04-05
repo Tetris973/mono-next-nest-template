@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { Prisma, Role } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { UserRepository } from './user.repository';
+import { RoleService } from '@server/role/role.service';
+import { BaseRoles } from '@server/authz/baseRoles.enum';
 
 @Injectable()
 export class UserService {
   constructor(
-    private prisma: PrismaService,
     private repository: UserRepository,
+    private roleService: RoleService,
   ) {}
 
   async findOne(userWhereUniqueInput: Prisma.UserWhereUniqueInput) {
@@ -29,7 +30,13 @@ export class UserService {
   }
 
   async create(data: Prisma.UserCreateInput) {
-    return this.repository.create({ ...data, roles: { set: [Role.USER] } });
+    const role = await this.roleService.findOne({
+      name: BaseRoles[BaseRoles.USER],
+    });
+    if (!role) {
+      throw new Error('Unexpected Error: Basic Role USER not found');
+    }
+    return this.repository.createWithRole(data, role.id);
   }
 
   async update(params: {
