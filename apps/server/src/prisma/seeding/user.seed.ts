@@ -1,53 +1,52 @@
 import { PrismaService } from '../prisma.service';
-import { Role } from '@prisma/client';
 
-// array of username, to have the id number
-const USERNAMES = {
-  tetris: { id: 1, name: 'tetris' },
-  adrien: { id: 2, name: 'adrien' },
-  simon: { id: 3, name: 'simon34' },
-  victor: { id: 4, name: 'victor' },
-  testUser: { id: 5, name: 'testUser' },
-};
+enum Users {
+  tetris = 1,
+  adrien,
+  simon34,
+  victor,
+  testUser,
+}
 
 async function seedUsers(prisma: PrismaService) {
   const users = [
     {
-      username: USERNAMES.tetris.name,
+      id: Users.tetris,
+      username: Users[Users.tetris],
       password: '$2b$10$KQklnlzZ/dLdNW5/I5INjODDWVUQeDRSRKmKUJVU/iOpSVfG2ZVuG',
-      roles: [Role.ADMIN],
     },
     {
-      username: USERNAMES.adrien.name,
+      id: Users.adrien,
+      username: Users[Users.adrien],
       password: '$2b$10$KQklnlzZ/dLdNW5/I5INjODDWVUQeDRSRKmKUJVU/iOpSVfG2ZVuG',
-      roles: [Role.USER],
     },
     {
-      username: USERNAMES.simon.name,
+      id: Users.simon34,
+      username: Users[Users.simon34],
       password: '$2b$10$KQklnlzZ/dLdNW5/I5INjODDWVUQeDRSRKmKUJVU/iOpSVfG2ZVuG',
-      roles: [Role.USER],
     },
     {
-      username: USERNAMES.victor.name,
+      id: Users.victor,
+      username: Users[Users.victor],
       password: '$2b$10$KQklnlzZ/dLdNW5/I5INjODDWVUQeDRSRKmKUJVU/iOpSVfG2ZVuG',
-      roles: [Role.USER],
     },
     {
-      username: USERNAMES.testUser.name,
+      id: Users.testUser,
+      username: Users[Users.testUser],
       password: '$2b$10$KQklnlzZ/dLdNW5/I5INjODDWVUQeDRSRKmKUJVU/iOpSVfG2ZVuG',
-      roles: [Role.USER],
     },
   ];
 
   for (const user of users) {
+    const { id, ...userData } = user;
     await prisma.user.upsert({
       where: { username: user.username },
       update: {},
-      create: user,
+      create: userData,
     });
+    console.log(`User '${user.username}'`);
   }
-
-  console.log(`${users.length} users created.`);
+  console.log('/// Users seeded. ///');
 }
 
-export { seedUsers, USERNAMES };
+export { seedUsers, Users };

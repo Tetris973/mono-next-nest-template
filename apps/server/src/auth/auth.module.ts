@@ -8,7 +8,6 @@ import { LocalStrategy } from './passport/local.strategy';
 import { JwtStrategy } from './passport/jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './passport/jwt-auth.guard';
-import { RolesGuard } from './roles.guard';
 
 @Module({
   imports: [
@@ -28,10 +27,6 @@ import { RolesGuard } from './roles.guard';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     } /* Bind the JwtAuth Guard globaly so all endpoint are protected by default */,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    } /* Bind the Role Guard globaly so all endpoint use it by default */,
     LocalStrategy,
     JwtStrategy,
   ],

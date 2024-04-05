@@ -1,6 +1,6 @@
-import { Role, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { Expose } from 'class-transformer';
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty } from '@nestjs/swagger';
 
 export class UserDto implements User {
   @Expose()
@@ -14,10 +14,6 @@ export class UserDto implements User {
 
   @Expose()
   updatedAt: Date;
-
-  @ApiProperty({ enum: Role, isArray: true })
-  @Expose()
-  roles: Role[];
 
   @ApiHideProperty()
   password: string;

@@ -46,6 +46,26 @@ export class UserRepository {
     return this.prisma.user.create({ data });
   }
 
+  async createWithRole(
+    data: Prisma.UserCreateInput,
+    roleId: Prisma.RoleWhereUniqueInput['id'],
+  ): Promise<User> {
+    return this.prisma.user.create({
+      data: {
+        ...data,
+        userRoles: {
+          create: {
+            role: {
+              connect: {
+                id: roleId,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   async update(params: {
     where: Prisma.UserWhereUniqueInput;
     data: Prisma.UserUpdateInput;
@@ -58,5 +78,40 @@ export class UserRepository {
     return this.prisma.user.delete({
       where,
     });
+  }
+
+  async findAllPermissions(userId: number) {
+    const perimissions = await this.prisma.$kysely
+      .selectFrom(['Permission as p'])
+      .innerJoin('RolePermission as rp', 'rp.permissionId', 'p.id')
+      .innerJoin('Role as r', 'rp.roleId', 'r.id')
+      .innerJoin('UserRole as ur', 'r.id', 'ur.roleId')
+      .innerJoin('User as u', 'ur.userId', 'u.id')
+      .innerJoin('Resource as res', 'p.resourceId', 'res.id')
+      .select([
+        'p.id',
+        'p.action',
+        'p.condition',
+        'p.resourceId',
+        'res.name as resourceName',
+      ])
+      .distinctOn('p.id')
+      .where('u.id', '=', userId)
+      .execute();
+
+    return perimissions;
+  }
+
+  async findAllRoles(userId: number) {
+    const roles = await this.prisma.$kysely
+      .selectFrom(['Role as r'])
+      .innerJoin('UserRole as ur', 'r.id', 'ur.roleId')
+      .innerJoin('User as u', 'ur.userId', 'u.id')
+      .select(['r.id', 'r.name'])
+      .distinctOn('r.id')
+      .where('u.id', '=', userId)
+      .execute();
+
+    return roles;
   }
 }
