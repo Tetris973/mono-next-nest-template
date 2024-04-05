@@ -36,7 +36,9 @@
     "apps/server/nest-cli.json": {
       "compilerOptions.plugins[0].name": "Swagger plugin to automatically infer ApiProperty from DTO, class-validator, comments over properties and endpoints",
       "compilerOptions.plugins[0].options.classValidatorShim": "Use class-validator validation decorator to document swagger API",
-      "compilerOptions.plugins[0].options.introspectComments": "Generate API description and example from js comments"
+      "compilerOptions.plugins[0].options.introspectComments": "Generate API description and example from js comments",
+      "compilerOptions.builder": "Use swc for all command that use compilation",
+      "compilerOptions.typeCheck": "Tell the swc compiler to run type check with tscompiler alongside swc compilation, it also execute NestJS CLI plugins and produce a serialized metadata file"
     }
   }
 }

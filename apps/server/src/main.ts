@@ -7,10 +7,12 @@ import {
   ClassSerializerInterceptor,
   INestApplication,
 } from '@nestjs/common';
+import metadata from './metadata';
+
 /**
  * Setup Swagger documentation as web service for the application
  */
-export function setupSwagger(app: INestApplication) {
+export async function setupSwagger(app: INestApplication) {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Nest basic API for users')
     .setDescription('The users API description')
@@ -28,6 +30,10 @@ export function setupSwagger(app: INestApplication) {
     .addSecurityRequirements('token') // Auto add the token to all endpoints
     .addTag('users')
     .build();
+
+  // Used to make swagger(swagger dto type) work with swc compilation
+  await SwaggerModule.loadPluginMetadata(metadata);
+
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   const swaggerPath = 'api';
   SwaggerModule.setup(swaggerPath, app, document);
