@@ -11,7 +11,7 @@ enum Permissions {
   USER_DELETE,
 }
 
-async function seedPermissions(prisma: PrismaService) {
+async function seedPermissions(prisma: PrismaService, doLog: boolean = false) {
   const permissions = [
     {
       id: Permissions.USER_MANAGE,
@@ -55,14 +55,15 @@ async function seedPermissions(prisma: PrismaService) {
     });
     const conditionText = perm.condition ? perm.condition : '';
     const conditionKey = perm.condition ? 'condition' : '';
-    console.log(
-      `Permission Action '${perm.action}' on '${BaseResources[perm.resourceId]} `,
-      conditionKey,
-      conditionText,
-    );
+    if (doLog)
+      console.log(
+        `Permission Action '${perm.action}' on '${BaseResources[perm.resourceId]} `,
+        conditionKey,
+        conditionText,
+      );
   }
 
-  console.log('/// Permissions seeded. ///');
+  if (doLog) console.log('/// Permissions seeded. ///');
 }
 
 export { seedPermissions, Permissions };

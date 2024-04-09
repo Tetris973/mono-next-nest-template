@@ -3,16 +3,14 @@ import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 // Run all the test, including the e2e-spec.ts and repository.ts
-// used for wallabysJs
 export default defineConfig({
   test: {
-    include: ['**/*.e2e-spec.ts', 'src/**/*.spec.ts'],
-    fileParallelism: false,
+    include: ['src/**/*.spec.ts'],
+    exclude: ['src/**/*.repository.spec.ts'],
     root: './',
     alias: {
       '@test': './apps/server/test',
     },
-    setupFiles: ['./test/setup.ts'],
   },
   plugins: [
     // This is required to build the test files with SWC

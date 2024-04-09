@@ -1,7 +1,7 @@
 import { PrismaService } from '../prisma.service';
 import { BaseRoles } from '@server/authz/baseRoles.enum';
 
-async function seedRoles(prisma: PrismaService) {
+async function seedRoles(prisma: PrismaService, doLog: boolean = false) {
   for (const enumMember in BaseRoles) {
     // Check if its the index of the enumMember instead of the key
     const enumIndex = parseInt(enumMember, 10);
@@ -18,11 +18,11 @@ async function seedRoles(prisma: PrismaService) {
         },
       });
 
-      console.log(`Role '${name}'`);
+      if (doLog) console.log(`Role '${name}'`);
     }
   }
 
-  console.log('/// Roles seeded. ///');
+  if (doLog) console.log('/// Roles seeded. ///');
 }
 
 export { seedRoles };

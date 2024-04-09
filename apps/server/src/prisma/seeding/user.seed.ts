@@ -8,7 +8,7 @@ enum Users {
   testUser,
 }
 
-async function seedUsers(prisma: PrismaService) {
+async function seedUsers(prisma: PrismaService, doLog: boolean = false) {
   const users = [
     {
       id: Users.tetris,
@@ -44,9 +44,9 @@ async function seedUsers(prisma: PrismaService) {
       update: {},
       create: userData,
     });
-    console.log(`User '${user.username}'`);
+    if (doLog) console.log(`User '${user.username}'`);
   }
-  console.log('/// Users seeded. ///');
+  if (doLog) console.log('/// Users seeded. ///');
 }
 
 export { seedUsers, Users };

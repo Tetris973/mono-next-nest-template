@@ -17,6 +17,8 @@ services:
       # Mounts a volume named postgres (define below) at /var/lib/postgresql/data inside the container.
       # This is done so that the data persists even if the container is stopped or removed.
       - postgres:/var/lib/postgresql/data
+      # Mount for setup script to create deb/test/... dabatase.
+      - ./initdb.d:/docker-entrypoint-initdb.d
     ports:
       # Maps the host port (left) to the container port (right) 5432 is default port for postgres.
       - '5432:5432'

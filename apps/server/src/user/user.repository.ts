@@ -43,15 +43,34 @@ export class UserRepository {
   }
 
   async create(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prisma.user.create({ data });
+    try {
+      return await this.prisma.user.create({ data });
+    } catch (error) {
+      if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
+        throw error;
+      }
+
+      switch (error.code) {
+        case 'P2002':
+          const field = Array.isArray(error.meta?.target)
+            ? error.meta.target.join(', ')
+            : '';
+          throw new Error(
+            `${field} ${data[field as keyof typeof data]} is already in use.`,
+          );
+
+        default:
+          throw error;
+      }
+    }
   }
 
   async createWithRole(
     data: Prisma.UserCreateInput,
     roleId: Prisma.RoleWhereUniqueInput['id'],
   ): Promise<User> {
-    return this.prisma.user.create({
-      data: {
+    try {
+      return await this.create({
         ...data,
         userRoles: {
           create: {
@@ -62,22 +81,81 @@ export class UserRepository {
             },
           },
         },
-      },
-    });
+      });
+    } catch (error) {
+      if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
+        throw error;
+      }
+
+      switch (error.code) {
+        case 'P2025':
+          throw new Error(
+            `The role with ID ${roleId} does not exist when creating user.`,
+          );
+
+        default:
+          throw error;
+      }
+    }
   }
 
+  /**
+   * @returns Updated user or null if the user was not found
+   * @throws Error if the user to update was not found or if the unique constraint was violated
+   */
   async update(params: {
     where: Prisma.UserWhereUniqueInput;
     data: Prisma.UserUpdateInput;
-  }): Promise<User> {
+  }): Promise<User | null> {
     const { where, data } = params;
-    return this.prisma.user.update({ where, data });
+
+    try {
+      return await this.prisma.user.update({ where, data });
+    } catch (error) {
+      if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
+        throw error;
+      }
+
+      switch (error.code) {
+        // Handle "Record to update not found" case
+        case 'P2025':
+          throw new Error('The user to update was not found.');
+
+        // Handle unique constraint violation
+        case 'P2002':
+          const field = Array.isArray(error.meta?.target)
+            ? error.meta.target.join(', ')
+            : '';
+          throw new Error(
+            `${field} ${data[field as keyof typeof data]} is already in use.`,
+          );
+
+        default:
+          throw error;
+      }
+    }
   }
 
-  async delete(where: Prisma.UserWhereUniqueInput): Promise<User> {
-    return this.prisma.user.delete({
-      where,
-    });
+  /**
+   * @returns Deleted user or null if the user was not found
+   */
+  async delete(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
+    try {
+      return await this.prisma.user.delete({ where });
+    } catch (error) {
+      if (!(error instanceof Prisma.PrismaClientKnownRequestError)) {
+        throw error;
+      }
+
+      switch (error.code) {
+        // Record to delete not found
+        case 'P2025':
+          return null;
+
+        default:
+          throw error;
+      }
+    }
   }
 
   async findAllPermissions(userId: number) {
@@ -98,7 +176,6 @@ export class UserRepository {
       .distinctOn('p.id')
       .where('u.id', '=', userId)
       .execute();
-
     return perimissions;
   }
 
