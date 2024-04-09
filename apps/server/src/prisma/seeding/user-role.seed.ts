@@ -2,7 +2,10 @@ import { PrismaService } from '../prisma.service';
 import { Users } from './user.seed';
 import { BaseRoles } from '@server/authz/baseRoles.enum';
 
-async function seedUserRoleRelations(prisma: PrismaService) {
+async function seedUserRoleRelations(
+  prisma: PrismaService,
+  doLog: boolean = false,
+) {
   const userRole = [
     {
       userId: Users.tetris,
@@ -49,11 +52,12 @@ async function seedUserRoleRelations(prisma: PrismaService) {
       });
     }
 
-    console.log(
-      `User '${Users[relation.userId]}' Role '${BaseRoles[relation.roleId]}'`,
-    );
+    if (doLog)
+      console.log(
+        `User '${Users[relation.userId]}' Role '${BaseRoles[relation.roleId]}'`,
+      );
   }
-  console.log('/// User-Role seeded. ///');
+  if (doLog) console.log('/// User-Role seeded. ///');
 }
 
 export { seedUserRoleRelations, Users };

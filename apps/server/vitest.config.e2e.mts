@@ -4,13 +4,14 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   test: {
-    include: ['**/*.e2e-spec.ts'],
+    include: ['**/*.e2e-spec.ts', 'src/**/*.repository.spec.ts'],
     // Check if need to enable, prevent concurrent access of database when end-to-end testing
-    //fileParallelism: false,
+    fileParallelism: false,
     root: './',
     alias: {
       '@test': './apps/server/test',
     },
+    setupFiles: ['./test/setup.ts'],
   },
   plugins: [
     [
@@ -18,6 +19,7 @@ export default defineConfig({
       swc.vite({
         // Explicitly set the module type to avoid inheriting this value from a `.swcrc` config file
         module: { type: 'es6' },
+        tsconfigFile: './tsconfig.build.json',
       }),
       // To resolve tsconfig paths
       tsconfigPaths(),

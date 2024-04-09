@@ -1,7 +1,7 @@
 import { PrismaService } from '../prisma.service';
 import { BaseResources } from '@server/authz/baseResources.enum';
 
-async function seedResources(prisma: PrismaService) {
+async function seedResources(prisma: PrismaService, doLog: boolean = false) {
   for (const enumMember in BaseResources) {
     // Check if its the index of the enumMember instead of the key
     const enumIndex = parseInt(enumMember, 10);
@@ -18,11 +18,11 @@ async function seedResources(prisma: PrismaService) {
         },
       });
 
-      console.log(`Resource '${name}'`);
+      if (doLog) console.log(`Resource '${name}'`);
     }
   }
 
-  console.log('/// Resources seeded. ///');
+  if (doLog) console.log('/// Resources seeded. ///');
 }
 
 export { seedResources };
