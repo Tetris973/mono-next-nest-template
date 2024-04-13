@@ -37,9 +37,17 @@ describe('UserRepository', () => {
   });
 
   describe('findOne', () => {
-    it('should return a user', async () => {
+    it('should return a user with hidden password by default', async () => {
       const user = await repository.findOne({ id: Users.tetris });
       expect(user?.username).toBe(Users[Users.tetris]);
+      expect(user?.password).toBe('password hidden');
+    });
+
+    it('should return a user with password if requested', async () => {
+      const user = await repository.findOne({ id: Users.tetris }, true);
+      expect(user?.username).toBe(Users[Users.tetris]);
+      expect(user?.password).toBeDefined();
+      expect(user?.password).not.toBe('password hidden');
     });
   });
 
