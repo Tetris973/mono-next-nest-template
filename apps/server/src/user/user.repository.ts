@@ -8,12 +8,12 @@ export class UserRepository {
 
   async findOne(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-    password: boolean = false,
+    showPassword: boolean = false,
   ): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: userWhereUniqueInput,
     });
-    if (!password && user) {
+    if (!showPassword && user) {
       user.password = 'password hidden';
     }
     return user;
