@@ -8,9 +8,6 @@ export default defineConfig({
     // Check if need to enable, prevent concurrent access of database when end-to-end testing
     fileParallelism: false,
     root: './',
-    alias: {
-      '@test': './apps/server/test',
-    },
     setupFiles: ['./test/setup.ts'],
   },
   plugins: [
@@ -25,9 +22,4 @@ export default defineConfig({
       tsconfigPaths(),
     ],
   ],
-  resolve: {
-    alias: {
-      '@test': './apps/server/test',
-    },
-  },
 });

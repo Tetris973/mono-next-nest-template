@@ -16,7 +16,10 @@
             ],
             "@web/*": [
                 "./apps/web/*"
-            ]
+            ],
+            "@testServer/*": [
+                "./apps/server/test/*"
+            ],
         }
     }
 }
