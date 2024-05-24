@@ -44,6 +44,7 @@ export class CaslAbilityFactory {
 
     const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
 
+    // Iterate over each permission from database and assign it to the ability of the user
     caslPermissions.forEach((permission) => {
       if (permission.condition) {
         can(
