@@ -6,6 +6,7 @@ import { ConfigModule } from '@server/config/config.module';
 import { seedRoles } from '@server/prisma/seeding/role.seed';
 import { BaseRoles } from '@server/authz/baseRoles.enum';
 import { RoleRepository } from './role.repository';
+import { TestPrismaService } from '@testServer/testPrisma.service';
 
 describe('RoleRepository', () => {
   let repository: RoleRepository;
@@ -14,7 +15,10 @@ describe('RoleRepository', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [ConfigModule],
-      providers: [RoleRepository, PrismaService],
+      providers: [
+        RoleRepository,
+        { provide: PrismaService, useValue: TestPrismaService.getInstance() },
+      ],
     }).compile();
 
     repository = module.get<RoleRepository>(RoleRepository);

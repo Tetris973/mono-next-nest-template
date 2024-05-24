@@ -1,6 +1,5 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { UserRepository } from './user.repository';
-import { beforeEach } from 'vitest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigModule } from '@server/config/config.module';
@@ -14,6 +13,7 @@ import {
 } from '@server/prisma/seeding/permission.seed';
 import { seedRolePermission } from '@server/prisma/seeding/role-permission.seed';
 import { BaseRoles } from '@server/authz/baseRoles.enum';
+import { TestPrismaService } from '@testServer/testPrisma.service';
 
 describe('UserRepository', () => {
   let repository: UserRepository;
@@ -22,7 +22,10 @@ describe('UserRepository', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [ConfigModule],
-      providers: [UserRepository, PrismaService],
+      providers: [
+        { provide: PrismaService, useValue: TestPrismaService.getInstance() },
+        UserRepository,
+      ],
     }).compile();
 
     repository = module.get<UserRepository>(UserRepository);

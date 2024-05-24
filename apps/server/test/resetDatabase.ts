@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { PrismaService } from '@server/prisma/prisma.service';
+import { TestPrismaService } from './testPrisma.service';
 
 export async function resetDatabase() {
   // Check if NODE_ENV is set to 'test'
@@ -15,13 +15,11 @@ export async function resetDatabase() {
   }
 
   const tableNames = Object.values(Prisma.ModelName);
-  const prisma = new PrismaService();
+  const prisma = TestPrismaService.getInstance();
 
   for (const tableName of tableNames) {
     await prisma.$executeRawUnsafe(
       `TRUNCATE TABLE "${tableName}" RESTART IDENTITY CASCADE`,
     );
   }
-
-  prisma.$disconnect();
 }

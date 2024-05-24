@@ -9,9 +9,6 @@ export default defineConfig({
     include: ['**/*.e2e-spec.ts', 'src/**/*.spec.ts'],
     fileParallelism: false,
     root: './',
-    alias: {
-      '@test': './apps/server/test',
-    },
     setupFiles: ['./test/setup.ts'],
   },
   plugins: [
@@ -24,9 +21,4 @@ export default defineConfig({
     // To resolve tsconfig paths
     tsconfigPaths(),
   ],
-  resolve: {
-    alias: {
-      '@test': './apps/server/test',
-    },
-  },
 });

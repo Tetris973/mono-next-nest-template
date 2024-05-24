@@ -8,9 +8,6 @@ export default defineConfig({
     include: ['src/**/*.spec.ts'],
     exclude: ['src/**/*.repository.spec.ts'],
     root: './',
-    alias: {
-      '@test': './apps/server/test',
-    },
   },
   plugins: [
     // This is required to build the test files with SWC
@@ -22,9 +19,4 @@ export default defineConfig({
     // To resolve tsconfig paths
     tsconfigPaths(),
   ],
-  resolve: {
-    alias: {
-      '@test': './apps/server/test',
-    },
-  },
 });
