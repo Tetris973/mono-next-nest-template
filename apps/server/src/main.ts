@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { INestApplication } from '@nestjs/common';
 import metadata from './metadata';
+import helmet from 'helmet';
 
 /**
  * Setup Swagger documentation as web service for the application
@@ -37,6 +38,11 @@ export async function setupSwagger(app: INestApplication) {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Add security headers
+  // Helmet and CORS must be added before module that may use app.use(...)
+  app.use(helmet());
+  app.enableCors();
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('port') || -1; // -1 to throw error if not set
