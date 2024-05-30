@@ -31,8 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    */
   async validate(payload: IJwtPayload) {
     const user = await this.userService.findOne({ id: payload.sub });
-    if (!user)
-      throw new Error('Unexpected error, user not found during JWT validation');
+    if (!user) throw new Error('Unexpected error, user not found during JWT validation');
     return user;
   }
 }

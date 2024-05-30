@@ -54,7 +54,7 @@ describe('AuthService', () => {
         username: user.username,
         sub: user.id,
       });
-      expect(token.access_token).toBe('token');
+      expect(token.accessToken).toBe('token');
     });
   });
 
@@ -91,9 +91,7 @@ describe('AuthService', () => {
       });
 
       // RUN  & CHECK RESULTS
-      await expect(service.signup(createUserDto)).rejects.toThrow(
-        'Username is already taken',
-      );
+      await expect(service.signup(createUserDto)).rejects.toThrow('Username is already taken');
     });
   });
 

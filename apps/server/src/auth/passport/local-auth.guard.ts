@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  ExecutionContext,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, ExecutionContext, BadRequestException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
@@ -19,9 +15,7 @@ export class LocalAuthGuard extends AuthGuard('local') {
 
     // If there are validation errors, throw a BadRequestException with the validation messages
     if (errors.length > 0) {
-      const errorMessages = errors.flatMap((error) =>
-        Object.values(error.constraints || {}),
-      );
+      const errorMessages = errors.flatMap((error) => Object.values(error.constraints || {}));
       throw new BadRequestException(errorMessages);
     }
 

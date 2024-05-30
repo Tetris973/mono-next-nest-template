@@ -16,7 +16,7 @@ export class AuthService {
   async signup(createUserDto: CreateUserDto) {
     const { password, username } = createUserDto;
     const user = await this.userService.findOne({
-      username: username,
+      username,
     });
     if (user) {
       throw new Error('Username is already taken');
@@ -44,10 +44,10 @@ export class AuthService {
   /**
    * Log a user in and return a JWT
    */
-  async login(user: User): Promise<{ access_token: string }> {
+  async login(user: User): Promise<{ accessToken: string }> {
     const payload: IJwtPayload = { username: user.username, sub: user.id };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      accessToken: await this.jwtService.signAsync(payload),
     };
   }
 }

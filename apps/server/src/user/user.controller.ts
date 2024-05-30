@@ -54,12 +54,8 @@ export class UserController {
     @CurrentUser() user: User,
   ): Promise<UserDto> {
     const ability = await this.abilityFactory.createForUser(user);
-    const canUpdate = ability.can(
-      Action.UPDATE,
-      subject('User', { id: Number(id) }),
-    );
-    if (!canUpdate)
-      throw new HttpException('Unauthorized', HttpStatus.FORBIDDEN);
+    const canUpdate = ability.can(Action.UPDATE, subject('User', { id: Number(id) }));
+    if (!canUpdate) throw new HttpException('Unauthorized', HttpStatus.FORBIDDEN);
     const update = await this.userService.update({
       where: { id: Number(id) },
       data: updateUserDto,

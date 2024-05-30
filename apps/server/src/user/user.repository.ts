@@ -35,7 +35,7 @@ export class UserRepository {
       orderBy,
     });
     if (users) {
-      users.map((user) => {
+      users.forEach((user) => {
         user.password = 'password hidden';
       });
     }
@@ -51,24 +51,17 @@ export class UserRepository {
       }
 
       switch (error.code) {
-        case 'P2002':
-          const field = Array.isArray(error.meta?.target)
-            ? error.meta.target.join(', ')
-            : '';
-          throw new Error(
-            `${field} ${data[field as keyof typeof data]} is already in use.`,
-          );
-
+        case 'P2002': {
+          const field = Array.isArray(error.meta?.target) ? error.meta.target.join(', ') : '';
+          throw new Error(`${field} ${data[field as keyof typeof data]} is already in use.`);
+        }
         default:
           throw error;
       }
     }
   }
 
-  async createWithRole(
-    data: Prisma.UserCreateInput,
-    roleId: Prisma.RoleWhereUniqueInput['id'],
-  ): Promise<User> {
+  async createWithRole(data: Prisma.UserCreateInput, roleId: Prisma.RoleWhereUniqueInput['id']): Promise<User> {
     try {
       return await this.create({
         ...data,
@@ -89,9 +82,7 @@ export class UserRepository {
 
       switch (error.code) {
         case 'P2025':
-          throw new Error(
-            `The role with ID ${roleId} does not exist when creating user.`,
-          );
+          throw new Error(`The role with ID ${roleId} does not exist when creating user.`);
 
         default:
           throw error;
@@ -103,10 +94,7 @@ export class UserRepository {
    * @returns Updated user or null if the user was not found
    * @throws Error if the user to update was not found or if the unique constraint was violated
    */
-  async update(params: {
-    where: Prisma.UserWhereUniqueInput;
-    data: Prisma.UserUpdateInput;
-  }): Promise<User | null> {
+  async update(params: { where: Prisma.UserWhereUniqueInput; data: Prisma.UserUpdateInput }): Promise<User | null> {
     const { where, data } = params;
 
     try {
@@ -122,13 +110,10 @@ export class UserRepository {
           throw new Error('The user to update was not found.');
 
         // Handle unique constraint violation
-        case 'P2002':
-          const field = Array.isArray(error.meta?.target)
-            ? error.meta.target.join(', ')
-            : '';
-          throw new Error(
-            `${field} ${data[field as keyof typeof data]} is already in use.`,
-          );
+        case 'P2002': {
+          const field = Array.isArray(error.meta?.target) ? error.meta.target.join(', ') : '';
+          throw new Error(`${field} ${data[field as keyof typeof data]} is already in use.`);
+        }
 
         default:
           throw error;
@@ -166,13 +151,7 @@ export class UserRepository {
       .innerJoin('UserRole as ur', 'r.id', 'ur.roleId')
       .innerJoin('User as u', 'ur.userId', 'u.id')
       .innerJoin('Resource as res', 'p.resourceId', 'res.id')
-      .select([
-        'p.id',
-        'p.action',
-        'p.condition',
-        'p.resourceId',
-        'res.name as resourceName',
-      ])
+      .select(['p.id', 'p.action', 'p.condition', 'p.resourceId', 'res.name as resourceName'])
       .distinctOn('p.id')
       .where('u.id', '=', userId)
       .execute();

@@ -1,19 +1,19 @@
 import { PrismaService } from '../prisma.service';
-const prisma = new PrismaService();
 
 import { seedUsers } from './user.seed';
 import { seedResources } from './resource.seed';
-//import { seedPermissions } from './permission.seed';
+// import { seedPermissions } from './permission.seed';
 import { seedRoles } from './role.seed';
 import { seedUserRoleRelations } from './user-role.seed';
-//import { seedRolePermission } from './role-permission.seed';
+const prisma = new PrismaService();
+// import { seedRolePermission } from './role-permission.seed';
 
 async function main() {
   console.log('--- Seeding Resources... ---');
   await seedResources(prisma, true);
 
-  //console.log('--- Seeding Permissions... ---');
-  //await seedPermissions(prisma, true);
+  // console.log('--- Seeding Permissions... ---');
+  // await seedPermissions(prisma, true);
 
   console.log('--- Seeding Roles... ---');
   await seedRoles(prisma, true);
@@ -24,8 +24,8 @@ async function main() {
   console.log('--- Seeding User-Role... ---');
   await seedUserRoleRelations(prisma, true);
 
-  //console.log('--- Seeding Role-Permission... ---');
-  //await seedRolePermission(prisma, true);
+  // console.log('--- Seeding Role-Permission... ---');
+  // await seedRolePermission(prisma, true);
 
   console.log('--- All seeding completed successfully. ---');
 }

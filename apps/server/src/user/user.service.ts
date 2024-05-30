@@ -39,10 +39,7 @@ export class UserService {
     return this.repository.createWithRole(data, role.id);
   }
 
-  async update(params: {
-    where: Prisma.UserWhereUniqueInput;
-    data: Prisma.UserUpdateInput;
-  }) {
+  async update(params: { where: Prisma.UserWhereUniqueInput; data: Prisma.UserUpdateInput }) {
     return this.repository.update(params);
   }
 

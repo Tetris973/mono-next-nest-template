@@ -7,10 +7,7 @@ import { Users, seedUsers } from '@server/prisma/seeding/user.seed';
 import { seedUserRoleRelations } from '@server/prisma/seeding/user-role.seed';
 import { seedRoles } from '@server/prisma/seeding/role.seed';
 import { seedResources } from '@server/prisma/seeding/resource.seed';
-import {
-  seedPermissions,
-  Permissions,
-} from '@server/prisma/seeding/permission.seed';
+import { seedPermissions, Permissions } from '@server/prisma/seeding/permission.seed';
 import { seedRolePermission } from '@server/prisma/seeding/role-permission.seed';
 import { BaseRoles } from '@server/authz/baseRoles.enum';
 import { TestPrismaService } from '@testServer/testPrisma.service';
@@ -22,10 +19,7 @@ describe('UserRepository', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [ConfigModule],
-      providers: [
-        { provide: PrismaService, useValue: TestPrismaService.getInstance() },
-        UserRepository,
-      ],
+      providers: [{ provide: PrismaService, useValue: TestPrismaService.getInstance() }, UserRepository],
     }).compile();
 
     repository = module.get<UserRepository>(UserRepository);
@@ -88,9 +82,7 @@ describe('UserRepository', () => {
         await repository.create(user);
       } catch (error) {
         // CHECK RESULTS
-        expect(error.message).toBe(
-          `username ${Users[Users.tetris]} is already in use.`,
-        );
+        expect((error as Error).message).toBe(`username ${Users[Users.tetris]} is already in use.`);
       }
     });
   });
@@ -126,9 +118,7 @@ describe('UserRepository', () => {
         await repository.createWithRole(user, roleId);
       } catch (error) {
         // CHECK RESULTS
-        expect(error.message).toBe(
-          `The role with ID ${roleId} does not exist when creating user.`,
-        );
+        expect((error as Error).message).toBe(`The role with ID ${roleId} does not exist when creating user.`);
       }
     });
   });
@@ -168,7 +158,7 @@ describe('UserRepository', () => {
         });
       } catch (error) {
         // CHECK RESULTS
-        expect(error.message).toBe('The user to update was not found.');
+        expect((error as Error).message).toBe('The user to update was not found.');
       }
     });
 
@@ -188,9 +178,7 @@ describe('UserRepository', () => {
         });
       } catch (error) {
         // CHECK RESULTS
-        expect(error.message).toBe(
-          `username ${Users[Users.victor]} is already in use.`,
-        );
+        expect((error as Error).message).toBe(`username ${Users[Users.victor]} is already in use.`);
       }
     });
   });

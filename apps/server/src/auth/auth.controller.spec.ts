@@ -53,7 +53,7 @@ describe('AuthController', () => {
       // INIT
       const user = { username: 'test', password: 'pass' } as User;
       mockedAuthService.login.mockResolvedValue({
-        access_token: 'jwt',
+        accessToken: 'jwt',
       } as JwtDto);
 
       // RUN

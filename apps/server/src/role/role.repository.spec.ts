@@ -1,5 +1,4 @@
-import { describe, it, expect } from 'vitest';
-import { beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { TestingModule, Test } from '@nestjs/testing';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigModule } from '@server/config/config.module';
@@ -15,10 +14,7 @@ describe('RoleRepository', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [ConfigModule],
-      providers: [
-        RoleRepository,
-        { provide: PrismaService, useValue: TestPrismaService.getInstance() },
-      ],
+      providers: [RoleRepository, { provide: PrismaService, useValue: TestPrismaService.getInstance() }],
     }).compile();
 
     repository = module.get<RoleRepository>(RoleRepository);
