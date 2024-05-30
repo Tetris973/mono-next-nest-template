@@ -6,7 +6,18 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "pnpm run --parallel dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "apps/server/src/**/*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "apps/server/test/**/*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "keywords": [],
   "author": "Cedric OLENDER",
@@ -40,5 +51,9 @@
       "compilerOptions.builder": "Use swc for all command that use compilation",
       "compilerOptions.typeCheck": "Tell the swc compiler to run type check with tscompiler alongside swc compilation, it also execute NestJS CLI plugins and produce a serialized metadata file"
     }
+  },
+  "devDependencies": {
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.5"
   }
 }
