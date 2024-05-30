@@ -6,9 +6,7 @@ import { Prisma, Role } from '@prisma/client';
 export class RoleRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findOne(
-    roleWhereUniqueInput: Prisma.RoleWhereUniqueInput,
-  ): Promise<Role | null> {
+  async findOne(roleWhereUniqueInput: Prisma.RoleWhereUniqueInput): Promise<Role | null> {
     const role = await this.prisma.role.findUnique({
       where: roleWhereUniqueInput,
     });

@@ -11,10 +11,10 @@ async function seedRoles(prisma: PrismaService, doLog: boolean = false) {
       const name = BaseRoles[enumMember];
 
       await prisma.role.upsert({
-        where: { id: id },
+        where: { id },
         update: {},
         create: {
-          name: name,
+          name,
         },
       });
 

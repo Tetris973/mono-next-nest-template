@@ -39,9 +39,7 @@ describe('AuthzService', () => {
       await service.findAllPermissionsOfUser(user);
 
       // CHECK RESULTS
-      expect(mockUserRepository.findAllPermissions).toHaveBeenCalledWith(
-        user.id,
-      );
+      expect(mockUserRepository.findAllPermissions).toHaveBeenCalledWith(user.id);
     });
   });
 

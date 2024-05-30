@@ -18,8 +18,6 @@ export async function resetDatabase() {
   const prisma = TestPrismaService.getInstance();
 
   for (const tableName of tableNames) {
-    await prisma.$executeRawUnsafe(
-      `TRUNCATE TABLE "${tableName}" RESTART IDENTITY CASCADE`,
-    );
+    await prisma.$executeRawUnsafe(`TRUNCATE TABLE "${tableName}" RESTART IDENTITY CASCADE`);
   }
 }

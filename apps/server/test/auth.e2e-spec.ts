@@ -1,10 +1,9 @@
 import { describe, beforeEach, it } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, HttpStatus } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { CreateUserDto } from '@server/user/dto/create-user.dto';
-import { HttpStatus } from '@nestjs/common';
 import { seedRoles } from '@server/prisma/seeding/role.seed';
 import { PrismaService } from '@server/prisma/prisma.service';
 import { TestPrismaService } from './testPrisma.service';
@@ -17,9 +16,7 @@ describe('AuthController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-      providers: [
-        { provide: PrismaService, useValue: TestPrismaService.getInstance() },
-      ],
+      providers: [{ provide: PrismaService, useValue: TestPrismaService.getInstance() }],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -33,9 +30,7 @@ describe('AuthController (e2e)', () => {
   describe('/auth/profile (GET)', () => {
     it('should return 401 if no token is provided', async () => {
       // RUN & CHECK RESULT
-      await request(app.getHttpServer())
-        .get('/auth/profile')
-        .expect(HttpStatus.UNAUTHORIZED);
+      await request(app.getHttpServer()).get('/auth/profile').expect(HttpStatus.UNAUTHORIZED);
     });
 
     it('should return 401 if an invalid token is provided', async () => {
@@ -62,21 +57,15 @@ describe('AuthController (e2e)', () => {
       };
 
       // RUN & CHECK RESULT
-      await request(app.getHttpServer())
-        .post('/auth/signup')
-        .send(createUserDto)
-        .expect(HttpStatus.CREATED);
+      await request(app.getHttpServer()).post('/auth/signup').send(createUserDto).expect(HttpStatus.CREATED);
 
       // RUN & CHECK RESULT
-      const loginRes = await request(app.getHttpServer())
-        .post('/auth/login')
-        .send(loginUserDto)
-        .expect(HttpStatus.OK);
+      const loginRes = await request(app.getHttpServer()).post('/auth/login').send(loginUserDto).expect(HttpStatus.OK);
 
       // RUN & CHECK RESULT
       await request(app.getHttpServer())
         .get('/auth/profile')
-        .set('Authorization', `Bearer ${loginRes.body.access_token}`)
+        .set('Authorization', `Bearer ${loginRes.body.accessToken}`)
         .expect(HttpStatus.OK);
     });
   });

@@ -96,10 +96,7 @@ describe('UserService', () => {
       expect(mockedRoleRepository.findOne).toHaveBeenCalledWith({
         name: BaseRoles[BaseRoles.USER],
       });
-      expect(mockedUserRepository.createWithRole).toHaveBeenCalledWith(
-        data,
-        BaseRoles.USER,
-      );
+      expect(mockedUserRepository.createWithRole).toHaveBeenCalledWith(data, BaseRoles.USER);
     });
 
     it('should throw an error if default role is not found', async () => {
@@ -111,9 +108,7 @@ describe('UserService', () => {
       };
 
       // RUN & CHECK RESULTS
-      await expect(service.create(data)).rejects.toThrow(
-        'Unexpected Error: Basic Role USER not found',
-      );
+      await expect(service.create(data)).rejects.toThrow('Unexpected Error: Basic Role USER not found');
     });
   });
 

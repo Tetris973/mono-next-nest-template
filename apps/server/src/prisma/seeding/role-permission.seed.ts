@@ -2,10 +2,7 @@ import { PrismaService } from '../prisma.service';
 import { BaseRoles } from '@server/authz/baseRoles.enum';
 import { Permissions } from './permission.seed';
 
-async function seedRolePermission(
-  prisma: PrismaService,
-  doLog: boolean = false,
-) {
+async function seedRolePermission(prisma: PrismaService, doLog: boolean = false) {
   const rolePermission = [
     {
       roleId: BaseRoles.ADMIN,
@@ -19,7 +16,7 @@ async function seedRolePermission(
 
   // The rolePermission above are already hardcoded in the cas-ability.factory
   // They serves only as example for eventual pemission to seed
-  //const rolePermission: any = [];
+  // const rolePermission: any = [];
 
   for (const relation of rolePermission) {
     // Use the following because upsert does not work with composite keys
@@ -44,10 +41,7 @@ async function seedRolePermission(
       });
     }
 
-    if (doLog)
-      console.log(
-        `Role '${BaseRoles[relation.roleId]} Permission '${Permissions[relation.permissionId]}''`,
-      );
+    if (doLog) console.log(`Role '${BaseRoles[relation.roleId]} Permission '${Permissions[relation.permissionId]}''`);
   }
   if (doLog) console.log('/// Role-Permission seeded. ///');
 }

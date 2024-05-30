@@ -11,10 +11,10 @@ async function seedResources(prisma: PrismaService, doLog: boolean = false) {
       const name = BaseResources[enumMember];
 
       await prisma.resource.upsert({
-        where: { id: id },
+        where: { id },
         update: {},
         create: {
-          name: name,
+          name,
         },
       });
 

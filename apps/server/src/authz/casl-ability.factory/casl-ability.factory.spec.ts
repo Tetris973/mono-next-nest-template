@@ -10,12 +10,7 @@ describe('CaslAbilityFactory', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        CaslAbilityFactory,
-        AuthzService,
-        UserRepository,
-        PrismaService,
-      ],
+      providers: [CaslAbilityFactory, AuthzService, UserRepository, PrismaService],
     }).compile();
 
     casl = module.get<CaslAbilityFactory>(CaslAbilityFactory);

@@ -14,68 +14,12 @@ type AppSubjects = Subjects<{
   User: User;
 }>;
 
-export type AppAbility = PureAbility<
-  [Action, AppSubjects | ForcedSubject<AppSubjects> | 'all'],
-  PrismaQuery
->;
+export type AppAbility = PureAbility<[Action, AppSubjects | ForcedSubject<AppSubjects> | 'all'], PrismaQuery>;
 
 interface CaslPermission {
   action: Action;
   subject: string;
   condition?: PrismaQuery<AppSubjects>;
-}
-
-@Injectable()
-export class CaslAbilityFactory {
-  constructor(private authzService: AuthzService) {}
-
-  async createForUser(user: User): Promise<AppAbility> {
-    const dbPermissions =
-      await this.authzService.findAllPermissionsOfUser(user);
-    const caslPermissions: CaslPermission[] = dbPermissions.map((p) => ({
-      action: p.action,
-      subject: p.resourceName,
-      condition: parseCondition(p.condition as PermissionCondition, {
-        // Define here the variables that will be used to replace placeholders in the conditions
-        // Those variables must be used in the condition in the database as placeholders like '${userId}'
-        userId: user.id,
-      }),
-    }));
-
-    const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
-
-    // Iterate over each permission from database and assign it to the ability of the user
-    caslPermissions.forEach((permission) => {
-      if (permission.condition) {
-        can(
-          permission.action,
-          permission.subject as ResourceType,
-          permission.condition,
-        );
-      } else {
-        can(permission.action, permission.subject as ResourceType);
-      }
-    });
-
-    const roles = await this.authzService.findAllRolesOfUser(user);
-
-    // Here is where the hardCoded permissions are defined
-    // Iterate over each role of the user and assign permissions based on the role
-    roles.forEach((role) => {
-      switch (BaseRoles[role.name as keyof typeof BaseRoles]) {
-        case BaseRoles.ADMIN:
-          can(Action.manage, 'all');
-          break;
-        case BaseRoles.USER:
-          can(Action.READ, 'all');
-          can(Action.UPDATE, 'User', { id: user.id });
-          break;
-      }
-    });
-
-    const ability = build();
-    return ability;
-  }
 }
 
 export type PermissionCondition = Record<string, any>;
@@ -130,4 +74,52 @@ function parseCondition(
 
   // Return the parsed condition with all placeholders replaced
   return parsedCondition;
+}
+
+@Injectable()
+export class CaslAbilityFactory {
+  constructor(private authzService: AuthzService) {}
+
+  async createForUser(user: User): Promise<AppAbility> {
+    const dbPermissions = await this.authzService.findAllPermissionsOfUser(user);
+    const caslPermissions: CaslPermission[] = dbPermissions.map((p) => ({
+      action: p.action,
+      subject: p.resourceName,
+      condition: parseCondition(p.condition as PermissionCondition, {
+        // Define here the variables that will be used to replace placeholders in the conditions
+        // Those variables must be used in the condition in the database as placeholders like '${userId}'
+        userId: user.id,
+      }),
+    }));
+
+    const { can, build } = new AbilityBuilder<AppAbility>(createPrismaAbility);
+
+    // Iterate over each permission from database and assign it to the ability of the user
+    caslPermissions.forEach((permission) => {
+      if (permission.condition) {
+        can(permission.action, permission.subject as ResourceType, permission.condition);
+      } else {
+        can(permission.action, permission.subject as ResourceType);
+      }
+    });
+
+    const roles = await this.authzService.findAllRolesOfUser(user);
+
+    // Here is where the hardCoded permissions are defined
+    // Iterate over each role of the user and assign permissions based on the role
+    roles.forEach((role) => {
+      switch (BaseRoles[role.name as keyof typeof BaseRoles]) {
+        case BaseRoles.ADMIN:
+          can(Action.manage, 'all');
+          break;
+        case BaseRoles.USER:
+          can(Action.READ, 'all');
+          can(Action.UPDATE, 'User', { id: user.id });
+          break;
+      }
+    });
+
+    const ability = build();
+    return ability;
+  }
 }

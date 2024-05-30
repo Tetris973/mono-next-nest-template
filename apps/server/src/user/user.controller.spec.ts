@@ -88,10 +88,7 @@ describe('UserController', () => {
 
       // CHECK RESULT
       await expect(result).rejects.toThrow('User not found');
-      await expect(result).rejects.toHaveProperty(
-        'status',
-        HttpStatus.NOT_FOUND,
-      );
+      await expect(result).rejects.toHaveProperty('status', HttpStatus.NOT_FOUND);
     });
   });
 
@@ -135,10 +132,7 @@ describe('UserController', () => {
 
       // CHECK RESULT
       await expect(result).rejects.toThrow('Unauthorized');
-      await expect(result).rejects.toHaveProperty(
-        'status',
-        HttpStatus.FORBIDDEN,
-      );
+      await expect(result).rejects.toHaveProperty('status', HttpStatus.FORBIDDEN);
     });
   });
 

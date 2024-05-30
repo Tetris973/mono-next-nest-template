@@ -9,14 +9,8 @@ export class TestLogger implements LoggerService {
     this.includeTimestamp = includeTimestamp;
   }
 
-  private formatMessage(
-    message: string,
-    level: string,
-    context?: string,
-  ): string {
-    const timestamp = this.includeTimestamp
-      ? `${new Date().toISOString()} `
-      : '';
+  private formatMessage(message: string, level: string, context?: string): string {
+    const timestamp = this.includeTimestamp ? `${new Date().toISOString()} ` : '';
     return `${timestamp}[${level}] ${context || 'Context'}: ${message}`;
   }
 

@@ -16,9 +16,7 @@ describe('UserController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-      providers: [
-        { provide: PrismaService, useValue: TestPrismaService.getInstance() },
-      ],
+      providers: [{ provide: PrismaService, useValue: TestPrismaService.getInstance() }],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -36,13 +34,11 @@ describe('UserController (e2e)', () => {
    * @returns the JWT token
    */
   async function loginAsTetris() {
-    const loginResponse = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({
-        username: Users[Users.tetris],
-        password: 'Chocolat123!',
-      });
-    return loginResponse.body.access_token;
+    const loginResponse = await request(app.getHttpServer()).post('/auth/login').send({
+      username: Users[Users.tetris],
+      password: 'Chocolat123!',
+    });
+    return loginResponse.body.accessToken;
   }
 
   /**
@@ -50,13 +46,11 @@ describe('UserController (e2e)', () => {
    * @returns the JWT token
    */
   async function loginAsTestUser() {
-    const loginResponse = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({
-        username: Users[Users.testUser],
-        password: 'Chocolat123!',
-      });
-    return loginResponse.body.access_token;
+    const loginResponse = await request(app.getHttpServer()).post('/auth/login').send({
+      username: Users[Users.testUser],
+      password: 'Chocolat123!',
+    });
+    return loginResponse.body.accessToken;
   }
 
   describe('/users (GET)', () => {
@@ -65,17 +59,12 @@ describe('UserController (e2e)', () => {
       const token = await loginAsTestUser();
 
       // RUN & CHECK RESULT
-      await request(app.getHttpServer())
-        .get('/users')
-        .set('Authorization', `Bearer ${token}`)
-        .expect(HttpStatus.OK);
+      await request(app.getHttpServer()).get('/users').set('Authorization', `Bearer ${token}`).expect(HttpStatus.OK);
     });
 
     it('should return Unauthorized for all not logged user', async () => {
       // RUN & CHECK RESULT
-      await request(app.getHttpServer())
-        .get('/users')
-        .expect(HttpStatus.UNAUTHORIZED);
+      await request(app.getHttpServer()).get('/users').expect(HttpStatus.UNAUTHORIZED);
     });
   });
 
@@ -85,17 +74,12 @@ describe('UserController (e2e)', () => {
       const token = await loginAsTestUser();
 
       // RUN & CHECK RESULT
-      await request(app.getHttpServer())
-        .get('/users/1')
-        .set('Authorization', `Bearer ${token}`)
-        .expect(HttpStatus.OK);
+      await request(app.getHttpServer()).get('/users/1').set('Authorization', `Bearer ${token}`).expect(HttpStatus.OK);
     });
 
     it('should return Unauthorized for all not logged user', async () => {
       // RUN & CHECK RESULT
-      await request(app.getHttpServer())
-        .get('/users/1')
-        .expect(HttpStatus.UNAUTHORIZED);
+      await request(app.getHttpServer()).get('/users/1').expect(HttpStatus.UNAUTHORIZED);
     });
   });
 
@@ -192,9 +176,7 @@ describe('UserController (e2e)', () => {
 
     it('should return Unauthorized when the user is not logged', async () => {
       // RUN & CHECK RESULT
-      await request(app.getHttpServer())
-        .delete(`/users/${Users.testUser}`)
-        .expect(HttpStatus.UNAUTHORIZED);
+      await request(app.getHttpServer()).delete(`/users/${Users.testUser}`).expect(HttpStatus.UNAUTHORIZED);
     });
   });
 });
