@@ -1,23 +1,21 @@
 {
   "extends": "../../tsconfig.json", // extend the root tsconfig
   "compilerOptions": {
+    // Recommended: "commonjs" is recommended for NestJS projects due to its compatibility with the Node.js ecosystem and synchronous module loading, suitable for server-side applications.
     "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
-    "sourceMap": true,
+    // "node" is recommended for NestJS projects to align with Node.js's module resolution mechanism, ensuring consistent and correct module import behavior in a Node.js environment.
+    "moduleResolution": "node",
     "outDir": "./dist",
-    // The following options are not required as they've been moved to the root tsconfig
-    // "emitDecoratorMetadata": true,
-    // "experimentalDecorators": true,
-    // "baseUrl": "./",
-    // "incremental": true,
-    // "skipLibCheck": true,
-    // "strictNullChecks": true,
-    // "noImplicitAny": true,
-    // "strictBindCallApply": true,
-    // "forceConsistentCasingInFileNames": true,
-    // "noFallthroughCasesInSwitch": true
+    /* 
+      Description: In NestJS, set to false to support dependency injection, allowing class properties to be initialized outside the constructor, aligning with NestJS's architectural patterns.
+      Default: true.
+      Set to false: to Support NestJS's dependency injection and architectural patterns.
+    */
+    "strictPropertyInitialization": false,
+    /* 
+      Description: Sets the JavaScript target version to ES2021, optimizing the output for modern runtime environments and leveraging the latest ECMAScript features supported by NestJS.
+      Useful for: Optimizing the output for modern runtime environments and leveraging the latest ECMAScript features.
+    */
+    "target": "es2021",
   }
 }
