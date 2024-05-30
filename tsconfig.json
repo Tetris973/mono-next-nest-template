@@ -1,15 +1,129 @@
 {
     "compilerOptions": {
-        "baseUrl": ".",
-        "experimentalDecorators": true,
+        /* 
+          Description: Allows JavaScript files to be included in your project.
+          Default: false.
+          Because I want to use TypeScript only.
+        */
+        "allowJs": false,
+        /* 
+          Description: Allows default imports from modules with no default export. This does not affect code emit, just typechecking.
+          Default: false.
+          Reason: Enables compatibility with CommonJS modules and modules that use `module.exports` for default export.
+        */
+        "allowSyntheticDefaultImports": true,
+        /* 
+          Description: Base directory to resolve non-relative module names. If not set, paths are relative to each source file.
+          For NestJS, "baseUrl": "./" aligns module resolution with its project structure.
+        */
+        "baseUrl": "./",
+        /* 
+          Description: Generates corresponding '.d.ts' declaration files.
+          Default: false.
+          Useful for: Providing type information, enabling code autocomplete and IntelliSense.
+        */
+        "declaration": true,
+        /* 
+          Description: Adds design-type metadata for decorated declarations in source.
+          Default: false.
+          Essential for: NestJS to leverage decorators for dependency injection and routing.
+        */
         "emitDecoratorMetadata": true,
-        "incremental": true,
-        "skipLibCheck": true,
-        "strictNullChecks": true,
-        "noImplicitAny": true,
-        "strictBindCallApply": true,
+        /* 
+          Description: Enables compatibility with Babel, allowing non-ES modules to be default-imported.
+          Default: false.
+          Essential for: Interoperability in projects mixing CommonJS and ES modules.
+        */
+        "esModuleInterop": true,
+        /* 
+          Description: Enables experimental support for ES decorators, a stage 2 proposal.
+          Default: false.
+          Necessary for: Using decorators, which are fundamental in NestJS for defining modules, services, controllers, etc.
+        */
+        "experimentalDecorators": true,
+        /* 
+          Description: Ensures consistency in the casing of referenced file names.
+          Default: false.
+          Prevents: Issues in case-sensitive file systems and maintains consistent project conventions.
+        */
         "forceConsistentCasingInFileNames": true,
+        /* 
+          Description: Skips importing emit helpers from 'tslib', reducing dependencies and avoiding the need to install 'tslib'.
+          Default: false.
+          Reason: Set to false to avoid additional dependencies and simplify setup. If set to true, it would require the installation of 'tslib' but can reduce bundle size by avoiding helper duplication.
+        */
+        "importHelpers": false,
+        /* 
+          Description: Enables incremental compilation to improve build times by only recompiling changed parts of the project.
+          Beneficial for: Particularly beneficial in larger projects for faster development cycles.
+        */
+        "incremental": true,
+        /*
+          Description: Specifies the module system to use.
+          Not set because Nestjs and Nextjs have different module systems.
+        */
+        //"module": "commonjs",
+        /* 
+          Description: Determines the module resolution strategy.
+          Not set because Nestjs and Nextjs have different module resolution strategies.
+        */
+        //"moduleResolution": "node",
+        /* 
+          Description: Controls output generation. When set to true, no files are emitted if there are TypeScript errors, ensuring no potentially broken JavaScript is produced.
+          Useful for: Ensuring only fully valid TypeScript compiles to JavaScript.
+          Reason: Set to false to allow incremental builds and debugging during development. This setting enables generating JavaScript files even if there are type errors, facilitating a more flexible and iterative development workflow.
+        */
+        "noEmit": false,
+        /* 
+          Description: Prevents fallthrough in switch cases to ensure each case ends with 'break', 'return', 'throw', or 'continue'.
+          Enhances: Code safety by avoiding unintended execution of multiple cases.
+        */
         "noFallthroughCasesInSwitch": true,
+        /* 
+          Description: Prevents the use of values with 'any' type implicitly. When true, explicit 'any' type annotations are required, enhancing type safety and code clarity.
+          Should have the same config as in ESLint.
+        */
+        "noImplicitAny": true,
+        /*
+          The output directory for the compiled files.
+          Each app has its own outDir.
+        */
+        // "outDir": "./dist",
+        /* 
+          Description: Enables color and context in the error messages.
+          Default: false.
+        */
+        "pretty": true,
+        /* 
+          Description: Removes comments from the compiled JavaScript, reducing file size and keeping the output clean in production builds.
+        */
+        "removeComments": true,
+        /* 
+          Description: Enables importing JSON files directly in TypeScript files, treating them as ES6 modules, which simplifies accessing JSON data within the code.
+        */
+        "resolveJsonModule": true,
+        /* 
+          Description: Skips type checking of declaration files to speed up the compilation process. While this improves build times, it might overlook type errors in library declarations.
+          Set to true for faster build time, we trust the types of the libraries we use.
+          Should be set to false when debugging or in CI.
+        */
+        "skipLibCheck": true,
+        /* 
+          Description: Generates source map files for the compiled JavaScript, enhancing debugging by mapping the compiled code back to the original TypeScript source.
+          Default: false.
+        */
+        "sourceMap": true,
+        /* 
+          Description: Enables all strict type-checking options, enforcing a higher level of type safety across the project.
+          Default: false.
+          Reason for true: Prevent errors and bugs, better coding experience.
+        */
+        "strict": true,
+        // ALL of the following options are set to true because of the strict option above
+        //"strictBindCallApply": true, // Ensures strict checking of bind, call, and apply methods.
+        //"strictFunctionTypes": true, // Enables strict checking of function types.
+        //"strictPropertyInitialization": true, // Ensures class properties are correctly initialized.
+        //"strictNullChecks": true, // Enforces strict null and undefined checks.
         "paths": {
             "@server/*": [
                 "./apps/server/src/*"
@@ -19,7 +133,7 @@
             ],
             "@testServer/*": [
                 "./apps/server/test/*"
-            ],
+            ]
         }
     }
 }

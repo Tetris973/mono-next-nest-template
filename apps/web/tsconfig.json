@@ -6,13 +6,9 @@
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
+    // "esnext" is recommended for Next.js projects to enable modern ES module syntax, which is compatible with the latest JavaScript features and optimizations, especially for client-side and server-side rendering in Next.js applications.
     "module": "esnext",
     "moduleResolution": "bundler",
-    "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "plugins": [
@@ -20,11 +16,6 @@
         "name": "next"
       }
     ],
-    // "skipLibCheck": true,
-    // "incremental": true,
-    // "paths": {
-    //   "@/*": ["./src/*"]
-    // }
   },
   "include": [
     "next-env.d.ts",
