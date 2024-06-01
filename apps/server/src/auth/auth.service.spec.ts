@@ -100,31 +100,6 @@ describe('AuthService', () => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const username = 'tetris';
 
-    it('should return null if the user does not exist', async () => {
-      // INIT
-      mockedUserService.userCredentials.mockResolvedValue(null);
-
-      // RUN
-      const result = await service.validateCredentials('nonexistent', 'pass');
-
-      //  CHECK RESULTS
-      expect(result).toBeNull();
-    });
-
-    it('should return null if the password is incorrect', async () => {
-      // INIT
-      mockedUserService.userCredentials.mockResolvedValue({
-        username,
-        password: hashedPassword,
-      });
-
-      // RUN
-      const result = await service.validateCredentials(username, 'wrongpass');
-
-      // CHECK RESULTS
-      expect(result).toBeNull();
-    });
-
     it('should return a user if the credentials are valid', async () => {
       // INIT
       mockedUserService.userCredentials.mockResolvedValue({
@@ -141,6 +116,25 @@ describe('AuthService', () => {
 
       // CHECK RESULTS
       expect(result).toEqual({ id: 1, username });
+    });
+
+    it('should throw an error if the password is incorrect', async () => {
+      // INIT
+      mockedUserService.userCredentials.mockResolvedValue({
+        username,
+        password: hashedPassword,
+      });
+
+      // RUN
+      await expect(service.validateCredentials(username, 'wrongpass')).rejects.toThrow('The password is incorrect');
+    });
+
+    it('should throw an error if the user does not exist', async () => {
+      // INIT
+      mockedUserService.userCredentials.mockResolvedValue(null);
+
+      // RUN
+      await expect(service.validateCredentials('nonexistent', 'pass')).rejects.toThrow('The username does not exist.');
     });
   });
 });

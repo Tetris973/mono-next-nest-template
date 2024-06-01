@@ -5,6 +5,6 @@
     "test",
     "dist",
     "**/*spec.ts",
-    "quokka_test"
+    "quokka_test",
   ]
 }

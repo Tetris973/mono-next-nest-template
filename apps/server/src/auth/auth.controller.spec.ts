@@ -4,8 +4,9 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '@server/user/dto/create-user.dto';
 import { UserDto } from '@server/user/dto/user.dto';
-import { JwtDto } from './dto/jwt.dto';
 import { User } from '@prisma/client';
+import { Response } from 'express';
+import { ConfigModule } from '@server/config/config.module';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -15,8 +16,13 @@ describe('AuthController', () => {
     login: vi.fn(),
   };
 
+  const mockedResponse: Partial<Response> = {
+    cookie: vi.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [ConfigModule],
       controllers: [AuthController],
       providers: [{ provide: AuthService, useValue: mockedAuthService }],
     }).compile();
@@ -52,16 +58,17 @@ describe('AuthController', () => {
     it('should return a transformed JwtDto object on successful login', async () => {
       // INIT
       const user = { username: 'test', password: 'pass' } as User;
+      const token = 'jwt';
       mockedAuthService.login.mockResolvedValue({
-        accessToken: 'jwt',
-      } as JwtDto);
+        accessToken: token,
+      });
 
       // RUN
-      const result = await controller.login(user);
+      await controller.login(user, mockedResponse as Response);
 
       // CHECK RESULT
       expect(mockedAuthService.login).toHaveBeenCalledWith(user);
-      expect(result).toBeInstanceOf(JwtDto);
+      expect(mockedResponse.cookie).toHaveBeenCalledWith('Authentication', token, expect.any(Object));
     });
   });
 

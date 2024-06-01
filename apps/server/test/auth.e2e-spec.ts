@@ -1,4 +1,4 @@
-import { describe, beforeEach, it } from 'vitest';
+import { describe, beforeEach, it, expect } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, HttpStatus } from '@nestjs/common';
 import request from 'supertest';
@@ -8,6 +8,8 @@ import { seedRoles } from '@server/prisma/seeding/role.seed';
 import { PrismaService } from '@server/prisma/prisma.service';
 import { TestPrismaService } from './testPrisma.service';
 import { LogInUserDto } from '@server/user/dto/log-in-user.dto';
+import { ConfigService } from '@nestjs/config';
+import ms from 'ms';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -28,16 +30,16 @@ describe('AuthController (e2e)', () => {
   });
 
   describe('/auth/profile (GET)', () => {
-    it('should return 401 if no token is provided', async () => {
+    it('should return 401 if no cookie token is provided', async () => {
       // RUN & CHECK RESULT
       await request(app.getHttpServer()).get('/auth/profile').expect(HttpStatus.UNAUTHORIZED);
     });
 
-    it('should return 401 if an invalid token is provided', async () => {
+    it('should return 401 if an invalid cookie token is provided', async () => {
       // RUN & CHECK RESULT
       await request(app.getHttpServer())
         .get('/auth/profile')
-        .set('Authorization', 'Bearer invalidToken')
+        .set('Cookie', ['Authentication=invalid'])
         .expect(HttpStatus.UNAUTHORIZED);
     });
   });
@@ -62,11 +64,22 @@ describe('AuthController (e2e)', () => {
       // RUN & CHECK RESULT
       const loginRes = await request(app.getHttpServer()).post('/auth/login').send(loginUserDto).expect(HttpStatus.OK);
 
+      // CHECK auth cookie attributes
+      const cookie = loginRes.headers['set-cookie'][0];
+      expect(cookie).toContain('Authentication=');
+      expect(cookie).toContain('HttpOnly; Secure');
+
+      const expiresMatch = cookie.match(/Expires=([^;]+)/);
+      const cookieExpirationDate = new Date(expiresMatch![1]).getTime();
+      expect(cookie.match(/Expires=([^;]+)/)).not.toBeNull();
+
+      const jwtExpiration = app.get(ConfigService).getOrThrow<string>('jwtExpiration');
+      const jwtExpirationTime = ms(jwtExpiration);
+      const expirationTimeFromNow = new Date(Date.now() + jwtExpirationTime).getTime();
+      expect(cookieExpirationDate).toBeLessThanOrEqual(expirationTimeFromNow);
+
       // RUN & CHECK RESULT
-      await request(app.getHttpServer())
-        .get('/auth/profile')
-        .set('Authorization', `Bearer ${loginRes.body.accessToken}`)
-        .expect(HttpStatus.OK);
+      await request(app.getHttpServer()).get('/auth/profile').set('Cookie', cookie).expect(HttpStatus.OK);
     });
   });
 });
