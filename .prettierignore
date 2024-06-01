@@ -1,0 +1,2 @@
+# ignore lint-stageg of swagger metatada generated in server app
+metadata.ts
