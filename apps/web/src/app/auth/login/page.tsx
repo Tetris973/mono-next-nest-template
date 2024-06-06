@@ -20,11 +20,14 @@ import {
   Spinner,
   Checkbox,
 } from '@chakra-ui/react';
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { useLogin } from './hooks/useLogin';
+import { useLogin } from './hooks/login.use';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from '../AuthContext';
 
 export default function Login() {
-  const { error, showPassword, setShowPassword, handleSubmit, loading } = useLogin();
+  const { error, showPassword, setShowPassword, handleSubmit } = useLogin();
+  const { loading } = useAuth();
 
   return (
     <Flex
@@ -71,7 +74,7 @@ export default function Login() {
                     <Button
                       variant={'ghost'}
                       onClick={() => setShowPassword((showPassword) => !showPassword)}>
-                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                      {showPassword ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}
                     </Button>
                   </InputRightElement>
                 </InputGroup>
