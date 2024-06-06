@@ -17,25 +17,30 @@ const setAuthCookie = (response: Response) => {
       value: token,
       secure: true,
       httpOnly: true,
-      expires: new Date(jwtDecode(token).exp! * 1000),
+      expires: new Date(jwtDecode(token).exp! * 1000), // TODO: check if expiration is correct
     });
   }
 };
 
 const getErrorMessage = (status: number, parsedRes: any): LoginFormError | null => {
+  let isUsernameError = false;
+  let isPasswordError = false;
   switch (status) {
     case HttpStatus.UNAUTHORIZED:
       return { message: 'Incorrect password', code: HttpStatus.UNAUTHORIZED };
     case HttpStatus.BAD_REQUEST:
-      if (Array.isArray(parsedRes.message)) {
-        if (parsedRes.message.some((msg: string) => msg.includes('username must be'))) {
-          return { message: 'User not found', code: HttpStatus.NOT_FOUND };
-        }
-        if (parsedRes.message.includes('password is not strong enough')) {
-          return { message: 'Password is not strong enough', code: HttpStatus.UNAUTHORIZED };
-        }
+      isUsernameError = parsedRes.message.some((msg: string) => msg.includes('username must be'));
+      isPasswordError = parsedRes.message.includes('password is not strong enough');
+
+      if (isUsernameError) {
+        return { message: 'User not found', code: HttpStatus.NOT_FOUND };
       }
+      if (isPasswordError) {
+        return { message: 'Password is not strong enough', code: HttpStatus.UNAUTHORIZED };
+      }
+
       return { message: 'Invalid request', code: HttpStatus.BAD_REQUEST };
+
     case HttpStatus.NOT_FOUND:
       return { message: 'User not found', code: HttpStatus.NOT_FOUND };
     default:
@@ -43,7 +48,7 @@ const getErrorMessage = (status: number, parsedRes: any): LoginFormError | null 
   }
 };
 
-export const login = async (loginData: FormData): Promise<LoginFormError | null> => {
+export const loginService = async (loginData: FormData): Promise<LoginFormError | null> => {
   let res: Response;
   try {
     res = await fetch(`${API_URL}/auth/login`, {
