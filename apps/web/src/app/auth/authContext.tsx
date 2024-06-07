@@ -2,31 +2,31 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { loginService } from '@web/app/auth/login/login.service'; // Import the login service
+import { loginService } from '@web/app/auth/login/login.service';
 import { LoginFormError } from '@web/app/common/form-error.interface';
 import { HttpStatus } from '../constants/http-status';
 
 interface AuthContextType {
-  user: { id: string; username: string } | null;
+  user: { id: string; username: string; createdAt: string; updatedAt: string } | null;
   loading: boolean;
   login: (formData: FormData) => Promise<LoginFormError | null>;
   logout: () => void;
-  setUser: (user: { id: string; username: string } | null) => void;
+  updateProfile: (newUsername: string) => Promise<void>; // Add updateProfile function to the context
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<{ id: string; username: string } | null>(null);
+  const [user, setUser] = useState<{ id: string; username: string; createdAt: string; updatedAt: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const fetchUser = async () => {
     try {
-      const response = await fetch('/api/auth/user');
+      const response = await fetch('/api/auth/profile');
       if (response.status === HttpStatus.OK) {
         const data = await response.json();
-        setUser({ id: data.id, username: data.username });
+        setUser({ id: data.id, username: data.username, createdAt: data.createdAt, updatedAt: data.updatedAt });
       } else if (response.status === HttpStatus.NO_CONTENT) {
         setUser(null);
       } else {
@@ -64,7 +64,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     router.push('/');
   };
 
-  return <AuthContext.Provider value={{ user, setUser, loading, login, logout }}>{children}</AuthContext.Provider>;
+  const updateProfile = async (newUsername: string) => {
+    if (!user) return;
+
+    try {
+      const response = await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: newUsername, id: user.id }),
+      });
+      if (response.ok) {
+        const updatedProfile = await response.json();
+        setUser(updatedProfile); // Update the user context with the new profile data
+      } else {
+        throw new Error('Failed to update profile');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      throw error;
+    }
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, loading, login, logout, updateProfile }}>{children}</AuthContext.Provider>
+  );
 };
 
 export const useAuth = (): AuthContextType => {
