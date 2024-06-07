@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import { Box, Flex, Button, Text, Avatar } from '@chakra-ui/react';
+import { Box, Flex, Button, Text, Avatar, Menu, MenuButton, MenuList, MenuItem, MenuDivider } from '@chakra-ui/react';
 import { useAuth } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faSignOutAlt, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faSignOutAlt, faSignInAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Header: React.FC = () => {
   const { user, logout, loading } = useAuth();
@@ -36,17 +36,33 @@ const Header: React.FC = () => {
         </Flex>
         {!loading && user && (
           <Flex align="center">
-            <Avatar
-              name={user.username}
-              size="sm"
-              mr={4}
-            />
-            <Button
-              onClick={logout}
-              leftIcon={<FontAwesomeIcon icon={faSignOutAlt} />}
-              colorScheme="gray">
-              Logout
-            </Button>
+            <Menu>
+              <MenuButton>
+                <Avatar
+                  name={user.username}
+                  size="sm"
+                  mr={4}
+                  cursor="pointer"
+                />
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={() => router.push('/auth/profile')}>
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    style={{ marginRight: '10px' }}
+                  />
+                  Profile
+                </MenuItem>
+                <MenuDivider />
+                <MenuItem onClick={logout}>
+                  <FontAwesomeIcon
+                    icon={faSignOutAlt}
+                    style={{ marginRight: '10px' }}
+                  />
+                  Logout
+                </MenuItem>
+              </MenuList>
+            </Menu>
           </Flex>
         )}
         {!loading && !user && (
