@@ -42,16 +42,15 @@ describe('AuthService', () => {
   });
 
   describe('login', () => {
-    it('should return a token signed from username and id', async () => {
+    it('should return a token signed from user id', async () => {
       // INIT
-      const user = { id: 1, username: 'tetris' } as User;
+      const user = { id: 1 } as User;
 
       // RUN
       const token = await service.login(user);
 
       // CHECK RESULTS
       expect(mockedJwtService.signAsync).toHaveBeenCalledWith({
-        username: user.username,
         sub: user.id,
       });
       expect(token.accessToken).toBe('token');

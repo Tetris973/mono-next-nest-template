@@ -45,7 +45,7 @@ export class AuthService {
    * Log a user in and return a JWT
    */
   async login(user: User): Promise<{ accessToken: string }> {
-    const payload: IJwtPayload = { username: user.username, sub: user.id };
+    const payload: IJwtPayload = { sub: user.id };
     const accessToken = await this.jwtService.signAsync(payload);
 
     return { accessToken };
