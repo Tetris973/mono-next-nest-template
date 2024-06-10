@@ -86,11 +86,13 @@ describe('AuthService', () => {
       } as CreateUserDto;
 
       mockedUserService.findOne.mockResolvedValue({
-        username: 'userLareadyExist',
+        username: 'userAlreadyInUse',
       });
 
       // RUN  & CHECK RESULTS
-      await expect(service.signup(createUserDto)).rejects.toThrow('Username is already taken');
+      await expect(service.signup(createUserDto)).rejects.toThrow(
+        `Username ${createUserDto.username} is already in use.`,
+      );
     });
   });
 

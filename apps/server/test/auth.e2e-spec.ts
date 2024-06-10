@@ -44,6 +44,21 @@ describe('AuthController (e2e)', () => {
     });
   });
 
+  describe('/auth/signup (POST)', () => {
+    it('should return 409 if username is already in use', async () => {
+      // INIT
+      const createUserDto: CreateUserDto = {
+        username: 'testUser',
+        password: 'Chocolat123!',
+        confirmPassword: 'Chocolat123!',
+      };
+      await request(app.getHttpServer()).post('/auth/signup').send(createUserDto);
+
+      // RUN & CHECK RESULT
+      await request(app.getHttpServer()).post('/auth/signup').send(createUserDto).expect(HttpStatus.CONFLICT);
+    });
+  });
+
   describe('signup, login and profile', () => {
     it('should create a user, login and get the profile', async () => {
       // INIT
