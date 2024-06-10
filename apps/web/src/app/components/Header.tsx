@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { Box, Flex, Button, Avatar, Menu, MenuButton, MenuList, MenuItem, MenuDivider } from '@chakra-ui/react';
-import { useAuth } from '@web/app/auth/authContext';
+import { useAuth } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSignOutAlt, faSignInAlt, faUser } from '@fortawesome/free-solid-svg-icons';

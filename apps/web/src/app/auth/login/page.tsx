@@ -20,10 +20,10 @@ import {
   Spinner,
   Checkbox,
 } from '@chakra-ui/react';
-import { useLogin } from './hooks/login.use';
+import { useLogin } from './login.use';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../authContext';
+import { useAuth } from '../AuthContext';
 
 export default function Login() {
   const { error, showPassword, setShowPassword, handleSubmit } = useLogin();
