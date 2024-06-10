@@ -1,59 +1,29 @@
+// app/auth/profile/page.tsx
+
 'use client';
-import React, { useEffect, useState } from 'react';
+
 import {
   Button,
   Flex,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Heading,
   Input,
   Stack,
   useColorModeValue,
   Avatar,
   Center,
-  useToast,
   Skeleton,
+  Spinner,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '../AuthContext';
+import { useUserProfileEdit } from './profile.use';
 import Header from '@web/app/components/Header';
+import { useRouter } from 'next/navigation';
 
 export default function UserProfileEdit(): JSX.Element {
-  const { user, loading, updateProfile } = useAuth();
+  const { user, error, newUsername, authLoading, loading, setNewUsername, handleSubmit } = useUserProfileEdit();
   const router = useRouter();
-  const toast = useToast();
-  const [newUsername, setNewUsername] = useState('');
-
-  useEffect(() => {
-    if (!user && !loading) {
-      router.push('/auth/login');
-    } else {
-      setNewUsername(user?.username || '');
-    }
-  }, [user, loading, router]);
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    try {
-      await updateProfile(newUsername);
-      toast({
-        title: 'Success',
-        description: 'Profile updated successfully',
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      });
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to update profile',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-  };
 
   return (
     <>
@@ -93,9 +63,10 @@ export default function UserProfileEdit(): JSX.Element {
           </FormControl>
           <FormControl
             id="userName"
+            isInvalid={!!error.username}
             isRequired>
             <FormLabel>User name</FormLabel>
-            {loading ? (
+            {authLoading ? (
               <Skeleton height="40px" />
             ) : (
               <Input
@@ -106,10 +77,11 @@ export default function UserProfileEdit(): JSX.Element {
                 onChange={(e) => setNewUsername(e.target.value)}
               />
             )}
+            <FormErrorMessage>{error.username}</FormErrorMessage>
           </FormControl>
           <FormControl id="createdAt">
             <FormLabel>Created At</FormLabel>
-            {loading ? (
+            {authLoading ? (
               <Skeleton height="40px" />
             ) : (
               <Input
@@ -124,7 +96,7 @@ export default function UserProfileEdit(): JSX.Element {
           </FormControl>
           <FormControl id="updatedAt">
             <FormLabel>Updated At</FormLabel>
-            {loading ? (
+            {authLoading ? (
               <Skeleton height="40px" />
             ) : (
               <Input
@@ -157,7 +129,9 @@ export default function UserProfileEdit(): JSX.Element {
               _hover={{
                 bg: 'blue.500',
               }}
-              onClick={handleSubmit}>
+              onClick={handleSubmit}
+              isLoading={loading}
+              spinner={<Spinner />}>
               Submit
             </Button>
           </Stack>

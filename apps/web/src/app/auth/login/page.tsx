@@ -23,7 +23,7 @@ import {
 import { useLogin } from './hooks/login.use';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../authContext';
 
 export default function Login() {
   const { error, showPassword, setShowPassword, handleSubmit } = useLogin();

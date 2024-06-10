@@ -2,16 +2,18 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { loginService } from '@web/app/auth/login/login.service';
+import { loginAction } from '@web/app/auth/login/login.service';
 import { LoginFormError } from '@web/app/common/form-error.interface';
-import { HttpStatus } from '../constants/http-status';
+import { logoutAction } from '@web/app/auth/logout/logout.service';
+import { updateProfileAction, getProfileAction } from '@web/app/auth/profile/profile.service';
+import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
 
 interface AuthContextType {
   user: { id: string; username: string; createdAt: string; updatedAt: string } | null;
   loading: boolean;
   login: (formData: FormData) => Promise<LoginFormError | null>;
   logout: () => void;
-  updateProfile: (newUsername: string) => Promise<void>; // Add updateProfile function to the context
+  updateProfile: (newUsername: string) => Promise<ActionErrorResponse | void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,22 +24,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const router = useRouter();
 
   const fetchUser = async () => {
-    try {
-      const response = await fetch('/api/auth/profile');
-      if (response.status === HttpStatus.OK) {
-        const data = await response.json();
-        setUser({ id: data.id, username: data.username, createdAt: data.createdAt, updatedAt: data.updatedAt });
-      } else if (response.status === HttpStatus.NO_CONTENT) {
-        setUser(null);
-      } else {
-        console.error(`Unexpected response status: ${response.status}`);
-      }
-    } catch (error) {
-      console.error("UNEXPECTED ERROR: couldn't fetch user", error);
+    const data = await getProfileAction();
+    if ('status' in data) {
       setUser(null);
-    } finally {
-      setLoading(false);
+    } else {
+      setUser(data);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -47,7 +40,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (formData: FormData): Promise<LoginFormError | null> => {
     setLoading(true);
 
-    const loginError = await loginService(formData);
+    const loginError = await loginAction(formData);
     if (loginError) {
       setLoading(false);
       return loginError;
@@ -59,7 +52,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = async () => {
-    await fetch('/api/auth/logout');
+    await logoutAction();
     setUser(null);
     router.push('/');
   };
@@ -67,22 +60,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateProfile = async (newUsername: string) => {
     if (!user) return;
 
-    try {
-      const response = await fetch('/api/auth/profile', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: newUsername, id: user.id }),
-      });
-      if (response.ok) {
-        const updatedProfile = await response.json();
-        setUser(updatedProfile); // Update the user context with the new profile data
-      } else {
-        throw new Error('Failed to update profile');
-      }
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      throw error;
+    const updateResponse = await updateProfileAction(newUsername);
+    if ('status' in updateResponse) {
+      return updateResponse;
     }
+
+    setUser(updateResponse);
   };
 
   return (

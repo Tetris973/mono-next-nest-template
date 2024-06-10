@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Heading, Stack, useColorModeValue, Spinner } from '@chakra-ui/react';
-import { useAuth } from './auth/AuthContext';
+import { useAuth } from './auth/authContext';
 import Header from './components/Header';
 
 export default function Home() {

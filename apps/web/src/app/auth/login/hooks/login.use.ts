@@ -5,7 +5,7 @@ import { useToast } from '@chakra-ui/react';
 import { validateLoginForm } from '../validation';
 import { HttpStatus } from '@web/app/constants/http-status';
 import { LoginFormError } from '@web/app/common/form-error.interface';
-import { useAuth } from '@web/app/auth/AuthContext';
+import { useAuth } from '@web/app/auth/authContext';
 import { useRouter } from 'next/navigation';
 
 export const useLogin = () => {
