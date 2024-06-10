@@ -1,4 +1,4 @@
-// app/auth/login/login.ts
+// app/auth/login/login.service.ts
 
 'use server';
 
@@ -48,7 +48,7 @@ const getErrorMessage = (status: number, parsedRes: any): LoginFormError | null 
   }
 };
 
-export const loginService = async (loginData: FormData): Promise<LoginFormError | null> => {
+export const loginAction = async (loginData: FormData): Promise<LoginFormError | null> => {
   let res: Response;
   try {
     res = await fetch(`${API_URL}/auth/login`, {
@@ -57,7 +57,6 @@ export const loginService = async (loginData: FormData): Promise<LoginFormError 
       body: JSON.stringify(Object.fromEntries(loginData)),
     });
   } catch (error) {
-    console.error('Fetch error:', error);
     return {
       message: 'Failed to connect to the server. Please try again later.',
       code: HttpStatus.SERVICE_UNAVAILABLE,

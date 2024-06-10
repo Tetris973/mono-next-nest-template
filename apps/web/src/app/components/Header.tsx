@@ -1,8 +1,9 @@
+// app/components/Header.tsx
 'use client';
 
 import React from 'react';
-import { Box, Flex, Button, Text, Avatar, Menu, MenuButton, MenuList, MenuItem, MenuDivider } from '@chakra-ui/react';
-import { useAuth } from '@web/app/auth/AuthContext';
+import { Box, Flex, Button, Avatar, Menu, MenuButton, MenuList, MenuItem, MenuDivider } from '@chakra-ui/react';
+import { useAuth } from '@web/app/auth/authContext';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSignOutAlt, faSignInAlt, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -22,17 +23,20 @@ const Header: React.FC = () => {
         justify="space-between">
         <Flex alignItems="center">
           <Box mr={4}>
-            <FontAwesomeIcon
-              icon={faHome}
-              size="2x"
-              color="gray.600"
-            />
+            <Button
+              onClick={() => router.push('/')}
+              leftIcon={
+                <FontAwesomeIcon
+                  icon={faHome}
+                  size="2x"
+                  color="gray.600"
+                />
+              }
+              fontWeight="bold"
+              fontSize="xl">
+              My App
+            </Button>
           </Box>
-          <Text
-            fontWeight="bold"
-            fontSize="xl">
-            My App
-          </Text>
         </Flex>
         {!loading && user && (
           <Flex align="center">
