@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { validateUserProfileEditForm } from './validation';
 import { HttpStatus } from '@web/app/constants/http-status';
-import { useAuth } from '@web/app/auth/authContext';
+import { useAuth } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 
 export const useUserProfileEdit = () => {

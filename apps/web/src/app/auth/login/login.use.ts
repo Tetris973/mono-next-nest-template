@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/react';
-import { validateLoginForm } from '../validation';
+import { validateLoginForm } from './validation';
 import { HttpStatus } from '@web/app/constants/http-status';
 import { LoginFormError } from '@web/app/common/form-error.interface';
-import { useAuth } from '@web/app/auth/authContext';
+import { useAuth } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 
 export const useLogin = () => {
