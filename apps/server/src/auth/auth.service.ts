@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
 import { IJwtPayload } from './passport/jwt-payload.interface';
 import { CreateUserDto } from '@server/user/dto/create-user.dto';
+import { FieldAlreadyInUseException } from '@server/common/field-already-In-use.exception';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +20,7 @@ export class AuthService {
       username,
     });
     if (user) {
-      throw new Error('Username is already taken');
+      throw new FieldAlreadyInUseException('Username', username);
     }
     const hash = await bcrypt.hash(password, 10);
     return this.userService.create({ username, password: hash });

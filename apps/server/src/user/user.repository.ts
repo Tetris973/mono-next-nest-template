@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
+import { FieldAlreadyInUseException } from '@server/common/field-already-In-use.exception';
 
 @Injectable()
 export class UserRepository {
@@ -53,7 +54,7 @@ export class UserRepository {
       switch (error.code) {
         case 'P2002': {
           const field = Array.isArray(error.meta?.target) ? error.meta.target.join(', ') : '';
-          throw new Error(`${field} ${data[field as keyof typeof data]} is already in use.`);
+          throw new FieldAlreadyInUseException(field, data[field as keyof typeof data]);
         }
         default:
           throw error;
@@ -112,7 +113,7 @@ export class UserRepository {
         // Handle unique constraint violation
         case 'P2002': {
           const field = Array.isArray(error.meta?.target) ? error.meta.target.join(', ') : '';
-          throw new Error(`${field} ${data[field as keyof typeof data]} is already in use.`);
+          throw new FieldAlreadyInUseException(field, data[field as keyof typeof data]);
         }
 
         default:

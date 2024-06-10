@@ -121,6 +121,18 @@ describe('UserController (e2e)', () => {
         .expect(HttpStatus.FORBIDDEN);
     });
 
+    it('should return Conflict when the username already exists', async () => {
+      // INIT
+      const authCookie = await loginAsTestUser();
+
+      // RUN & CHECK RESULT
+      await request(app.getHttpServer())
+        .patch(`/users/${Users.testUser}`)
+        .send({ username: Users[Users.tetris] })
+        .set('Cookie', authCookie)
+        .expect(HttpStatus.CONFLICT);
+    });
+
     it('should return Unauthorized when the user is not logged', async () => {
       // RUN & CHECK RESULT
       await request(app.getHttpServer())

@@ -7,8 +7,9 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthzModule } from './authz/authz.module';
 import { RoleModule } from './role/role.module';
 import { ConfigModule } from './config/config.module';
-import { APP_INTERCEPTOR, APP_PIPE, Reflector } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_PIPE, Reflector, APP_FILTER } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
+import { AllExceptionsFilter } from './all-exceptions.filter';
 
 @Module({
   imports: [
@@ -44,6 +45,10 @@ import cookieParser from 'cookie-parser';
         }),
       // This tells NestJS to inject the Reflector service into the factory
       inject: [Reflector],
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
     },
   ],
 })
