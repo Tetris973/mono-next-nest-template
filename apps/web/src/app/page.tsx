@@ -1,13 +1,11 @@
 'use client';
 
 import { Box, Heading, Stack, useColorModeValue, Spinner } from '@chakra-ui/react';
-import { useAuth } from './auth/AuthContext';
 import Header from './components/Header';
+import { useProfile } from './auth/ProfileContext';
 
 export default function Home() {
-  const { user, loading } = useAuth();
-
-  const bg = useColorModeValue('gray.50', 'gray.800');
+  const { user, loading } = useProfile();
 
   return (
     <>
@@ -17,7 +15,7 @@ export default function Home() {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bg={bg}
+        bg={useColorModeValue('gray.50', 'gray.800')}
         py={12}
         px={6}>
         <Stack
@@ -26,7 +24,8 @@ export default function Home() {
           maxW="lg"
           align="center">
           <Heading fontSize="4xl">Welcome to My Next.js App</Heading>
-          {!loading ? user && <Heading fontSize="4xl">{user.username}!</Heading> : <Spinner />}
+          {loading && <Spinner />}
+          {!loading && <Heading fontSize="4xl">{user?.username}</Heading>}
         </Stack>
       </Box>
     </>

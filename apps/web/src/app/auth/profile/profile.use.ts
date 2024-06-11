@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { validateUserProfileEditForm } from './validation';
 import { HttpStatus } from '@web/app/constants/http-status';
-import { useAuth } from '@web/app/auth/AuthContext';
+import { useProfile } from '@web/app/auth/ProfileContext';
 import { useRouter } from 'next/navigation';
 
 export const useUserProfileEdit = () => {
-  const { user, loading: authLoading, updateProfile } = useAuth();
+  const { user, updateProfile, loading: profileLoading } = useProfile();
   const [error, setError] = useState({ username: '' });
   const [newUsername, setNewUsername] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,12 +16,12 @@ export const useUserProfileEdit = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!user && !authLoading) {
+    if (!user && !profileLoading) {
       router.push('/auth/login');
     } else {
       setNewUsername(user?.username || '');
     }
-  }, [user, authLoading, router]);
+  }, [user, profileLoading, router]);
 
   const toastServerError = (message: string) => {
     toast.closeAll();
@@ -75,8 +75,8 @@ export const useUserProfileEdit = () => {
   return {
     error,
     newUsername,
-    authLoading,
     loading,
+    profileLoading,
     setNewUsername,
     handleSubmit,
     user,

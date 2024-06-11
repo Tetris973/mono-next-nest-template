@@ -23,11 +23,9 @@ import {
 import { useLogin } from './login.use';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../AuthContext';
 
 export default function Login() {
-  const { error, showPassword, setShowPassword, handleSubmit } = useLogin();
-  const { loading } = useAuth();
+  const { error, showPassword, setShowPassword, handleSubmit, authLoading } = useLogin();
 
   return (
     <Flex
@@ -114,7 +112,7 @@ export default function Login() {
                   _hover={{
                     bg: 'blue.500',
                   }}
-                  isLoading={loading}
+                  isLoading={authLoading}
                   spinner={<Spinner />}>
                   Sign in
                 </Button>

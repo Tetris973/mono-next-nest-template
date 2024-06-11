@@ -22,7 +22,7 @@ import Header from '@web/app/components/Header';
 import { useRouter } from 'next/navigation';
 
 export default function UserProfileEdit(): JSX.Element {
-  const { user, error, newUsername, authLoading, loading, setNewUsername, handleSubmit } = useUserProfileEdit();
+  const { user, error, newUsername, profileLoading, loading, setNewUsername, handleSubmit } = useUserProfileEdit();
   const router = useRouter();
 
   return (
@@ -66,7 +66,7 @@ export default function UserProfileEdit(): JSX.Element {
             isInvalid={!!error.username}
             isRequired>
             <FormLabel>User name</FormLabel>
-            {authLoading ? (
+            {profileLoading ? (
               <Skeleton height="40px" />
             ) : (
               <Input
@@ -81,7 +81,7 @@ export default function UserProfileEdit(): JSX.Element {
           </FormControl>
           <FormControl id="createdAt">
             <FormLabel>Created At</FormLabel>
-            {authLoading ? (
+            {profileLoading ? (
               <Skeleton height="40px" />
             ) : (
               <Input
@@ -96,7 +96,7 @@ export default function UserProfileEdit(): JSX.Element {
           </FormControl>
           <FormControl id="updatedAt">
             <FormLabel>Updated At</FormLabel>
-            {authLoading ? (
+            {profileLoading ? (
               <Skeleton height="40px" />
             ) : (
               <Input

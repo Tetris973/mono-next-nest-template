@@ -9,17 +9,17 @@ import { useAuth } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 
 export const useLogin = () => {
-  const { login, user } = useAuth();
+  const { login, loading: authLoading, isAuthenticated } = useAuth();
   const [error, setError] = useState({ username: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
+    if (isAuthenticated) {
       router.push('/');
     }
-  }, [user, router]);
+  }, [isAuthenticated, router]);
 
   const toastServerError = (message: string) => {
     toast.closeAll();
@@ -76,5 +76,6 @@ export const useLogin = () => {
     showPassword,
     setShowPassword,
     handleSubmit,
+    authLoading,
   };
 };
