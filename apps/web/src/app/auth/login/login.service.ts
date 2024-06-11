@@ -71,3 +71,9 @@ export const loginAction = async (loginData: FormData): Promise<LoginFormError |
   const parsedRes = await res.json();
   return getErrorMessage(res.status, parsedRes);
 };
+
+export const isAuthenticatedAction = () => {
+  const cookieStore = cookies();
+  const token = cookieStore.get('Authentication')?.value;
+  return !!token;
+};

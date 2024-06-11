@@ -1,15 +1,27 @@
-// app/components/Header.tsx
 'use client';
 
 import React from 'react';
-import { Box, Flex, Button, Avatar, Menu, MenuButton, MenuList, MenuItem, MenuDivider } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Button,
+  Avatar,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
+  Spinner,
+} from '@chakra-ui/react';
+import { useProfile } from '@web/app/auth/ProfileContext';
 import { useAuth } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSignOutAlt, faSignInAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Header: React.FC = () => {
-  const { user, logout, loading } = useAuth();
+  const { logout } = useAuth();
+  const { user, loading } = useProfile();
   const router = useRouter();
 
   return (
@@ -38,6 +50,7 @@ const Header: React.FC = () => {
             </Button>
           </Box>
         </Flex>
+        {loading && <Spinner />}
         {!loading && user && (
           <Flex align="center">
             <Menu>
