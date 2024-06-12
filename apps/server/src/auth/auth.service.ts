@@ -6,12 +6,14 @@ import { User } from '@prisma/client';
 import { IJwtPayload } from './passport/jwt-payload.interface';
 import { CreateUserDto } from '@server/user/dto/create-user.dto';
 import { FieldAlreadyInUseException } from '@server/common/field-already-In-use.exception';
+import { AuthzService } from '@server/authz/authz.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private authzService: AuthzService,
   ) {}
 
   async signup(createUserDto: CreateUserDto) {
@@ -46,7 +48,9 @@ export class AuthService {
    * Log a user in and return a JWT
    */
   async login(user: User): Promise<{ accessToken: string }> {
-    const payload: IJwtPayload = { sub: user.id };
+    const res = await this.authzService.findAllRolesOfUser(user);
+    const roles = res.map((role) => role.name);
+    const payload: IJwtPayload = { sub: user.id, roles };
     const accessToken = await this.jwtService.signAsync(payload);
 
     return { accessToken };

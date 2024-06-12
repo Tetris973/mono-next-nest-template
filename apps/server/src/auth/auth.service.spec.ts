@@ -5,7 +5,9 @@ import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { CreateUserDto } from '@server/user/dto/create-user.dto';
+import { AuthzService } from '@server/authz/authz.service';
 import bcrypt from 'bcrypt';
+import { BaseRoles } from '@server/authz/baseRoles.enum';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -20,6 +22,10 @@ describe('AuthService', () => {
     userCredentials: vi.fn(),
   };
 
+  const mockedAuthzService = {
+    findAllRolesOfUser: vi.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [AuthService],
@@ -30,6 +36,9 @@ describe('AuthService', () => {
         }
         if (token === JwtService) {
           return mockedJwtService;
+        }
+        if (token === AuthzService) {
+          return mockedAuthzService;
         }
       })
       .compile();
@@ -45,6 +54,11 @@ describe('AuthService', () => {
     it('should return a token signed from user id', async () => {
       // INIT
       const user = { id: 1 } as User;
+      mockedAuthzService.findAllRolesOfUser.mockResolvedValue([
+        { id: BaseRoles.ADMIN, name: BaseRoles[BaseRoles.ADMIN] },
+        { id: BaseRoles.USER, name: BaseRoles[BaseRoles.USER] },
+      ]);
+      const expectedRoles = [BaseRoles[BaseRoles.ADMIN], BaseRoles[BaseRoles.USER]];
 
       // RUN
       const token = await service.login(user);
@@ -52,6 +66,7 @@ describe('AuthService', () => {
       // CHECK RESULTS
       expect(mockedJwtService.signAsync).toHaveBeenCalledWith({
         sub: user.id,
+        roles: expectedRoles,
       });
       expect(token.accessToken).toBe('token');
     });
