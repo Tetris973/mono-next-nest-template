@@ -1,3 +1,5 @@
+// src/app/auth/login/page.tsx
+
 'use client';
 import { Flex, Stack, Heading, useColorModeValue } from '@chakra-ui/react';
 import { LoginForm } from './LoginForm';

@@ -1,11 +1,13 @@
 'use client';
 
-import { Box, Heading, Stack, useColorModeValue, Spinner } from '@chakra-ui/react';
-import Header from './components/Header';
+import { Box, Heading, Stack, useColorModeValue, Spinner, Button } from '@chakra-ui/react';
+import { Header } from './components/Header';
 import { useProfile } from './auth/ProfileContext';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const { user, loading } = useProfile();
+  const router = useRouter();
 
   return (
     <>
@@ -25,7 +27,12 @@ export default function Home() {
           align="center">
           <Heading fontSize="4xl">Welcome to My Next.js App</Heading>
           {loading && <Spinner />}
-          {!loading && <Heading fontSize="4xl">{user?.username}</Heading>}
+          {!loading && user && (
+            <>
+              <Heading fontSize="4xl">{user?.username}</Heading>
+              <Button onClick={() => router.push('/user/dashboard')}>Go to dashboard</Button>
+            </>
+          )}
         </Stack>
       </Box>
     </>

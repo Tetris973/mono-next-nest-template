@@ -1,11 +1,10 @@
-// app/auth/profile/hooks/useUserProfileEdit.ts
+// app/auth/profile/profile.use
 
 import { useState, useEffect } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { validateUserProfileEditForm } from './validation';
 import { HttpStatus } from '@web/app/constants/http-status';
 import { useProfile } from '@web/app/auth/ProfileContext';
-import { useRouter } from 'next/navigation';
 
 export const useUserProfileEdit = () => {
   const { user, updateProfile, loading: profileLoading } = useProfile();
@@ -13,15 +12,12 @@ export const useUserProfileEdit = () => {
   const [newUsername, setNewUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const toast = useToast();
-  const router = useRouter();
 
   useEffect(() => {
-    if (!user && !profileLoading) {
-      router.push('/auth/login');
-    } else {
-      setNewUsername(user?.username || '');
+    if (!profileLoading && user) {
+      setNewUsername(user.username || '');
     }
-  }, [user, profileLoading, router]);
+  }, [user, profileLoading]);
 
   const toastServerError = (message: string) => {
     toast.closeAll();

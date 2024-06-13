@@ -1,10 +1,12 @@
+// app/auth/profile/ProfileAvatar.tsx
+
 import { Avatar, Center, Stack, FormControl, FormLabel } from '@chakra-ui/react';
 
 interface ProfileAvatarProps {
   username: string;
 }
 
-const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ username }) => (
+export const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ username }) => (
   <FormControl id="userIcon">
     <FormLabel>User Icon</FormLabel>
     <Stack
@@ -20,5 +22,3 @@ const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ username }) => (
     </Stack>
   </FormControl>
 );
-
-export default ProfileAvatar;

@@ -1,14 +1,16 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { loginAction, isAuthenticatedAction } from '@web/app/auth/login/login.service';
+import { loginAction, isAuthenticatedAction, getRolesAction } from '@web/app/auth/login/login.service';
 import { LoginFormError } from '@web/app/common/form-error.interface';
 import { logoutAction } from '@web/app/auth/logout/logout.service';
+import { Role } from './profile/role.interface';
 
 interface AuthContextType {
   login: (formData: FormData) => Promise<LoginFormError | null>;
   logout: () => void;
   loading: boolean;
   isAuthenticated: boolean;
+  roles: Role[];
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -16,11 +18,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProviderNew: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [roles, setRoles] = useState<Role[]>([]);
   const router = useRouter();
 
   useEffect(() => {
     const rehydrateAuth = async () => {
       const isAuthenticated = await isAuthenticatedAction();
+      setRoles(await getRolesAction());
       setLoading(false);
       setIsAuthenticated(isAuthenticated);
     };
@@ -35,6 +39,7 @@ export const AuthProviderNew: React.FC<{ children: React.ReactNode }> = ({ child
       return loginError;
     }
     setIsAuthenticated(true);
+    setRoles(await getRolesAction());
     setLoading(false);
     return null;
   };
@@ -44,12 +49,15 @@ export const AuthProviderNew: React.FC<{ children: React.ReactNode }> = ({ child
 
     await logoutAction();
     setIsAuthenticated(false);
+    setRoles([]);
     router.push('/');
 
     setLoading(false);
   };
 
-  return <AuthContext.Provider value={{ login, logout, loading, isAuthenticated }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ login, logout, loading, isAuthenticated, roles }}>{children}</AuthContext.Provider>
+  );
 };
 
 export const useAuth = (): AuthContextType => {
