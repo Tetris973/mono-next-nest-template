@@ -1,14 +1,32 @@
-// app/auth/profile/ProfileForm.tsx
+// app/dashboard/UserEditForm.tsx
 
 import { Button, Stack, Spinner } from '@chakra-ui/react';
-import { useUserProfileEdit } from './profile.use';
-import { ProfileField } from './ProfileField';
-import { ProfileAvatar } from './ProfileAvatar';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { ProfileField } from '@web/app/auth/profile/ProfileField';
+import { ProfileAvatar } from '@web/app/auth/profile/ProfileAvatar';
+import { User } from '@web/app/user/user.interface';
 
-export const ProfileForm: React.FC = () => {
-  const { user, error, newUsername, profileLoading, loading, setNewUsername, handleSubmit } = useUserProfileEdit();
-  const router = useRouter();
+interface UserEditFormProps {
+  user: User | null;
+  onCancel: () => void;
+  onSubmit: (user: User) => Promise<void>;
+  error: string | null;
+  loading: boolean;
+}
+
+export const UserEditForm: React.FC<UserEditFormProps> = ({ user, onCancel, onSubmit, error, loading }) => {
+  const [newUsername, setNewUsername] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      setNewUsername(user.username);
+    }
+  }, [user]);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    await onSubmit({ ...user, username: newUsername } as User);
+  };
 
   return (
     <Stack
@@ -25,8 +43,8 @@ export const ProfileForm: React.FC = () => {
         id="userName"
         label="User name"
         value={newUsername}
-        error={error.username}
-        loading={profileLoading}
+        error={error || ''}
+        loading={loading}
         onChange={(e) => setNewUsername(e.target.value)}
       />
       <ProfileField
@@ -34,7 +52,7 @@ export const ProfileForm: React.FC = () => {
         label="Created At"
         value={user?.createdAt || ''}
         error=""
-        loading={profileLoading}
+        loading={loading}
         isReadOnly
       />
       <ProfileField
@@ -42,14 +60,14 @@ export const ProfileForm: React.FC = () => {
         label="Updated At"
         value={user?.updatedAt || ''}
         error=""
-        loading={profileLoading}
+        loading={loading}
         isReadOnly
       />
       <Stack
         spacing={6}
         direction={['column', 'row']}>
         <Button
-          onClick={() => router.push('/')}
+          onClick={onCancel}
           bg={'red.400'}
           color={'white'}
           w="full"

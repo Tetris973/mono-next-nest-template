@@ -7,6 +7,9 @@ import { cookies } from 'next/headers';
 import { LoginFormError } from '@web/app/common/form-error.interface';
 import { API_URL } from '@web/app/constants/api';
 import { HttpStatus } from '@web/app/constants/http-status';
+import { Role } from '@web/app/auth/profile/role.interface';
+import { IJwtPayload } from '@web/app/auth/jwt-payload.interface';
+import { logoutAction } from '../logout/logout.service';
 
 const setAuthCookie = (response: Response) => {
   const setCookieHeader = response.headers.get('Set-Cookie');
@@ -76,4 +79,19 @@ export const isAuthenticatedAction = () => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
   return !!token;
+};
+
+export const getRolesAction = (): Role[] => {
+  const cookieStore = cookies();
+  const token = cookieStore.get('Authentication')?.value || '';
+  if (!token) {
+    return [];
+  }
+  try {
+    const decodedToken = jwtDecode<IJwtPayload>(token);
+    return decodedToken.roles;
+  } catch (error) {
+    logoutAction();
+    return [];
+  }
 };

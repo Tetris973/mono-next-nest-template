@@ -7,13 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 import { API_URL } from '@web/app/constants/api';
 import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
 import { HttpStatus } from '@web/app/constants/http-status';
-
-interface Profile {
-  id: string;
-  username: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Profile } from './profile.interface';
 
 export async function getProfileAction(): Promise<Profile | ActionErrorResponse> {
   const cookieStore = cookies();

@@ -1,3 +1,5 @@
+// app/auth/profile/ProfileField.tsx
+
 import { FormControl, FormLabel, FormErrorMessage, Input, Skeleton } from '@chakra-ui/react';
 
 interface ProfileFieldProps {
@@ -10,7 +12,7 @@ interface ProfileFieldProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ProfileField: React.FC<ProfileFieldProps> = ({
+export const ProfileField: React.FC<ProfileFieldProps> = ({
   id,
   label,
   value,
@@ -40,5 +42,3 @@ const ProfileField: React.FC<ProfileFieldProps> = ({
     <FormErrorMessage>{error}</FormErrorMessage>
   </FormControl>
 );
-
-export default ProfileField;

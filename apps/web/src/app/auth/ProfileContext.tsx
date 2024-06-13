@@ -1,10 +1,11 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { updateProfileAction, getProfileAction } from '@web/app/auth/profile/profile.service';
+import { Profile } from '@web/app/auth/profile/profile.interface';
 import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
 import { useAuth } from './AuthContext';
 
 interface ProfileContextType {
-  user: { id: string; username: string; createdAt: string; updatedAt: string } | null;
+  user: Profile | null;
   loading: boolean;
   fetchUser: () => Promise<void>;
   updateProfile: (newUsername: string) => Promise<ActionErrorResponse | void>;
@@ -13,7 +14,7 @@ interface ProfileContextType {
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<{ id: string; username: string; createdAt: string; updatedAt: string } | null>(null);
+  const [user, setUser] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const { isAuthenticated } = useAuth();
 
@@ -42,6 +43,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
       fetchUser();
     } else {
       setUser(null);
+      setLoading(false);
     }
   }, [isAuthenticated]);
 

@@ -19,7 +19,7 @@ import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSignOutAlt, faSignInAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 
-const Header: React.FC = () => {
+export const Header: React.FC = () => {
   const { logout } = useAuth();
   const { user, loading } = useProfile();
   const router = useRouter();
@@ -94,5 +94,3 @@ const Header: React.FC = () => {
     </Box>
   );
 };
-
-export default Header;
