@@ -20,12 +20,12 @@ import {
   useBoolean,
 } from '@chakra-ui/react';
 import { useDashboard } from './dashboard.use';
-import { useUserUpdate } from './updateUser.use';
 import { UserCard } from './UserCard';
 import { UserList } from './UserList';
 import { User } from '@web/app/user/user.interface';
 import { Header } from '@web/app/components/Header';
-import { UserEditForm } from './UserEditForm';
+import { ProfileForm } from '@web/app/auth/profile/ProfileForm';
+import { useProfile } from '@web/app/auth/ProfileContext';
 
 const UserCardContainer: React.FC<{
   user: User | null;
@@ -63,7 +63,7 @@ export function Dashboard(): JSX.Element {
     deleteUser,
     reloadAfterUpdate,
   } = useDashboard();
-  const { updateUser, loading: loadingUpdate, error: updateError } = useUserUpdate();
+  const { loadProfile, profile } = useProfile();
   const toast = useToast();
   const bg = useColorModeValue('gray.50', 'gray.800');
 
@@ -92,6 +92,14 @@ export function Dashboard(): JSX.Element {
     }
   };
 
+  const onSubmitSuccess = () => {
+    reloadAfterUpdate();
+    if (selectedUser?.id === profile?.id) {
+      loadProfile();
+    }
+    setEditing.off();
+  };
+
   return (
     <>
       <Header />
@@ -114,18 +122,11 @@ export function Dashboard(): JSX.Element {
             containerStyle={{ marginRight: '32px' }}
           />
           <Spacer />
-          {editing ? (
-            <UserEditForm
-              user={selectedUser}
+          {editing && selectedUser ? (
+            <ProfileForm
+              userId={selectedUser.id || ''}
               onCancel={setEditing.off}
-              onSubmit={async (user) => {
-                const updatedUser = await updateUser(user);
-                if (!updatedUser) return;
-                await reloadAfterUpdate();
-                setEditing.off();
-              }}
-              error={updateError}
-              loading={loadingUpdate}
+              onSubmitSuccess={onSubmitSuccess}
             />
           ) : (
             <UserCardContainer

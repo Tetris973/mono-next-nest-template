@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getAllUsersAction, getUserByIdAction, deleteUserAction } from './dashboard.service';
 import { User } from '@web/app/user/user.interface';
-import { Role } from '@web/app/auth/profile/role.interface';
+import { Role } from '@web/app/auth/role.interface';
 import { useAuth } from '@web/app/auth/AuthContext';
 
 export const useDashboard = () => {

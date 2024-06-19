@@ -2,7 +2,7 @@
 
 import { useState, useEffect, CSSProperties } from 'react';
 import { Box, Input, List, ListItem, Text, useColorModeValue, Spinner } from '@chakra-ui/react';
-import { User } from './dashboard.service';
+import { User } from '@web/app/user/user.interface';
 
 interface UserListProps {
   users: User[];
