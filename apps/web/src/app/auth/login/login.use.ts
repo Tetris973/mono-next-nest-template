@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { validateLoginForm } from './validation';
-import { HttpStatus } from '@web/app/constants/http-status';
+import { HttpStatus } from '@web/app/constants/http-status.enum';
 import { LoginFormError } from '@web/app/common/form-error.interface';
 import { useAuth } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';

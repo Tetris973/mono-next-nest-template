@@ -59,9 +59,9 @@ export function Dashboard(): JSX.Element {
     loadingSelectedUser,
     error,
     showAdmin,
-    fetchUserById,
+    loadUserById,
     deleteUser,
-    reloadAfterUpdate,
+    loadUsers,
   } = useDashboard();
   const { loadProfile, profile } = useProfile();
   const { toastError, toastSuccess } = useCustomToast();
@@ -85,7 +85,7 @@ export function Dashboard(): JSX.Element {
   };
 
   const onSubmitSuccess = () => {
-    reloadAfterUpdate();
+    loadUsers();
     if (selectedUser?.id === profile?.id) {
       loadProfile();
     }
@@ -110,7 +110,7 @@ export function Dashboard(): JSX.Element {
             users={users}
             loading={loadingUsers}
             error={error}
-            onUserSelect={fetchUserById}
+            onUserSelect={loadUserById}
             containerStyle={{ marginRight: '32px' }}
           />
           <Spacer />

@@ -1,12 +1,25 @@
 // app/dashboard/dashboard.use.ts
 
 import { useState, useEffect } from 'react';
-import { getAllUsersAction, getUserByIdAction, deleteUserAction } from './dashboard.service';
+import { getAllUsersAction, getUserByIdAction, deleteUserAction } from '@web/app/user/user.service';
 import { User } from '@web/app/user/user.interface';
-import { Role } from '@web/app/auth/role.interface';
 import { useAuth } from '@web/app/auth/AuthContext';
+import { Role } from '@web/app/auth/role.interface';
+import { ApiException } from '@web/app/common/ApiException';
 
-export const useDashboard = () => {
+interface useDashboard {
+  users: User[];
+  selectedUser: User | null;
+  loadingUsers: boolean;
+  loadingSelectedUser: boolean;
+  error: string;
+  showAdmin: boolean;
+  loadUserById: (id: string) => void;
+  deleteUser: (id: string) => void;
+  loadUsers: () => void;
+}
+
+export const useDashboard = (): useDashboard => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [loadingUsers, setLoadingUsers] = useState(true);
@@ -22,29 +35,21 @@ export const useDashboard = () => {
   }, [roles]);
 
   useEffect(() => {
-    setLoadingUsers(true);
-    getAllUsersAction()
-      .then((data) => {
-        setUsers(data);
-        setLoadingUsers(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoadingUsers(false);
-      });
+    loadUsers()
   }, []);
 
-  const fetchUserById = (id: string) => {
+  const loadUserById = async (id: string) => {
     setLoadingSelectedUser(true);
-    getUserByIdAction(id)
-      .then((data) => {
-        setSelectedUser(data);
-        setLoadingSelectedUser(false);
-      })
-      .catch((err) => {
+    try {
+      const user = await getUserByIdAction(id);
+      setSelectedUser(user);
+    } catch (err) {
+      if (err instanceof ApiException) {
         setError(err.message);
-        setLoadingSelectedUser(false);
-      });
+      }
+    } finally {
+      setLoadingSelectedUser(false);
+    }
   };
 
   const deleteUser = async (id: string) => {
@@ -53,26 +58,30 @@ export const useDashboard = () => {
       await deleteUserAction(id);
       setUsers(users.filter((user) => user.id !== id));
       setSelectedUser(null);
-      setLoadingSelectedUser(false);
     } catch (err) {
-      setError((err as Error).message);
+      if (err instanceof ApiException) {
+        setError(err.message);
+      }
+    } finally {
       setLoadingSelectedUser(false);
     }
   };
 
-  const reloadAfterUpdate = async () => {
+  const loadUsers = async () => {
     setLoadingUsers(true);
     setLoadingSelectedUser(true);
     try {
-      const data = await getAllUsersAction();
-      setUsers(data);
-      const res = data.find((user) => user.id === selectedUser?.id);
-      setSelectedUser(res || null);
+      const users = await getAllUsersAction();
+      setUsers(users);
+      const user = users.find((user) => user.id === selectedUser?.id);
+      setSelectedUser(user || null);
+    } catch (err) {
+      if (err instanceof ApiException) {
+        setError(err.message);
+      }
+    } finally {
       setLoadingUsers(false);
       setLoadingSelectedUser(false);
-    } catch (err) {
-      setError((err as Error).message);
-      setLoadingUsers(false);
     }
   };
 
@@ -83,8 +92,8 @@ export const useDashboard = () => {
     loadingSelectedUser,
     error,
     showAdmin,
-    fetchUserById,
+    loadUserById,
     deleteUser,
-    reloadAfterUpdate,
+    loadUsers,
   };
 };

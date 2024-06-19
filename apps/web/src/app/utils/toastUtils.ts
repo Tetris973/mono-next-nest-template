@@ -1,32 +1,18 @@
-import { useToast, UseToastOptions, ToastId } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { useToast, UseToastOptions } from '@chakra-ui/react';
 
 const useCustomToast = () => {
   const toast = useToast();
-  const toastIds = useRef<ToastId[]>([]);
 
   const showToast = (options: UseToastOptions) => {
-    if (toastIds.current.length >= 3) {
-      const oldestToastId = toastIds.current.shift();
-      if (oldestToastId) {
-        toast.close(oldestToastId);
-      }
-    }
-
-    const id = toast({
+    toast({
       duration: 5000,
       isClosable: true,
       ...options,
     });
-
-    if (id) {
-      toastIds.current.push(id);
-    }
   };
 
   const closeAllToasts = () => {
     toast.closeAll();
-    toastIds.current = [];
   };
 
   return {
