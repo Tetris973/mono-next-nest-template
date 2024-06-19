@@ -1,18 +1,18 @@
 // app/auth/login/login.use
 
 import { useState, useEffect } from 'react';
-import { useToast } from '@chakra-ui/react';
 import { validateLoginForm } from './validation';
 import { HttpStatus } from '@web/app/constants/http-status';
 import { LoginFormError } from '@web/app/common/form-error.interface';
 import { useAuth } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
+import { useCustomToast } from '@web/app/utils/toastUtils';
 
 export const useLogin = () => {
   const { login, loading: authLoading, isAuthenticated } = useAuth();
   const [error, setError] = useState({ username: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
-  const toast = useToast();
+  const { toastError, closeAllToasts } = useCustomToast();
   const router = useRouter();
 
   useEffect(() => {
@@ -21,22 +21,11 @@ export const useLogin = () => {
     }
   }, [isAuthenticated, router]);
 
-  const toastServerError = (message: string) => {
-    toast.closeAll();
-    toast({
-      title: 'Server Error',
-      description: message,
-      status: 'error',
-      duration: 5000,
-      isClosable: true,
-    });
-  };
-
   const handleLoginError = (loginError: LoginFormError) => {
     switch (loginError.code) {
       case HttpStatus.SERVICE_UNAVAILABLE:
-        toast.closeAll();
-        toastServerError(loginError.message);
+        closeAllToasts();
+        toastError(loginError.message);
         break;
       case HttpStatus.NOT_FOUND:
         setError((prev) => ({ ...prev, username: 'User not found' }));
@@ -45,8 +34,8 @@ export const useLogin = () => {
         setError((prev) => ({ ...prev, password: 'Incorrect password' }));
         break;
       default:
-        toast.closeAll();
-        toastServerError(loginError.message);
+        closeAllToasts();
+        toastError(loginError.message);
         break;
     }
   };

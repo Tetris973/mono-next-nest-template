@@ -1,9 +1,10 @@
 // apps/web/src/app/auth/profile/ProfileForm.tsx
 
-import { Button, Stack, Spinner, useToast } from '@chakra-ui/react';
+import { Button, Stack, Spinner } from '@chakra-ui/react';
 import { useProfileForm } from './profile.use';
 import { ProfileField } from './ProfileField';
 import { ProfileAvatar } from './ProfileAvatar';
+import { useCustomToast } from '@web/app/utils/toastUtils';
 
 interface ProfileFormProps {
   userId: string;
@@ -14,26 +15,14 @@ interface ProfileFormProps {
 export const ProfileForm: React.FC<ProfileFormProps> = ({ userId, onCancel, onSubmitSuccess }) => {
   const { user, profileError, newUsername, profileLoading, submitLoading, setNewUsername, handleSubmit } =
     useProfileForm(userId);
-  const toast = useToast();
+  const { toastError, toastSuccess } = useCustomToast();
 
   const handleFormSubmit = async (event: React.FormEvent) => {
     const result = await handleSubmit(event);
     if (result.error) {
-      toast({
-        title: 'Error',
-        description: result.error,
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
+      toastError(result.error);
     } else if (result.success) {
-      toast({
-        title: 'Success',
-        description: result.success,
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      });
+      toastSuccess(result.success);
       onSubmitSuccess();
     }
   };
