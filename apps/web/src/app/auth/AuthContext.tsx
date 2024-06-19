@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { loginAction, isAuthenticatedAction, getRolesAction } from '@web/app/auth/login/login.service';
 import { LoginFormError } from '@web/app/common/form-error.interface';
 import { logoutAction } from '@web/app/auth/logout/logout.service';
-import { Role } from './profile/role.interface';
+import { Role } from './role.interface';
 
 interface AuthContextType {
   login: (formData: FormData) => Promise<LoginFormError | null>;

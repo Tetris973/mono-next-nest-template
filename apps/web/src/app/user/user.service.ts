@@ -4,7 +4,13 @@ import { API_URL } from '@web/app/constants/api';
 import { cookies } from 'next/headers';
 import { User } from '@web/app/user/user.interface';
 import { HttpStatus } from '@web/app/constants/http-status.enum';
-import { UnauthorizedException, ServiceUnavailableException, BadRequestException, ConflictException, ApiException } from '@web/app/common/ApiException';
+import {
+  UnauthorizedException,
+  ServiceUnavailableException,
+  BadRequestException,
+  ConflictException,
+  ApiException,
+} from '@web/app/common/ApiException';
 
 export const getUserByIdAction = async (id: string): Promise<User> => {
   const cookieStore = cookies();

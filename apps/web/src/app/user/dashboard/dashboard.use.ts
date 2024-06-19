@@ -28,16 +28,6 @@ export const useDashboard = (): useDashboard => {
   const [showAdmin, setShowAdmin] = useState(false);
   const { roles } = useAuth();
 
-  useEffect(() => {
-    if (roles) {
-      setShowAdmin(roles.includes(Role.ADMIN));
-    }
-  }, [roles]);
-
-  useEffect(() => {
-    loadUsers()
-  }, []);
-
   const loadUserById = async (id: string) => {
     setLoadingSelectedUser(true);
     try {
@@ -84,6 +74,17 @@ export const useDashboard = (): useDashboard => {
       setLoadingSelectedUser(false);
     }
   };
+
+  useEffect(() => {
+    if (roles) {
+      setShowAdmin(roles.includes(Role.ADMIN));
+    }
+  }, [roles]);
+
+  useEffect(() => {
+    loadUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {
     users,
