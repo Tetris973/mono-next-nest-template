@@ -5,7 +5,7 @@
 import { cookies } from 'next/headers';
 import { API_URL } from '@web/app/constants/api';
 import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
-import { HttpStatus } from '@web/app/constants/http-status';
+import { HttpStatus } from '@web/app/constants/http-status.enum';
 import { User } from '@web/app/user/user.interface';
 
 export async function getProfileAction(): Promise<User | ActionErrorResponse> {

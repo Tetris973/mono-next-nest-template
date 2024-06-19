@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { validateUserProfileEditForm } from './validation';
-import { HttpStatus } from '@web/app/constants/http-status';
 import { getUserByIdAction, updateUserAction } from '@web/app/user/user.service';
 import { User } from '@web/app/user/user.interface';
+import { ApiException, ConflictException } from '@web/app/common/ApiException';
 
 interface ProfileError {
   username: string;
@@ -35,14 +35,17 @@ export const useProfileForm = (userId: string): UseProfileForm => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       setProfileLoading(true);
-      const getUserResponse = await getUserByIdAction(userId);
-      if ('status' in getUserResponse) {
+      try {
+        const user = await getUserByIdAction(userId);
+        setUser(user);
+        setNewUsername(user.username || '');
+      } catch (err) {
+        if (err instanceof ApiException) {
+          setProfileError({ username: err.message });
+        }
+      } finally {
         setProfileLoading(false);
-        return;
       }
-      setUser(getUserResponse);
-      setNewUsername(getUserResponse.username || '');
-      setProfileLoading(false);
     };
 
     fetchUserProfile();
@@ -61,20 +64,20 @@ export const useProfileForm = (userId: string): UseProfileForm => {
       return {};
     }
 
-    const updateResponse = await updateUserAction(user.id, newUsername);
-    setSubmitLoading(false);
-
-    if ('status' in updateResponse) {
-      if (updateResponse.status === HttpStatus.CONFLICT) {
-        setProfileError({ username: updateResponse.message });
+    try {
+      const updatedUser = await updateUserAction(user.id, newUsername);
+      setUser(updatedUser);
+      setNewUsername(updatedUser.username || '');
+      return { success: `Profile of ${newUsername} updated successfully` };
+    } catch (err) {
+      if (err instanceof ConflictException) {
+        setProfileError({ username: err.message });
         return {};
       }
-      return { error: updateResponse.message };
+      return { error: (err as ApiException).message };
+    } finally {
+      setSubmitLoading(false);
     }
-
-    setUser(updateResponse);
-    setNewUsername(updateResponse.username || '');
-    return { success: `Profile of ${newUsername} updated successfully` };
   };
 
   return {

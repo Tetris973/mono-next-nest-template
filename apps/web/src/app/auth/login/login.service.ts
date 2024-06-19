@@ -6,8 +6,8 @@ import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
 import { LoginFormError } from '@web/app/common/form-error.interface';
 import { API_URL } from '@web/app/constants/api';
-import { HttpStatus } from '@web/app/constants/http-status';
-import { Role } from '@web/app/auth/profile/role.interface';
+import { HttpStatus } from '@web/app/constants/http-status.enum';
+import { Role } from '@web/app/auth/role.interface';
 import { IJwtPayload } from '@web/app/auth/jwt-payload.interface';
 import { logoutAction } from '../logout/logout.service';
 
