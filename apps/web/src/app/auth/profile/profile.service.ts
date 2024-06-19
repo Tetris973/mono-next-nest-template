@@ -1,22 +1,16 @@
-// src/app/auth/profile/profile.service.ts
-
 'use server';
 
 import { cookies } from 'next/headers';
 import { API_URL } from '@web/app/constants/api';
-import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
-import { HttpStatus } from '@web/app/constants/http-status.enum';
 import { User } from '@web/app/user/user.interface';
+import { UnauthorizedException, ServiceUnavailableException, ApiException } from '@web/app/common/ApiException';
 
-export async function getProfileAction(): Promise<User | ActionErrorResponse> {
+export const getProfileAction = async (): Promise<User> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
   if (!token) {
-    return {
-      status: HttpStatus.UNAUTHORIZED,
-      message: 'Not authenticated',
-    };
+    throw new UnauthorizedException('Not authenticated');
   }
 
   let response;
@@ -27,18 +21,12 @@ export async function getProfileAction(): Promise<User | ActionErrorResponse> {
       },
     });
   } catch (error) {
-    return {
-      status: HttpStatus.SERVICE_UNAVAILABLE,
-      message: 'Failed to fetch profile',
-    };
+    throw new ServiceUnavailableException('Failed to fetch profile');
   }
 
   if (!response.ok) {
-    return {
-      status: response.status,
-      message: 'Failed to fetch profile',
-    };
+    throw new ApiException('Failed to fetch profile', response.status);
   }
 
   return response.json();
-}
+};
