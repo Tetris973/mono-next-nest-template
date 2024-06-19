@@ -9,7 +9,6 @@ import {
   useColorModeValue,
   VStack,
   Spacer,
-  useToast,
   AlertDialog,
   AlertDialogBody,
   AlertDialogFooter,
@@ -26,6 +25,7 @@ import { User } from '@web/app/user/user.interface';
 import { Header } from '@web/app/components/Header';
 import { ProfileForm } from '@web/app/auth/profile/ProfileForm';
 import { useProfile } from '@web/app/auth/ProfileContext';
+import { useCustomToast } from '@web/app/utils/toastUtils';
 
 const UserCardContainer: React.FC<{
   user: User | null;
@@ -64,7 +64,7 @@ export function Dashboard(): JSX.Element {
     reloadAfterUpdate,
   } = useDashboard();
   const { loadProfile, profile } = useProfile();
-  const toast = useToast();
+  const { toastError, toastSuccess } = useCustomToast();
   const bg = useColorModeValue('gray.50', 'gray.800');
 
   const [alert, setAlert] = useBoolean();
@@ -75,17 +75,9 @@ export function Dashboard(): JSX.Element {
     if (selectedUser) {
       try {
         await deleteUser(selectedUser.id);
-        toast({
-          title: `User ${selectedUser.username} deleted successfully!`,
-          status: 'success',
-          isClosable: true,
-        });
+        toastSuccess(`User ${selectedUser.username} deleted successfully!`);
       } catch (err) {
-        toast({
-          title: 'Error deleting user.',
-          status: 'error',
-          isClosable: true,
-        });
+        toastError('Error deleting user.');
       } finally {
         setAlert.off();
       }
