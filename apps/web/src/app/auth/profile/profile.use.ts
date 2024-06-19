@@ -1,77 +1,86 @@
-// app/auth/profile/profile.use
+// apps/web/src/app/auth/profile/profile.use.ts
 
 import { useState, useEffect } from 'react';
-import { useToast } from '@chakra-ui/react';
 import { validateUserProfileEditForm } from './validation';
 import { HttpStatus } from '@web/app/constants/http-status';
-import { useProfile } from '@web/app/auth/ProfileContext';
+import { getUserByIdAction, updateUserAction } from '@web/app/user/user.service';
+import { User } from '@web/app/user/user.interface';
 
-export const useUserProfileEdit = () => {
-  const { user, updateProfile, loading: profileLoading } = useProfile();
-  const [error, setError] = useState({ username: '' });
+interface ProfileError {
+  username: string;
+}
+
+interface ProfileFormResult {
+  error?: string;
+  success?: string;
+}
+
+interface UseProfileForm {
+  profileError: ProfileError;
+  newUsername: string;
+  submitLoading: boolean;
+  profileLoading: boolean;
+  setNewUsername: (username: string) => void;
+  handleSubmit: (event: React.FormEvent) => Promise<ProfileFormResult>;
+  user: User | null;
+}
+
+export const useProfileForm = (userId: string): UseProfileForm => {
+  const [user, setUser] = useState<User | null>(null);
+  const [profileError, setProfileError] = useState<ProfileError>({ username: '' });
   const [newUsername, setNewUsername] = useState('');
-  const [loading, setLoading] = useState(false);
-  const toast = useToast();
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(true);
 
   useEffect(() => {
-    if (!profileLoading && user) {
-      setNewUsername(user.username || '');
-    }
-  }, [user, profileLoading]);
+    const fetchUserProfile = async () => {
+      setProfileLoading(true);
+      const getUserResponse = await getUserByIdAction(userId);
+      if ('status' in getUserResponse) {
+        setProfileLoading(false);
+        return;
+      }
+      setUser(getUserResponse);
+      setNewUsername(getUserResponse.username || '');
+      setProfileLoading(false);
+    };
 
-  const toastServerError = (message: string) => {
-    toast.closeAll();
-    toast({
-      title: 'Server Error',
-      description: message,
-      status: 'error',
-      duration: 5000,
-      isClosable: true,
-    });
-  };
+    fetchUserProfile();
+  }, [userId]);
 
-  const handleUpdateProfileError = (updateError: any) => {
-    if (updateError.status === HttpStatus.CONFLICT) {
-      setError((prev) => ({ ...prev, username: updateError.message }));
-    } else {
-      toast.closeAll();
-      toastServerError(updateError.message);
-    }
-  };
-
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent): Promise<ProfileFormResult> => {
+    if (!user) return { error: 'User not found' };
     event.preventDefault();
-    setLoading(true);
+    setSubmitLoading(true);
 
     const validationErrors = validateUserProfileEditForm(newUsername);
-    setError(validationErrors);
+    setProfileError({ username: validationErrors.username });
 
     if (validationErrors.username) {
-      setLoading(false);
-      return;
+      setSubmitLoading(false);
+      return {};
     }
 
-    const updateError = await updateProfile(newUsername);
+    const updateResponse = await updateUserAction(user.id, newUsername);
+    setSubmitLoading(false);
 
-    setLoading(false);
-
-    if (updateError) {
-      handleUpdateProfileError(updateError);
-    } else {
-      toast({
-        title: 'Success',
-        description: 'Profile updated successfully',
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      });
+    if ('status' in updateResponse) {
+      if (updateResponse.status === HttpStatus.CONFLICT) {
+        setProfileError({ username: updateResponse.message });
+        return {};
+      }
+      return { error: updateResponse.message };
     }
+
+    setUser(updateResponse);
+    setNewUsername(updateResponse.username || '');
+    return { success: `Profile of ${newUsername} updated successfully` };
   };
 
   return {
-    error,
+    profileError,
     newUsername,
-    loading,
+    submitLoading,
     profileLoading,
     setNewUsername,
     handleSubmit,

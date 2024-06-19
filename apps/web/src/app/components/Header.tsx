@@ -21,7 +21,7 @@ import { faHome, faSignOutAlt, faSignInAlt, faUser } from '@fortawesome/free-sol
 
 export const Header: React.FC = () => {
   const { logout } = useAuth();
-  const { user, loading } = useProfile();
+  const { profile, loading } = useProfile();
   const router = useRouter();
 
   return (
@@ -51,12 +51,12 @@ export const Header: React.FC = () => {
           </Box>
         </Flex>
         {loading && <Spinner />}
-        {!loading && user && (
+        {!loading && profile && (
           <Flex align="center">
             <Menu>
               <MenuButton>
                 <Avatar
-                  name={user.username}
+                  name={profile.username}
                   size="sm"
                   mr={4}
                   cursor="pointer"
@@ -82,7 +82,7 @@ export const Header: React.FC = () => {
             </Menu>
           </Flex>
         )}
-        {!loading && !user && (
+        {!loading && !profile && (
           <Button
             onClick={() => router.push('/auth/login')}
             leftIcon={<FontAwesomeIcon icon={faSignInAlt} />}

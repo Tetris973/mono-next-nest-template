@@ -6,7 +6,7 @@ import { useProfile } from './auth/ProfileContext';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  const { user, loading } = useProfile();
+  const { profile, loading } = useProfile();
   const router = useRouter();
 
   return (
@@ -27,9 +27,9 @@ export default function Home() {
           align="center">
           <Heading fontSize="4xl">Welcome to My Next.js App</Heading>
           {loading && <Spinner />}
-          {!loading && user && (
+          {!loading && profile && (
             <>
-              <Heading fontSize="4xl">{user?.username}</Heading>
+              <Heading fontSize="4xl">{profile?.username}</Heading>
               <Button onClick={() => router.push('/user/dashboard')}>Go to dashboard</Button>
             </>
           )}

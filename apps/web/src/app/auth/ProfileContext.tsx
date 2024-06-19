@@ -1,55 +1,42 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { updateProfileAction, getProfileAction } from '@web/app/auth/profile/profile.service';
-import { Profile } from '@web/app/auth/profile/profile.interface';
-import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
+import { getProfileAction } from '@web/app/auth/profile/profile.service';
+import { User } from '@web/app/user/user.interface';
 import { useAuth } from './AuthContext';
 
 interface ProfileContextType {
-  user: Profile | null;
+  profile: User | null;
   loading: boolean;
-  fetchUser: () => Promise<void>;
-  updateProfile: (newUsername: string) => Promise<ActionErrorResponse | void>;
+  loadProfile: () => Promise<void>;
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<Profile | null>(null);
+  const [profile, setProfile] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const { isAuthenticated } = useAuth();
 
-  const fetchUser = async () => {
+  const loadProfile = async () => {
     setLoading(true);
     const data = await getProfileAction();
     if ('status' in data) {
-      setUser(null);
+      setProfile(null);
     } else {
-      setUser(data);
+      setProfile(data);
     }
     setLoading(false);
   };
 
-  const updateProfile = async (newUsername: string) => {
-    if (!user) return;
-    const updateResponse = await updateProfileAction(newUsername);
-    if ('status' in updateResponse) {
-      return updateResponse;
-    }
-    setUser(updateResponse);
-  };
-
   useEffect(() => {
     if (isAuthenticated) {
-      fetchUser();
+      loadProfile();
     } else {
-      setUser(null);
+      setProfile(null);
       setLoading(false);
     }
   }, [isAuthenticated]);
 
-  return (
-    <ProfileContext.Provider value={{ user, loading, fetchUser, updateProfile }}>{children}</ProfileContext.Provider>
-  );
+  return <ProfileContext.Provider value={{ profile, loading, loadProfile }}>{children}</ProfileContext.Provider>;
 };
 
 export const useProfile = (): ProfileContextType => {
