@@ -2,7 +2,6 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import { getProfileAction } from '@web/app/auth/profile/profile.service';
 import { User } from '@web/app/user/user.interface';
 import { useAuth } from './AuthContext';
-import { ApiException } from '@web/app/common/ApiException';
 
 interface ProfileContextType {
   profile: User | null;
@@ -19,17 +18,13 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const loadProfile = async () => {
     setLoading(true);
-    try {
-      const data = await getProfileAction();
+    const data = await getProfileAction();
+    if ('status' in data) {
+      setProfile(null);
+    } else {
       setProfile(data);
-    } catch (err) {
-      if (err instanceof ApiException) {
-        console.error(err.message);
-        setProfile(null);
-      }
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   useEffect(() => {

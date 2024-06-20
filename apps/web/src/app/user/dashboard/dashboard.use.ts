@@ -5,7 +5,6 @@ import { getAllUsersAction, getUserByIdAction, deleteUserAction } from '@web/app
 import { User } from '@web/app/user/user.interface';
 import { useAuth } from '@web/app/auth/AuthContext';
 import { Role } from '@web/app/auth/role.interface';
-import { ApiException } from '@web/app/common/ApiException';
 
 interface useDashboard {
   users: User[];
@@ -30,49 +29,40 @@ export const useDashboard = (): useDashboard => {
 
   const loadUserById = async (id: string) => {
     setLoadingSelectedUser(true);
-    try {
-      const user = await getUserByIdAction(id);
+    const user = await getUserByIdAction(id);
+    if ('status' in user) {
+      setError(user.message);
+    } else {
       setSelectedUser(user);
-    } catch (err) {
-      if (err instanceof ApiException) {
-        setError(err.message);
-      }
-    } finally {
-      setLoadingSelectedUser(false);
     }
+    setLoadingSelectedUser(false);
   };
 
   const deleteUser = async (id: string) => {
     setLoadingSelectedUser(true);
-    try {
-      await deleteUserAction(id);
+    const response = await deleteUserAction(id);
+    if (response && 'status' in response) {
+      setError(response.message);
+    } else {
       setUsers(users.filter((user) => user.id !== id));
       setSelectedUser(null);
-    } catch (err) {
-      if (err instanceof ApiException) {
-        setError(err.message);
-      }
-    } finally {
-      setLoadingSelectedUser(false);
     }
+    setLoadingSelectedUser(false);
   };
 
   const loadUsers = async () => {
     setLoadingUsers(true);
     setLoadingSelectedUser(true);
-    try {
-      const users = await getAllUsersAction();
+    const users = await getAllUsersAction();
+    if ('status' in users) {
+      setError(users.message);
+    } else {
       setUsers(users);
       const user = users.find((user) => user.id === selectedUser?.id);
       setSelectedUser(user || null);
-    } catch (err) {
-      if (err instanceof ApiException) {
-        setError(err.message);
-      }
-    } finally {
-      setLoadingUsers(false);
-      setLoadingSelectedUser(false);
     }
+    setLoadingUsers(false);
+    setLoadingSelectedUser(false);
   };
 
   useEffect(() => {
