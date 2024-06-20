@@ -4,20 +4,17 @@ import { API_URL } from '@web/app/constants/api';
 import { cookies } from 'next/headers';
 import { User } from '@web/app/user/user.interface';
 import { HttpStatus } from '@web/app/constants/http-status.enum';
-import {
-  UnauthorizedException,
-  ServiceUnavailableException,
-  BadRequestException,
-  ConflictException,
-  ApiException,
-} from '@web/app/common/ApiException';
+import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
 
-export const getUserByIdAction = async (id: string): Promise<User> => {
+export const getUserByIdAction = async (id: string): Promise<User | ActionErrorResponse> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
   if (!token) {
-    throw new UnauthorizedException('Not authenticated');
+    return {
+      status: HttpStatus.UNAUTHORIZED,
+      message: 'Not authenticated',
+    };
   }
 
   let response;
@@ -29,26 +26,38 @@ export const getUserByIdAction = async (id: string): Promise<User> => {
       },
     });
   } catch (error) {
-    throw new ServiceUnavailableException('Failed to fetch profile');
+    return {
+      status: HttpStatus.SERVICE_UNAVAILABLE,
+      message: 'Failed to fetch profile',
+    };
   }
 
   if (!response.ok) {
-    throw new ApiException('Failed to fetch profile', response.status);
+    return {
+      status: response.status,
+      message: 'Failed to fetch profile',
+    };
   }
 
   return response.json();
 };
 
-export const updateUserAction = async (userId: string, username: string): Promise<User> => {
+export const updateUserAction = async (userId: string, username: string): Promise<User | ActionErrorResponse> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
   if (!token) {
-    throw new UnauthorizedException('Auth cookie missing, not authenticated');
+    return {
+      status: HttpStatus.UNAUTHORIZED,
+      message: 'Auth cookie missing, not authenticated',
+    };
   }
 
   if (!userId) {
-    throw new BadRequestException('Invalid token: user ID not found');
+    return {
+      status: HttpStatus.BAD_REQUEST,
+      message: 'Invalid token: user ID not found',
+    };
   }
 
   let response;
@@ -62,25 +71,37 @@ export const updateUserAction = async (userId: string, username: string): Promis
       body: JSON.stringify({ username }),
     });
   } catch (error) {
-    throw new ServiceUnavailableException('Service unavailable');
+    return {
+      status: HttpStatus.SERVICE_UNAVAILABLE,
+      message: 'Service unavailable',
+    };
   }
 
   if (!response.ok) {
     if (response.status === HttpStatus.CONFLICT) {
-      throw new ConflictException('Username already exists');
+      return {
+        status: HttpStatus.CONFLICT,
+        message: 'Username already exists',
+      };
     }
-    throw new ApiException('Failed to update profile', response.status);
+    return {
+      status: response.status,
+      message: 'Failed to update profile',
+    };
   }
 
   return response.json();
 };
 
-export const getAllUsersAction = async (): Promise<User[]> => {
+export const getAllUsersAction = async (): Promise<User[] | ActionErrorResponse> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
   if (!token) {
-    throw new UnauthorizedException('Not authenticated');
+    return {
+      status: HttpStatus.UNAUTHORIZED,
+      message: 'Not authenticated',
+    };
   }
 
   let response;
@@ -92,22 +113,31 @@ export const getAllUsersAction = async (): Promise<User[]> => {
       },
     });
   } catch (error) {
-    throw new ServiceUnavailableException('Failed to fetch users');
+    return {
+      status: HttpStatus.SERVICE_UNAVAILABLE,
+      message: 'Failed to fetch users',
+    };
   }
 
   if (!response.ok) {
-    throw new ApiException('Failed to fetch users', response.status);
+    return {
+      status: response.status,
+      message: 'Failed to fetch users',
+    };
   }
 
   return response.json();
 };
 
-export const deleteUserAction = async (id: string): Promise<void> => {
+export const deleteUserAction = async (id: string): Promise<void | ActionErrorResponse> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
   if (!token) {
-    throw new UnauthorizedException('Not authenticated');
+    return {
+      status: HttpStatus.UNAUTHORIZED,
+      message: 'Not authenticated',
+    };
   }
 
   let response;
@@ -119,10 +149,16 @@ export const deleteUserAction = async (id: string): Promise<void> => {
       },
     });
   } catch (error) {
-    throw new ServiceUnavailableException('Failed to delete user');
+    return {
+      status: HttpStatus.SERVICE_UNAVAILABLE,
+      message: 'Failed to delete user',
+    };
   }
 
   if (!response.ok) {
-    throw new ApiException('Failed to delete user', response.status);
+    return {
+      status: response.status,
+      message: 'Failed to delete user',
+    };
   }
 };
