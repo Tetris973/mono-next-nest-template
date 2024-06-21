@@ -5,7 +5,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @MinLength(6)
   @MaxLength(32)
-  readonly username: string;
+  readonly username!: string;
 
   @IsStrongPassword({
     minLength: 8,
@@ -14,7 +14,7 @@ export class CreateUserDto {
     minSymbols: 1,
     minUppercase: 1,
   })
-  readonly password: string;
+  readonly password!: string;
 
   // This is a custom validation rule that checks if the confirmPassword field is equal to the password field.
   // The IsEmpty & IsNotEMpty decorators are used to always fail the validation.
@@ -24,5 +24,5 @@ export class CreateUserDto {
   @IsEmpty({ message: 'password do not match' }) // IsEmpty & IsNotEMpty are required! do not remove
   @IsNotEmpty({ message: 'password do not match' })
   @ValidateIf((o) => o.password !== o.confirmPassword)
-  readonly confirmPassword: string;
+  readonly confirmPassword!: string;
 }

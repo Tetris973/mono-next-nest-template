@@ -1,33 +1,31 @@
-// app/dashboard/dashboard.use.ts
-
 import { useState, useEffect } from 'react';
 import { getAllUsersAction, getUserByIdAction, deleteUserAction } from '@web/app/user/user.service';
-import { User } from '@web/app/user/user.interface';
+import { UserDto } from '@dto/user/dto/user.dto';
 import { useAuth } from '@web/app/auth/AuthContext';
 import { Role } from '@web/app/auth/role.interface';
 
 interface useDashboard {
-  users: User[];
-  selectedUser: User | null;
+  users: UserDto[];
+  selectedUser: UserDto | null;
   loadingUsers: boolean;
   loadingSelectedUser: boolean;
   error: string;
   showAdmin: boolean;
-  loadUserById: (id: string) => void;
-  deleteUser: (id: string) => void;
+  loadUserById: (id: number) => void;
+  deleteUser: (id: number) => void;
   loadUsers: () => void;
 }
 
 export const useDashboard = (): useDashboard => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [users, setUsers] = useState<UserDto[]>([]);
+  const [selectedUser, setSelectedUser] = useState<UserDto | null>(null);
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [loadingSelectedUser, setLoadingSelectedUser] = useState(false);
   const [error, setError] = useState('');
   const [showAdmin, setShowAdmin] = useState(false);
   const { roles } = useAuth();
 
-  const loadUserById = async (id: string) => {
+  const loadUserById = async (id: number) => {
     setLoadingSelectedUser(true);
     const user = await getUserByIdAction(id);
     if ('status' in user) {
@@ -38,7 +36,7 @@ export const useDashboard = (): useDashboard => {
     setLoadingSelectedUser(false);
   };
 
-  const deleteUser = async (id: string) => {
+  const deleteUser = async (id: number) => {
     setLoadingSelectedUser(true);
     const response = await deleteUserAction(id);
     if (response && 'status' in response) {

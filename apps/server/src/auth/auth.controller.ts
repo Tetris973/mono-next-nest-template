@@ -8,7 +8,7 @@ import { UserDto } from '@server/user/dto/user.dto';
 import { plainToClass } from 'class-transformer';
 import { ApiBody } from '@nestjs/swagger';
 import { CreateUserDto } from '@server/user/dto/create-user.dto';
-import { LogInUserDto } from '@server/user/dto/log-in-user.dto';
+import { LoginUserDto } from '@server/user/dto/log-in-user.dto';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import ms from 'ms';
@@ -28,7 +28,7 @@ export class AuthController {
     return plainToClass(UserDto, newUser);
   }
 
-  @ApiBody({ type: LogInUserDto })
+  @ApiBody({ type: LoginUserDto })
   @Public() // skip the JWT auth but not the local auth
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)

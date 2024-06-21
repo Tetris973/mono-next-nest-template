@@ -1,10 +1,8 @@
-// apps/web/src/app/auth/profile/profile.use.ts
-
 import { useState, useEffect } from 'react';
 import { validateUserProfileEditForm } from './validation';
 import { getUserByIdAction, updateUserAction } from '@web/app/user/user.service';
-import { User } from '@web/app/user/user.interface';
-import { HttpStatus } from '@web/app/constants/http-status.enum';
+import { UserDto } from '@dto/user/dto/user.dto';
+import { HttpStatus } from '@web/app/common/http-status.enum';
 
 interface ProfileError {
   username: string;
@@ -22,11 +20,11 @@ interface UseProfileForm {
   profileLoading: boolean;
   setNewUsername: (username: string) => void;
   handleSubmit: (event: React.FormEvent) => Promise<ProfileFormResult>;
-  user: User | null;
+  user: UserDto | null;
 }
 
-export const useProfileForm = (userId: string): UseProfileForm => {
-  const [user, setUser] = useState<User | null>(null);
+export const useProfileForm = (userId: number): UseProfileForm => {
+  const [user, setUser] = useState<UserDto | null>(null);
   const [profileError, setProfileError] = useState<ProfileError>({ username: '' });
   const [newUsername, setNewUsername] = useState('');
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -61,7 +59,7 @@ export const useProfileForm = (userId: string): UseProfileForm => {
       return {};
     }
 
-    const updatedUser = await updateUserAction(user.id, newUsername);
+    const updatedUser = await updateUserAction(user.id, { username: newUsername });
     setSubmitLoading(false);
     if ('status' in updatedUser) {
       if (updatedUser.status === HttpStatus.CONFLICT) {

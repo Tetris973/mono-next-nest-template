@@ -4,17 +4,17 @@ import { ApiHideProperty } from '@nestjs/swagger';
 
 export class UserDto implements User {
   @Expose()
-  id: number;
+  readonly id!: number;
 
   @Expose()
-  username: string;
+  readonly username!: string;
 
   @Expose()
-  createdAt: Date;
+  readonly createdAt!: Date;
 
   @Expose()
-  updatedAt: Date;
+  readonly updatedAt!: Date;
 
   @ApiHideProperty()
-  password: string;
+  readonly password!: string;
 }

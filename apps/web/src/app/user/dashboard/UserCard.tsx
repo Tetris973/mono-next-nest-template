@@ -1,12 +1,10 @@
-// app/dashboard/UserCard.tsx
-
 import { Stack, Text, Box, Avatar, useColorModeValue, IconButton, Spinner } from '@chakra-ui/react';
-import { User } from '@web/app/user/user.interface';
+import { UserDto } from '@dto/user/dto/user.dto';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 interface UserCardProps {
-  user: User | null;
+  user: UserDto | null;
   loading: boolean;
   onDelete: () => void;
   showAdmin: boolean;

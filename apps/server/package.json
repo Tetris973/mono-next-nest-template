@@ -12,6 +12,7 @@
     "preinstall": "npx only-allow pnpm",
     "compose:dev": "pnpm env:dev -- docker-compose up -d",
     "build": "nest build",
+    "build:dto": "tsc -p tsconfig.dto.json",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "pnpm env:dev -- nest start",
     "dev": "pnpm env:dev -- nest start --watch",

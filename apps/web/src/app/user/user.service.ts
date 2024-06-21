@@ -2,11 +2,12 @@
 
 import { API_URL } from '@web/app/constants/api';
 import { cookies } from 'next/headers';
-import { User } from '@web/app/user/user.interface';
-import { HttpStatus } from '@web/app/constants/http-status.enum';
+import { HttpStatus } from '@web/app/common/http-status.enum';
 import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
+import { UpdateUserDto } from '@dto/user/dto/update-user.dto';
+import { UserDto } from '@dto/user/dto/user.dto';
 
-export const getUserByIdAction = async (id: string): Promise<User | ActionErrorResponse> => {
+export const getUserByIdAction = async (id: number): Promise<UserDto | ActionErrorResponse> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
@@ -42,7 +43,10 @@ export const getUserByIdAction = async (id: string): Promise<User | ActionErrorR
   return response.json();
 };
 
-export const updateUserAction = async (userId: string, username: string): Promise<User | ActionErrorResponse> => {
+export const updateUserAction = async (
+  userId: number,
+  updateUserDto: UpdateUserDto,
+): Promise<UserDto | ActionErrorResponse> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
@@ -68,7 +72,7 @@ export const updateUserAction = async (userId: string, username: string): Promis
         Cookie: `Authentication=${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username }),
+      body: JSON.stringify(updateUserDto),
     });
   } catch (error) {
     return {
@@ -93,7 +97,7 @@ export const updateUserAction = async (userId: string, username: string): Promis
   return response.json();
 };
 
-export const getAllUsersAction = async (): Promise<User[] | ActionErrorResponse> => {
+export const getAllUsersAction = async (): Promise<UserDto[] | ActionErrorResponse> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
@@ -129,7 +133,7 @@ export const getAllUsersAction = async (): Promise<User[] | ActionErrorResponse>
   return response.json();
 };
 
-export const deleteUserAction = async (id: string): Promise<void | ActionErrorResponse> => {
+export const deleteUserAction = async (id: number): Promise<void | ActionErrorResponse> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 

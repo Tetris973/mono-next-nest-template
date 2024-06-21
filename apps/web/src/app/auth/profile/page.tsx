@@ -1,5 +1,3 @@
-// app/auth/profile/page.tsx
-
 'use client';
 import { Flex, useColorModeValue } from '@chakra-ui/react';
 import { ProfileForm } from './ProfileForm';

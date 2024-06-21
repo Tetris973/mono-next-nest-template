@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json", // extend the root tsconfig
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES6",
+    "declaration": true, // Emit type declarations (*.d.ts)
+    "emitDeclarationOnly": true, // Only emit type declarations (*.d.ts)
+    // Prevent error when compiling dto with mapped-type like (Omit, partial, ...)
+    // This cause minor error at compilation for import of @prisma/client types. The dtos are compiled and still usable
+    "preserveSymlinks": true,
+    "outDir": "./shared/dto",
+    "rootDir": "src/",
+  },
+  "include": [
+    "src/**/*.dto.ts"
+  ],
+}

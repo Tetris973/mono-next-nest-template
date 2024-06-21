@@ -1,5 +1,3 @@
-// app/common/validation.ts
-
 export const validateUsername = (username: string): string => {
   if (!username) {
     return 'You must enter the username.';

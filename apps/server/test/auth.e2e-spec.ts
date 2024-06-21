@@ -7,7 +7,7 @@ import { CreateUserDto } from '@server/user/dto/create-user.dto';
 import { seedRoles } from '@server/prisma/seeding/role.seed';
 import { PrismaService } from '@server/prisma/prisma.service';
 import { TestPrismaService } from './testPrisma.service';
-import { LogInUserDto } from '@server/user/dto/log-in-user.dto';
+import { LoginUserDto } from '@server/user/dto/log-in-user.dto';
 import { ConfigService } from '@nestjs/config';
 import ms from 'ms';
 
@@ -68,7 +68,7 @@ describe('AuthController (e2e)', () => {
         confirmPassword: 'Chocolat1234!',
       };
 
-      const loginUserDto: LogInUserDto = {
+      const loginUserDto: LoginUserDto = {
         username: createUserDto.username,
         password: createUserDto.password,
       };

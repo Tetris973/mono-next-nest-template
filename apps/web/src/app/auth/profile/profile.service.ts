@@ -2,11 +2,11 @@
 
 import { cookies } from 'next/headers';
 import { API_URL } from '@web/app/constants/api';
-import { User } from '@web/app/user/user.interface';
+import { UserDto } from '@dto/user/dto/user.dto';
 import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
-import { HttpStatus } from '@web/app/constants/http-status.enum';
+import { HttpStatus } from '@web/app/common/http-status.enum';
 
-export async function getProfileAction(): Promise<User | ActionErrorResponse> {
+export async function getProfileAction(): Promise<UserDto | ActionErrorResponse> {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
@@ -27,7 +27,7 @@ export async function getProfileAction(): Promise<User | ActionErrorResponse> {
   } catch (error) {
     return {
       status: HttpStatus.SERVICE_UNAVAILABLE,
-      message: 'Failed to fetch profile',
+      message: 'Service unavailable, retry again later',
     };
   }
 

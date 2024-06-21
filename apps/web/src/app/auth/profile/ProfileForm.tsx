@@ -1,5 +1,3 @@
-// apps/web/src/app/auth/profile/ProfileForm.tsx
-
 import { Button, Stack, Spinner } from '@chakra-ui/react';
 import { useProfileForm } from './profile.use';
 import { ProfileField } from './ProfileField';
@@ -7,7 +5,7 @@ import { ProfileAvatar } from './ProfileAvatar';
 import { useCustomToast } from '@web/app/utils/toastUtils';
 
 interface ProfileFormProps {
-  userId: string;
+  userId: number;
   onCancel: () => void;
   onSubmitSuccess: () => void;
 }
@@ -49,7 +47,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ userId, onCancel, onSu
       <ProfileField
         id="createdAt"
         label="Created At"
-        value={user?.createdAt || ''}
+        value={user ? new Date(user.createdAt).toLocaleString() : ''}
         error=""
         loading={profileLoading}
         isReadOnly
@@ -57,7 +55,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ userId, onCancel, onSu
       <ProfileField
         id="updatedAt"
         label="Updated At"
-        value={user?.updatedAt || ''}
+        value={user ? new Date(user.updatedAt).toLocaleString() : ''}
         error=""
         loading={profileLoading}
         isReadOnly
