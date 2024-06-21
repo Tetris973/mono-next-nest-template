@@ -1,9 +1,9 @@
 import { MinLength, MaxLength, IsStrongPassword } from 'class-validator';
 
-export class LogInUserDto {
+export class LoginUserDto {
   @MinLength(6)
   @MaxLength(32)
-  readonly username: string;
+  readonly username!: string;
 
   @IsStrongPassword({
     minLength: 8,
@@ -12,5 +12,5 @@ export class LogInUserDto {
     minSymbols: 1,
     minUppercase: 1,
   })
-  readonly password: string;
+  readonly password!: string;
 }

@@ -1,5 +1,3 @@
-// app/auth/profile/ProfileField.tsx
-
 import { FormControl, FormLabel, FormErrorMessage, Input, Skeleton } from '@chakra-ui/react';
 
 interface ProfileFieldProps {

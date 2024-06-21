@@ -16,7 +16,7 @@ module.exports = {
   env: {
     node: true,
   },
-  ignorePatterns: ['.eslintrc.js', 'prisma/generated/types.ts', 'src/metadata.ts'],
+  ignorePatterns: ['.eslintrc.js', 'prisma/generated/types.ts', 'src/metadata.ts', 'shared/dto'],
   rules: {
     ...sharedRules,
   },

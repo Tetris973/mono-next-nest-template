@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { loginAction, isAuthenticatedAction, getRolesAction } from '@web/app/auth/login/login.service';
-import { LoginFormError } from '@web/app/common/form-error.interface';
+import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
 import { logoutAction } from '@web/app/auth/logout/logout.service';
 import { Role } from './role.interface';
+import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';
 
 interface AuthContextType {
-  login: (formData: FormData) => Promise<LoginFormError | null>;
+  login: (formData: LoginUserDto) => Promise<ActionErrorResponse | null>;
   logout: () => void;
   loading: boolean;
   isAuthenticated: boolean;
@@ -31,7 +32,7 @@ export const AuthProviderNew: React.FC<{ children: React.ReactNode }> = ({ child
     rehydrateAuth();
   }, []);
 
-  const login = async (formData: FormData): Promise<LoginFormError | null> => {
+  const login = async (formData: LoginUserDto): Promise<ActionErrorResponse | null> => {
     setLoading(true);
     const loginError = await loginAction(formData);
     if (loginError) {

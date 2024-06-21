@@ -7,11 +7,12 @@
     "moduleResolution": "node",
     "outDir": "./dist",
     /* 
-      Description: In NestJS, set to false to support dependency injection, allowing class properties to be initialized outside the constructor, aligning with NestJS's architectural patterns.
+      Description: It prevent creating properties without initializing them.
       Default: true.
-      Set to false: to Support NestJS's dependency injection and architectural patterns.
+      Removed, set to true in parent config: It was preventing the creation of the DTOs without initializing the properties.
+      Workaround: Use ! primitive to tell TypeScript that the property will be initialized later.
     */
-    "strictPropertyInitialization": false,
+    // "strictPropertyInitialization": false,
     /* 
       Description: Sets the JavaScript target version to ES2021, optimizing the output for modern runtime environments and leveraging the latest ECMAScript features supported by NestJS.
       Useful for: Optimizing the output for modern runtime environments and leveraging the latest ECMAScript features.

@@ -1,5 +1,3 @@
-// app/auth/profile/ProfileAvatar.tsx
-
 import { Avatar, Center, Stack, FormControl, FormLabel } from '@chakra-ui/react';
 
 interface ProfileAvatarProps {

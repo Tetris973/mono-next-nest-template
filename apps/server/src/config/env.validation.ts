@@ -12,16 +12,16 @@ enum Environment {
  */
 class EnvironmentVariables {
   @IsEnum(Environment)
-  NODE_ENV: Environment;
+  readonly NODE_ENV!: Environment;
 
   @IsOptional()
   @IsNumber()
   @Min(0)
   @Max(65535)
-  PORT: number;
+  readonly PORT!: number;
 
   @Length(32)
-  JWT_SECRET: string;
+  readonly JWT_SECRET!: string;
 }
 
 /**

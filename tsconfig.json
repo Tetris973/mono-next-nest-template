@@ -134,6 +134,9 @@
       "@testServer/*": [
         "./apps/server/test/*"
       ],
+      "@dto/*": [
+        "./apps/server/shared/dto/*"
+      ]
     }
   }
 }

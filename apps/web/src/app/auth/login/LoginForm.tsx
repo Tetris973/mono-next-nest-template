@@ -2,9 +2,18 @@ import { Box, Button, Stack, Text, Tooltip, useColorModeValue, Spinner, Checkbox
 import { useLogin } from './login.use';
 import { LoginField } from './LoginField';
 import { PasswordField } from './PasswordField';
+import { useCustomToast } from '@web/app/utils/toastUtils';
 
 export const LoginForm: React.FC = () => {
+  const { toastError } = useCustomToast();
   const { error, showPassword, setShowPassword, handleSubmit, authLoading } = useLogin();
+
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const result = await handleSubmit(event);
+    if (result.error) {
+      toastError(result.error);
+    }
+  };
 
   return (
     <Box
@@ -12,7 +21,7 @@ export const LoginForm: React.FC = () => {
       bg={useColorModeValue('white', 'gray.700')}
       boxShadow={'lg'}
       p={8}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <Stack spacing={4}>
           <LoginField
             id="username"

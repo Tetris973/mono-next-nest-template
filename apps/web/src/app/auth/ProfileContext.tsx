@@ -1,10 +1,11 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { getProfileAction } from '@web/app/auth/profile/profile.service';
-import { User } from '@web/app/user/user.interface';
+import { UserDto } from '@dto/user/dto/user.dto';
 import { useAuth } from './AuthContext';
+import { HttpStatus } from '@web/app/common/http-status.enum';
 
 interface ProfileContextType {
-  profile: User | null;
+  profile: UserDto | null;
   loading: boolean;
   loadProfile: () => Promise<void>;
 }
@@ -12,7 +13,7 @@ interface ProfileContextType {
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [profile, setProfile] = useState<User | null>(null);
+  const [profile, setProfile] = useState<UserDto | null>(null);
   const [loading, setLoading] = useState(true);
   const { isAuthenticated } = useAuth();
 
@@ -20,6 +21,9 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setLoading(true);
     const data = await getProfileAction();
     if ('status' in data) {
+      if (data.status === HttpStatus.SERVICE_UNAVAILABLE) {
+        console.error(data.message);
+      }
       setProfile(null);
     } else {
       setProfile(data);

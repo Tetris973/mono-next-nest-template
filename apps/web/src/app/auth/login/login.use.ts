@@ -1,18 +1,32 @@
-// app/auth/login/login.use
-
 import { useState, useEffect } from 'react';
 import { validateLoginForm } from './validation';
-import { HttpStatus } from '@web/app/constants/http-status.enum';
-import { LoginFormError } from '@web/app/common/form-error.interface';
+import { HttpStatus } from '@web/app/common/http-status.enum';
+import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
 import { useAuth } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useCustomToast } from '@web/app/utils/toastUtils';
 
-export const useLogin = () => {
+interface LoginFormResult {
+  error?: string;
+  success?: string;
+}
+
+interface LoginFormError {
+  username: string;
+  password: string;
+}
+
+interface UseLogin {
+  error: LoginFormError;
+  showPassword: boolean;
+  authLoading: boolean;
+  setShowPassword: (showPassword: boolean) => void;
+  handleSubmit: (event: React.FormEvent) => Promise<LoginFormResult>;
+}
+
+export const useLogin = (): UseLogin => {
   const { login, loading: authLoading, isAuthenticated } = useAuth();
-  const [error, setError] = useState({ username: '', password: '' });
+  const [error, setError] = useState<LoginFormError>({ username: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
-  const { toastError, closeAllToasts } = useCustomToast();
   const router = useRouter();
 
   useEffect(() => {
@@ -21,26 +35,22 @@ export const useLogin = () => {
     }
   }, [isAuthenticated, router]);
 
-  const handleLoginError = (loginError: LoginFormError) => {
-    switch (loginError.code) {
+  const handleLoginError = (loginError: ActionErrorResponse): LoginFormResult => {
+    switch (loginError.status) {
       case HttpStatus.SERVICE_UNAVAILABLE:
-        closeAllToasts();
-        toastError(loginError.message);
-        break;
+        return { error: loginError.message };
       case HttpStatus.NOT_FOUND:
-        setError((prev) => ({ ...prev, username: 'User not found' }));
-        break;
+        setError((prev) => ({ ...prev, username: loginError.message }));
+        return {};
       case HttpStatus.UNAUTHORIZED:
-        setError((prev) => ({ ...prev, password: 'Incorrect password' }));
-        break;
+        setError((prev) => ({ ...prev, password: loginError.message }));
+        return {};
       default:
-        closeAllToasts();
-        toastError(loginError.message);
-        break;
+        return {};
     }
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent): Promise<LoginFormResult> => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget as HTMLFormElement);
     const username = formData.get('username')?.toString().trim();
@@ -50,14 +60,16 @@ export const useLogin = () => {
     setError(validationErrors);
 
     if (validationErrors.username || validationErrors.password) {
-      return;
+      return {};
     }
 
-    const loginError = await login(formData);
+    const loginError = await login({ username: username!, password: password! });
 
     if (loginError) {
-      handleLoginError(loginError);
+      return handleLoginError(loginError);
     }
+
+    return {};
   };
 
   return {

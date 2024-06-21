@@ -1,20 +1,18 @@
-// app/dashboard/UserList.tsx
-
 import { useState, useEffect, CSSProperties } from 'react';
 import { Box, Input, List, ListItem, Text, useColorModeValue, Spinner } from '@chakra-ui/react';
-import { User } from '@web/app/user/user.interface';
+import { UserDto } from '@dto/user/dto/user.dto';
 
 interface UserListProps {
-  users: User[];
+  users: UserDto[];
   loading: boolean;
   error: string;
-  onUserSelect: (id: string) => void;
+  onUserSelect: (id: number) => void;
   containerStyle?: CSSProperties;
 }
 
 export const UserList: React.FC<UserListProps> = ({ users, loading, error, onUserSelect, containerStyle }) => {
   const [filter, setFilter] = useState('');
-  const [filteredUsers, setFilteredUsers] = useState<User[]>(users);
+  const [filteredUsers, setFilteredUsers] = useState<UserDto[]>(users);
 
   const bgHover = useColorModeValue('gray.100', 'gray.600');
   const bg = useColorModeValue('gray.200', 'gray.600');
@@ -40,7 +38,7 @@ export const UserList: React.FC<UserListProps> = ({ users, loading, error, onUse
       {error && <Text color="red.500">{error}</Text>}
       {!loading && !error && (
         <List spacing={3}>
-          {filteredUsers.map((user: User) => (
+          {filteredUsers.map((user: UserDto) => (
             <ListItem
               key={user.id}
               _hover={{ bg: bgHover }}

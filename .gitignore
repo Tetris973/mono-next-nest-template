@@ -63,3 +63,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # Ignore quokka test files
 .quokka
 quokka_test
+
+# Ignore shared compiled DTO
+shared/

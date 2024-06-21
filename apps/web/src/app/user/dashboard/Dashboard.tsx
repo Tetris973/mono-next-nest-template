@@ -1,5 +1,3 @@
-// app/user/dashboard/Dashboard.tsx
-
 'use client';
 
 import React, { useRef } from 'react';
@@ -21,14 +19,14 @@ import {
 import { useDashboard } from './dashboard.use';
 import { UserCard } from './UserCard';
 import { UserList } from './UserList';
-import { User } from '@web/app/user/user.interface';
+import { UserDto } from '@dto/user/dto/user.dto';
 import { Header } from '@web/app/components/Header';
 import { ProfileForm } from '@web/app/auth/profile/ProfileForm';
 import { useProfile } from '@web/app/auth/ProfileContext';
 import { useCustomToast } from '@web/app/utils/toastUtils';
 
 const UserCardContainer: React.FC<{
-  user: User | null;
+  user: UserDto | null;
   loading: boolean;
   onDelete: () => void;
   showAdmin: boolean;
@@ -116,7 +114,7 @@ export function Dashboard(): JSX.Element {
           <Spacer />
           {editing && selectedUser ? (
             <ProfileForm
-              userId={selectedUser.id || ''}
+              userId={selectedUser.id}
               onCancel={setEditing.off}
               onSubmitSuccess={onSubmitSuccess}
             />
