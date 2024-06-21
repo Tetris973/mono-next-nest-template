@@ -1,6 +1,6 @@
-import { Box, Button, Stack, Text, Tooltip, useColorModeValue, Spinner, Checkbox } from '@chakra-ui/react';
+import { Box, Button, Stack, Text, Tooltip, useColorModeValue, Spinner, Checkbox, Link } from '@chakra-ui/react';
 import { useLogin } from './login.use';
-import { LoginField } from './LoginField';
+import { UsernameField } from './UsernameField';
 import { PasswordField } from './PasswordField';
 import { useCustomToast } from '@web/app/utils/toastUtils';
 
@@ -23,7 +23,7 @@ export const LoginForm: React.FC = () => {
       p={8}>
       <form onSubmit={handleFormSubmit}>
         <Stack spacing={4}>
-          <LoginField
+          <UsernameField
             id="username"
             label="Username"
             type="text"
@@ -76,6 +76,16 @@ export const LoginForm: React.FC = () => {
               spinner={<Spinner />}>
               Sign in
             </Button>
+          </Stack>
+          <Stack pt={6}>
+            <Text align={'center'}>
+              Not a user yet?{' '}
+              <Link
+                href="/auth/signup"
+                color={'blue.400'}>
+                Sign up
+              </Link>
+            </Text>
           </Stack>
         </Stack>
       </form>

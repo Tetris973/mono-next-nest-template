@@ -1,6 +1,6 @@
 import { FormControl, FormLabel, FormErrorMessage, Input, Skeleton } from '@chakra-ui/react';
 
-interface LoginFieldProps {
+interface UsernameFieldProps {
   id: string;
   label: string;
   type: string;
@@ -9,7 +9,7 @@ interface LoginFieldProps {
   loading: boolean;
 }
 
-export const LoginField: React.FC<LoginFieldProps> = ({ id, label, type, name, error, loading }) => (
+export const UsernameField: React.FC<UsernameFieldProps> = ({ id, label, type, name, error, loading }) => (
   <FormControl
     id={id}
     isInvalid={!!error}>

@@ -1,25 +1,43 @@
 import { useToast, UseToastOptions } from '@chakra-ui/react';
+import { useCallback } from 'react';
 
 const useCustomToast = () => {
   const toast = useToast();
 
-  const showToast = (options: UseToastOptions) => {
-    toast({
-      duration: 5000,
-      isClosable: true,
-      ...options,
-    });
-  };
+  // Memoize: useCallback is used to prevent unnecessary re-renders
+  const showToast = useCallback(
+    (options: UseToastOptions) => {
+      toast({
+        duration: 5000,
+        isClosable: true,
+        ...options,
+      });
+    },
+    [toast],
+  );
 
-  const closeAllToasts = () => {
+  // Memoize: useCallback is used to prevent unnecessary re-renders
+  const closeAllToasts = useCallback(() => {
     toast.closeAll();
-  };
+  }, [toast]);
 
   return {
-    toastSuccess: (description: string) => showToast({ title: 'Success', description, status: 'success' }),
-    toastError: (description: string) => showToast({ title: 'Error', description, status: 'error' }),
-    toastInfo: (description: string) => showToast({ title: 'Info', description, status: 'info' }),
-    toastWarning: (description: string) => showToast({ title: 'Warning', description, status: 'warning' }),
+    toastSuccess: useCallback(
+      (description: string) => showToast({ title: 'Success', description, status: 'success' }),
+      [showToast],
+    ),
+    toastError: useCallback(
+      (description: string) => showToast({ title: 'Error', description, status: 'error' }),
+      [showToast],
+    ),
+    toastInfo: useCallback(
+      (description: string) => showToast({ title: 'Info', description, status: 'info' }),
+      [showToast],
+    ),
+    toastWarning: useCallback(
+      (description: string) => showToast({ title: 'Warning', description, status: 'warning' }),
+      [showToast],
+    ),
     closeAllToasts,
   };
 };

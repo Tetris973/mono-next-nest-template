@@ -3,29 +3,22 @@ import { validateUserProfileEditForm } from './validation';
 import { getUserByIdAction, updateUserAction } from '@web/app/user/user.service';
 import { UserDto } from '@dto/user/dto/user.dto';
 import { HttpStatus } from '@web/app/common/http-status.enum';
-
-interface ProfileError {
-  username: string;
-}
-
-interface ProfileFormResult {
-  error?: string;
-  success?: string;
-}
+import { UpdateUserDto } from '@dto/user/dto/update-user.dto';
+import { FormSubmitResult } from '@web/app/common/form-submit-result.interface';
 
 interface UseProfileForm {
-  profileError: ProfileError;
+  profileError: UpdateUserDto;
   newUsername: string;
   submitLoading: boolean;
   profileLoading: boolean;
   setNewUsername: (username: string) => void;
-  handleSubmit: (event: React.FormEvent) => Promise<ProfileFormResult>;
+  handleSubmit: (event: React.FormEvent) => Promise<FormSubmitResult>;
   user: UserDto | null;
 }
 
 export const useProfileForm = (userId: number): UseProfileForm => {
   const [user, setUser] = useState<UserDto | null>(null);
-  const [profileError, setProfileError] = useState<ProfileError>({ username: '' });
+  const [profileError, setProfileError] = useState<UpdateUserDto>({ username: '' });
   const [newUsername, setNewUsername] = useState('');
   const [submitLoading, setSubmitLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(true);
@@ -46,13 +39,13 @@ export const useProfileForm = (userId: number): UseProfileForm => {
     fetchUserProfile();
   }, [userId]);
 
-  const handleSubmit = async (event: React.FormEvent): Promise<ProfileFormResult> => {
+  const handleSubmit = async (event: React.FormEvent): Promise<FormSubmitResult> => {
     if (!user) return { error: 'User not found' };
     event.preventDefault();
     setSubmitLoading(true);
 
-    const validationErrors = validateUserProfileEditForm(newUsername);
-    setProfileError({ username: validationErrors.username });
+    const validationErrors = validateUserProfileEditForm({ username: newUsername });
+    setProfileError(validationErrors);
 
     if (validationErrors.username) {
       setSubmitLoading(false);

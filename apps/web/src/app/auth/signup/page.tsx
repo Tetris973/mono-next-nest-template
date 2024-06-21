@@ -1,9 +1,9 @@
 'use client';
 import { Flex, Stack, Heading, useColorModeValue } from '@chakra-ui/react';
-import { LoginForm } from './LoginForm';
+import { SignupForm } from './SignupForm';
 import { Header } from '@web/app/components/Header';
 
-export default function Login(): JSX.Element {
+export default function Signup(): JSX.Element {
   return (
     <>
       <Header />
@@ -19,9 +19,9 @@ export default function Login(): JSX.Element {
           py={12}
           px={6}>
           <Stack align={'center'}>
-            <Heading fontSize={'4xl'}>Log in to your account</Heading>
+            <Heading fontSize={'4xl'}>Sign up new account</Heading>
           </Stack>
-          <LoginForm />
+          <SignupForm />
         </Stack>
       </Flex>
     </>
