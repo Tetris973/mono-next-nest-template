@@ -16,3 +16,10 @@ export const validatePassword = (password: string): string => {
   }
   return '';
 };
+
+export const validateConfirmPassword = (confirmPassword: string, password: string): string => {
+  if (confirmPassword !== password) {
+    return 'Passwords do not match.';
+  }
+  return '';
+};

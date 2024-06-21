@@ -84,10 +84,10 @@ export const Header: React.FC = () => {
         )}
         {!loading && !profile && (
           <Button
-            onClick={() => router.push('/auth/login')}
+            onClick={() => router.push('/auth/signup')}
             leftIcon={<FontAwesomeIcon icon={faSignInAlt} />}
             colorScheme="teal">
-            Login
+            Signup
           </Button>
         )}
       </Flex>

@@ -27,7 +27,7 @@ export async function getProfileAction(): Promise<UserDto | ActionErrorResponse>
   } catch (error) {
     return {
       status: HttpStatus.SERVICE_UNAVAILABLE,
-      message: 'Service unavailable, retry again later',
+      message: 'Failed to connect to the server. Please try again later.',
     };
   }
 

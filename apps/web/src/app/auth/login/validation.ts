@@ -1,8 +1,9 @@
 import { validateUsername, validatePassword } from '@web/app/auth/validation-common';
+import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';
 
-export const validateLoginForm = (username: string, password: string): { username: string; password: string } => {
+export const validateLoginForm = (loginDto: LoginUserDto): LoginUserDto => {
   return {
-    username: validateUsername(username),
-    password: validatePassword(password),
+    username: validateUsername(loginDto.username),
+    password: validatePassword(loginDto.password),
   };
 };
