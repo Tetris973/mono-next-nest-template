@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
 import { API_URL } from '@web/app/constants/api';
 import { HttpStatus } from '@web/app/common/http-status.enum';
-import { Role } from '@web/app/auth/role.interface';
+import { Role } from '@web/app/auth/role.enum';
 import { IJwtPayload } from '@web/app/auth/jwt-payload.interface';
 import { logoutAction } from '../logout/logout.service';
 import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';

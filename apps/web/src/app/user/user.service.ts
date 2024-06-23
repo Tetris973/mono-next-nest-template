@@ -3,18 +3,20 @@
 import { API_URL } from '@web/app/constants/api';
 import { cookies } from 'next/headers';
 import { HttpStatus } from '@web/app/common/http-status.enum';
-import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
 import { UpdateUserDto } from '@dto/user/dto/update-user.dto';
 import { UserDto } from '@dto/user/dto/user.dto';
+import { ActionResponse } from '@web/app/common/action-response.type';
 
-export const getUserByIdAction = async (id: number): Promise<UserDto | ActionErrorResponse> => {
+export const getUserByIdAction = async (id: number): Promise<ActionResponse<UserDto>> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
   if (!token) {
     return {
-      status: HttpStatus.UNAUTHORIZED,
-      message: 'Not authenticated',
+      error: {
+        status: HttpStatus.UNAUTHORIZED,
+        message: 'Not authenticated',
+      },
     };
   }
 
@@ -28,39 +30,47 @@ export const getUserByIdAction = async (id: number): Promise<UserDto | ActionErr
     });
   } catch (error) {
     return {
-      status: HttpStatus.SERVICE_UNAVAILABLE,
-      message: 'Failed to fetch profile',
+      error: {
+        status: HttpStatus.SERVICE_UNAVAILABLE,
+        message: 'Failed to connect to the server. Please try again later.',
+      },
     };
   }
 
   if (!response.ok) {
     return {
-      status: response.status,
-      message: 'Failed to fetch profile',
+      error: {
+        status: response.status,
+        message: 'Failed to fetch profile',
+      },
     };
   }
 
-  return response.json();
+  return { result: await response.json() };
 };
 
 export const updateUserAction = async (
   userId: number,
   updateUserDto: UpdateUserDto,
-): Promise<UserDto | ActionErrorResponse> => {
+): Promise<ActionResponse<UserDto>> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
   if (!token) {
     return {
-      status: HttpStatus.UNAUTHORIZED,
-      message: 'Auth cookie missing, not authenticated',
+      error: {
+        status: HttpStatus.UNAUTHORIZED,
+        message: 'Auth cookie missing, not authenticated',
+      },
     };
   }
 
   if (!userId) {
     return {
-      status: HttpStatus.BAD_REQUEST,
-      message: 'Invalid token: user ID not found',
+      error: {
+        status: HttpStatus.BAD_REQUEST,
+        message: 'Invalid token: user ID not found',
+      },
     };
   }
 
@@ -76,35 +86,43 @@ export const updateUserAction = async (
     });
   } catch (error) {
     return {
-      status: HttpStatus.SERVICE_UNAVAILABLE,
-      message: 'Service unavailable',
+      error: {
+        status: HttpStatus.SERVICE_UNAVAILABLE,
+        message: 'Failed to connect to the server. Please try again later.',
+      },
     };
   }
 
   if (!response.ok) {
     if (response.status === HttpStatus.CONFLICT) {
       return {
-        status: HttpStatus.CONFLICT,
-        message: 'Username already exists',
+        error: {
+          status: HttpStatus.CONFLICT,
+          message: 'Username already exists',
+        },
       };
     }
     return {
-      status: response.status,
-      message: 'Failed to update profile',
+      error: {
+        status: response.status,
+        message: 'Failed to update profile',
+      },
     };
   }
 
-  return response.json();
+  return { result: await response.json() };
 };
 
-export const getAllUsersAction = async (): Promise<UserDto[] | ActionErrorResponse> => {
+export const getAllUsersAction = async (): Promise<ActionResponse<UserDto[]>> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
   if (!token) {
     return {
-      status: HttpStatus.UNAUTHORIZED,
-      message: 'Not authenticated',
+      error: {
+        status: HttpStatus.UNAUTHORIZED,
+        message: 'Not authenticated',
+      },
     };
   }
 
@@ -118,29 +136,35 @@ export const getAllUsersAction = async (): Promise<UserDto[] | ActionErrorRespon
     });
   } catch (error) {
     return {
-      status: HttpStatus.SERVICE_UNAVAILABLE,
-      message: 'Failed to fetch users',
+      error: {
+        status: HttpStatus.SERVICE_UNAVAILABLE,
+        message: 'Failed to connect to the server. Please try again later.',
+      },
     };
   }
 
   if (!response.ok) {
     return {
-      status: response.status,
-      message: 'Failed to fetch users',
+      error: {
+        status: response.status,
+        message: 'Failed to fetch users',
+      },
     };
   }
 
-  return response.json();
+  return { result: await response.json() };
 };
 
-export const deleteUserAction = async (id: number): Promise<void | ActionErrorResponse> => {
+export const deleteUserAction = async (id: number): Promise<ActionResponse<null>> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
   if (!token) {
     return {
-      status: HttpStatus.UNAUTHORIZED,
-      message: 'Not authenticated',
+      error: {
+        status: HttpStatus.UNAUTHORIZED,
+        message: 'Not authenticated',
+      },
     };
   }
 
@@ -154,15 +178,21 @@ export const deleteUserAction = async (id: number): Promise<void | ActionErrorRe
     });
   } catch (error) {
     return {
-      status: HttpStatus.SERVICE_UNAVAILABLE,
-      message: 'Failed to delete user',
+      error: {
+        status: HttpStatus.SERVICE_UNAVAILABLE,
+        message: 'Failed to connect to the server. Please try again later.',
+      },
     };
   }
 
   if (!response.ok) {
     return {
-      status: response.status,
-      message: 'Failed to delete user',
+      error: {
+        status: response.status,
+        message: 'Failed to delete user',
+      },
     };
   }
+
+  return { result: null };
 };

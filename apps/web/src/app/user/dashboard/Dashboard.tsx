@@ -23,7 +23,7 @@ import { UserDto } from '@dto/user/dto/user.dto';
 import { Header } from '@web/app/components/Header';
 import { ProfileForm } from '@web/app/auth/profile/ProfileForm';
 import { useProfile } from '@web/app/auth/ProfileContext';
-import { useCustomToast } from '@web/app/utils/toastUtils';
+import { useCustomToast } from '@web/app/utils/toast-utils.use';
 
 const UserCardContainer: React.FC<{
   user: UserDto | null;

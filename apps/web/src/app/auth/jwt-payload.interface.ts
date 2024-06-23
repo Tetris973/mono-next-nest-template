@@ -1,4 +1,4 @@
-import { Role } from '@web/app/auth/role.interface';
+import { Role } from '@web/app/auth/role.enum';
 
 export interface IJwtPayload {
   sub: number;

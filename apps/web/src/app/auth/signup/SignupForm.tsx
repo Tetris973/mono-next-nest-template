@@ -2,7 +2,7 @@ import { Box, Button, Stack, useColorModeValue, Spinner, Text, Link } from '@cha
 import { useSignup } from './signup.use';
 import { UsernameField } from '@web/app/auth/login/UsernameField';
 import { PasswordField } from '@web/app/auth/login/PasswordField';
-import { useCustomToast } from '@web/app/utils/toastUtils';
+import { useCustomToast } from '@web/app/utils/toast-utils.use';
 import { useRouter } from 'next/navigation';
 
 export const SignupForm: React.FC = () => {

@@ -18,7 +18,7 @@ module.exports = {
     node: true,
     browser: true,
   },
-  ignorePatterns: ['.eslintrc.js', 'prisma/generated/types.ts', 'next-env.d.ts'],
+  ignorePatterns: ['.eslintrc.js', 'prisma/generated/types.ts', 'next-env.d.ts', 'vitest.config.mts'],
   rules: {
     ...sharedRules,
     // To remove a warning from eslint, this rule target the old version of next.js with pages routing
