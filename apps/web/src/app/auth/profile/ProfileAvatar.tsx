@@ -2,9 +2,10 @@ import { Avatar, Center, Stack, FormControl, FormLabel } from '@chakra-ui/react'
 
 interface ProfileAvatarProps {
   username: string;
+  loading: boolean;
 }
 
-export const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ username }) => (
+export const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ username, loading }) => (
   <FormControl id="userIcon">
     <FormLabel>User Icon</FormLabel>
     <Stack
@@ -12,7 +13,7 @@ export const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ username }) => (
       spacing={6}>
       <Center>
         <Avatar
-          name={username}
+          name={loading ? '' : username}
           size="xl"
           mr={4}
         />

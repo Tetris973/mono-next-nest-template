@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getAllUsersAction, getUserByIdAction, deleteUserAction } from '@web/app/user/user.service';
 import { UserDto } from '@dto/user/dto/user.dto';
 import { useAuth } from '@web/app/auth/AuthContext';
-import { Role } from '@web/app/auth/role.interface';
+import { Role } from '@web/app/auth/role.enum';
 
 interface useDashboard {
   users: UserDto[];
@@ -20,27 +20,27 @@ export const useDashboard = (): useDashboard => {
   const [users, setUsers] = useState<UserDto[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserDto | null>(null);
   const [loadingUsers, setLoadingUsers] = useState(true);
-  const [loadingSelectedUser, setLoadingSelectedUser] = useState(false);
+  const [loadingSelectedUser, setLoadingSelectedUser] = useState(false); // TODO: replace by useServerAction!
   const [error, setError] = useState('');
   const [showAdmin, setShowAdmin] = useState(false);
   const { roles } = useAuth();
 
   const loadUserById = async (id: number) => {
     setLoadingSelectedUser(true);
-    const user = await getUserByIdAction(id);
-    if ('status' in user) {
-      setError(user.message);
+    const { result, error } = await getUserByIdAction(id);
+    if (error) {
+      setError(error.message);
     } else {
-      setSelectedUser(user);
+      setSelectedUser(result);
     }
     setLoadingSelectedUser(false);
   };
 
   const deleteUser = async (id: number) => {
     setLoadingSelectedUser(true);
-    const response = await deleteUserAction(id);
-    if (response && 'status' in response) {
-      setError(response.message);
+    const { error } = await deleteUserAction(id);
+    if (error) {
+      setError(error.message);
     } else {
       setUsers(users.filter((user) => user.id !== id));
       setSelectedUser(null);
@@ -51,12 +51,12 @@ export const useDashboard = (): useDashboard => {
   const loadUsers = async () => {
     setLoadingUsers(true);
     setLoadingSelectedUser(true);
-    const users = await getAllUsersAction();
-    if ('status' in users) {
-      setError(users.message);
+    const { result, error } = await getAllUsersAction();
+    if (error) {
+      setError(error.message);
     } else {
-      setUsers(users);
-      const user = users.find((user) => user.id === selectedUser?.id);
+      setUsers(result);
+      const user = result.find((user) => user.id === selectedUser?.id);
       setSelectedUser(user || null);
     }
     setLoadingUsers(false);

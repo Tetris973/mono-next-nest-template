@@ -2,7 +2,7 @@ import { Box, Button, Stack, Text, Tooltip, useColorModeValue, Spinner, Checkbox
 import { useLogin } from './login.use';
 import { UsernameField } from './UsernameField';
 import { PasswordField } from './PasswordField';
-import { useCustomToast } from '@web/app/utils/toastUtils';
+import { useCustomToast } from '@web/app/utils/toast-utils.use';
 
 export const LoginForm: React.FC = () => {
   const { toastError } = useCustomToast();

@@ -2,7 +2,7 @@ import { Button, Stack, Spinner } from '@chakra-ui/react';
 import { useProfileForm } from './profile.use';
 import { ProfileField } from './ProfileField';
 import { ProfileAvatar } from './ProfileAvatar';
-import { useCustomToast } from '@web/app/utils/toastUtils';
+import { useCustomToast } from '@web/app/utils/toast-utils.use';
 
 interface ProfileFormProps {
   userId: number;
@@ -11,16 +11,16 @@ interface ProfileFormProps {
 }
 
 export const ProfileForm: React.FC<ProfileFormProps> = ({ userId, onCancel, onSubmitSuccess }) => {
-  const { user, profileError, newUsername, profileLoading, submitLoading, setNewUsername, handleSubmit } =
+  const { user, profileError, newUsername, profilePending, submitPending, setNewUsername, handleSubmit } =
     useProfileForm(userId);
   const { toastError, toastSuccess } = useCustomToast();
 
   const handleFormSubmit = async (event: React.FormEvent) => {
-    const result = await handleSubmit(event);
-    if (result.error) {
-      toastError(result.error);
-    } else if (result.success) {
-      toastSuccess(result.success);
+    const { success, error } = await handleSubmit(event);
+    if (error) {
+      toastError(error);
+    } else if (success) {
+      toastSuccess(success);
       onSubmitSuccess();
     }
   };
@@ -35,13 +35,16 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ userId, onCancel, onSu
       boxShadow={'lg'}
       p={6}
       my={12}>
-      <ProfileAvatar username={newUsername} />
+      <ProfileAvatar
+        username={newUsername}
+        loading={profilePending}
+      />
       <ProfileField
         id="userName"
         label="User name"
         value={newUsername}
         error={profileError.username}
-        loading={profileLoading}
+        loading={profilePending}
         onChange={(e) => setNewUsername(e.target.value)}
       />
       <ProfileField
@@ -49,7 +52,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ userId, onCancel, onSu
         label="Created At"
         value={user ? new Date(user.createdAt).toLocaleString() : ''}
         error=""
-        loading={profileLoading}
+        loading={profilePending}
         isReadOnly
       />
       <ProfileField
@@ -57,7 +60,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ userId, onCancel, onSu
         label="Updated At"
         value={user ? new Date(user.updatedAt).toLocaleString() : ''}
         error=""
-        loading={profileLoading}
+        loading={profilePending}
         isReadOnly
       />
       <Stack
@@ -77,7 +80,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ userId, onCancel, onSu
           w="full"
           _hover={{ bg: 'blue.500' }}
           onClick={handleFormSubmit}
-          isLoading={submitLoading}
+          isLoading={submitPending}
           spinner={<Spinner />}>
           Submit
         </Button>

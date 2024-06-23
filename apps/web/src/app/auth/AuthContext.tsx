@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { loginAction, isAuthenticatedAction, getRolesAction } from '@web/app/auth/login/login.service';
 import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
 import { logoutAction } from '@web/app/auth/logout/logout.service';
-import { Role } from './role.interface';
+import { Role } from './role.enum';
 import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';
 
 interface AuthContextType {

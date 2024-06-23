@@ -1,9 +1,10 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { getProfileAction } from '@web/app/auth/profile/profile.service';
 import { UserDto } from '@dto/user/dto/user.dto';
 import { useAuth } from './AuthContext';
-import { useCustomToast } from '../utils/toastUtils';
+import { useCustomToast } from '../utils/toast-utils.use';
 import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
+import { useServerAction } from '../utils/server-action.use';
 
 interface ProfileContextType {
   profile: UserDto | null;
@@ -16,20 +17,18 @@ const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { toastError } = useCustomToast();
   const [profile, setProfile] = useState<UserDto | null>(null);
-  const [loading, setLoading] = useState(true);
   const { isAuthenticated } = useAuth();
+  const [loading, getProfile] = useServerAction(getProfileAction);
 
-  const loadProfile = async (): Promise<ActionErrorResponse | void> => {
-    setLoading(true);
-    const data = await getProfileAction();
-    setLoading(false);
+  const loadProfile = useCallback(async (): Promise<ActionErrorResponse | void> => {
+    const { result, error } = await getProfile();
 
-    if ('status' in data) {
+    if (error) {
       setProfile(null);
-      return data;
+      return error;
     }
-    setProfile(data);
-  };
+    setProfile(result);
+  }, [getProfile]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -40,9 +39,8 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
       });
     } else {
       setProfile(null);
-      setLoading(false);
     }
-  }, [isAuthenticated, toastError]);
+  }, [isAuthenticated, toastError, loadProfile]);
 
   return <ProfileContext.Provider value={{ profile, loading, loadProfile }}>{children}</ProfileContext.Provider>;
 };
