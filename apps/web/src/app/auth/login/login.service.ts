@@ -2,7 +2,7 @@
 
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
-import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
+import { ActionResponse } from '@web/app/common/action-response.type';
 import { API_URL } from '@web/app/constants/api';
 import { HttpStatus } from '@web/app/common/http-status.enum';
 import { Role } from '@web/app/auth/role.enum';
@@ -24,33 +24,33 @@ const setAuthCookie = (response: Response) => {
   }
 };
 
-const getErrorMessage = (status: number, parsedRes: any): ActionErrorResponse | null => {
+const getErrorMessage = (status: number, parsedRes: any): ActionResponse<null> => {
   let isUsernameError = false;
   let isPasswordError = false;
   switch (status) {
     case HttpStatus.UNAUTHORIZED:
-      return { message: 'Incorrect password', status: HttpStatus.UNAUTHORIZED };
+      return { error: { message: 'Incorrect password', status: HttpStatus.UNAUTHORIZED } };
     case HttpStatus.BAD_REQUEST:
       isUsernameError = parsedRes.message.some((msg: string) => msg.includes('username must be'));
       isPasswordError = parsedRes.message.includes('password is not strong enough');
 
       if (isUsernameError) {
-        return { message: 'User not found', status: HttpStatus.NOT_FOUND };
+        return { error: { message: 'User not found', status: HttpStatus.NOT_FOUND } };
       }
       if (isPasswordError) {
-        return { message: 'Password is not strong enough', status: HttpStatus.UNAUTHORIZED };
+        return { error: { message: 'Password is not strong enough', status: HttpStatus.UNAUTHORIZED } };
       }
 
-      return { message: 'Invalid request', status: HttpStatus.BAD_REQUEST };
+      return { error: { message: 'Invalid request', status: HttpStatus.BAD_REQUEST } };
 
     case HttpStatus.NOT_FOUND:
-      return { message: 'User not found', status: HttpStatus.NOT_FOUND };
+      return { error: { message: 'User not found', status: HttpStatus.NOT_FOUND } };
     default:
-      return { message: 'An unexpected error occurred, please try again', status };
+      return { error: { message: 'An unexpected error occurred, please try again', status } };
   }
 };
 
-export const loginAction = async (loginData: LoginUserDto): Promise<ActionErrorResponse | null> => {
+export const loginAction = async (loginData: LoginUserDto): Promise<ActionResponse<null>> => {
   let res: Response;
   try {
     res = await fetch(`${API_URL}/auth/login`, {
@@ -60,14 +60,16 @@ export const loginAction = async (loginData: LoginUserDto): Promise<ActionErrorR
     });
   } catch (error) {
     return {
-      message: 'Failed to connect to the server. Please try again later.',
-      status: HttpStatus.SERVICE_UNAVAILABLE,
+      error: {
+        message: 'Failed to connect to the server. Please try again later.',
+        status: HttpStatus.SERVICE_UNAVAILABLE,
+      },
     };
   }
 
   if (res.ok) {
     setAuthCookie(res);
-    return null;
+    return { result: null };
   }
 
   const parsedRes = await res.json();

@@ -9,7 +9,6 @@ import { HttpStatus } from '@web/app/common/http-status.enum';
 import { UpdateUserDto } from '@dto/user/dto/update-user.dto';
 import { FormSubmitResult } from '@web/app/common/form-submit-result.interface';
 import { useServerAction } from '../../utils/server-action.use';
-import { ActionResponse } from '@web/app/common/action-response.type';
 
 interface UseProfileForm {
   profileError: UpdateUserDto;
@@ -22,8 +21,8 @@ interface UseProfileForm {
 }
 
 export interface UseProfileFormDependencies {
-  getUserByIdAction?: (userId: number) => Promise<ActionResponse<UserDto>>;
-  updateUserAction?: (userId: number, data: UpdateUserDto) => Promise<ActionResponse<UserDto>>;
+  getUserByIdAction?: typeof defaultGetUserByIdAction;
+  updateUserAction?: typeof defaultUpdateUserAction;
 }
 
 export const useProfileForm = (
