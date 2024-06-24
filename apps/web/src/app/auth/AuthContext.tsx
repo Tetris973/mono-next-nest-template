@@ -38,7 +38,7 @@ export const AuthProviderNew: React.FC<{ children: React.ReactNode }> = ({ child
   }, [fetchRoles]);
 
   const login = async (formData: LoginUserDto): Promise<ActionResponse<null>> => {
-    const loginError = await performLogin(formData);
+    const { error: loginError } = await performLogin(formData);
     if (loginError) {
       return { error: loginError };
     }

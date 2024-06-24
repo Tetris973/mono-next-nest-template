@@ -67,7 +67,7 @@ export const useLogin = ({ useAuth = defaultUseAuth }: UseLoginDependencies = {}
       return handleLoginError(loginError);
     }
 
-    return {};
+    return { success: 'Login successful' };
   };
 
   return {

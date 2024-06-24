@@ -1,25 +1,34 @@
 import { useState, useEffect } from 'react';
 import { validateSignupForm } from './validation';
 import { CreateUserDto } from '@dto/user/dto/create-user.dto';
-import { signupAction } from './signup.service';
+import { signupAction as defaultSignupAction } from './signup.service';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@web/app/auth/AuthContext';
-import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
+import { AuthContextInterface, useAuth as defaultUseAuth } from '@web/app/auth/AuthContext';
+import { ActionErrorResponse } from '@web/app/common/action-response.type';
 import { HttpStatus } from '@web/app/common/http-status.enum';
 import { FormSubmitResult } from '@web/app/common/form-submit-result.interface';
+import { useServerAction } from '@web/app/utils/server-action.use';
 
-interface UseSignupResult {
+export interface UseSignup {
   error: CreateUserDto;
   showPassword: boolean;
   setShowPassword: (showPassword: boolean) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<FormSubmitResult>;
-  signupLoading: boolean;
+  signupPending: boolean;
 }
 
-export const useSignup = (): UseSignupResult => {
+export interface UseSignupDependencies {
+  useAuth?: () => AuthContextInterface;
+  signupAction?: typeof defaultSignupAction;
+}
+
+export const useSignup = ({
+  useAuth = defaultUseAuth,
+  signupAction = defaultSignupAction,
+}: UseSignupDependencies = {}): UseSignup => {
   const [error, setError] = useState<CreateUserDto>({ username: '', password: '', confirmPassword: '' });
   const [showPassword, setShowPassword] = useState(false);
-  const [signupLoading, setSignupLoading] = useState(false);
+  const [signupPending, signup] = useServerAction(signupAction);
   const router = useRouter();
   const { isAuthenticated } = useAuth();
 
@@ -40,11 +49,12 @@ export const useSignup = (): UseSignupResult => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<FormSubmitResult> => {
     event.preventDefault();
-    const formData = new FormData(event.target as HTMLFormElement);
-    const username = formData.get('username')!.toString().trim();
-    const password = formData.get('password')!.toString().trim();
-    const confirmPassword = formData.get('confirmPassword')!.toString().trim();
-    const createUserDto: CreateUserDto = { username, password, confirmPassword };
+    const formData = new FormData(event.currentTarget);
+    const createUserDto: CreateUserDto = {
+      username: (formData.get('username') as string).trim(),
+      password: (formData.get('password') as string).trim(),
+      confirmPassword: (formData.get('confirmPassword') as string).trim(),
+    };
 
     const validationErrors = validateSignupForm(createUserDto);
     if (validationErrors.username || validationErrors.password || validationErrors.confirmPassword) {
@@ -52,10 +62,7 @@ export const useSignup = (): UseSignupResult => {
       return {};
     }
 
-    setSignupLoading(true);
-    const signupError = await signupAction(createUserDto);
-    setSignupLoading(false);
-
+    const { error: signupError } = await signup(createUserDto);
     if (signupError) {
       return handleSignupError(signupError);
     }
@@ -68,6 +75,6 @@ export const useSignup = (): UseSignupResult => {
     showPassword,
     setShowPassword,
     handleSubmit,
-    signupLoading,
+    signupPending,
   };
 };

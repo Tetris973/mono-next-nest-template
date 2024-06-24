@@ -1,13 +1,17 @@
 import { Box, Button, Stack, useColorModeValue, Spinner, Text, Link } from '@chakra-ui/react';
-import { useSignup } from './signup.use';
+import { UseSignup, useSignup as defaultUseSignup } from './signup.use';
 import { UsernameField } from '@web/app/auth/login/UsernameField';
 import { PasswordField } from '@web/app/auth/login/PasswordField';
 import { useCustomToast } from '@web/app/utils/toast-utils.use';
 import { useRouter } from 'next/navigation';
 
-export const SignupForm: React.FC = () => {
+interface SignupFormProps {
+  useSignup?: () => UseSignup;
+}
+
+export const SignupForm: React.FC<SignupFormProps> = ({ useSignup = defaultUseSignup }) => {
   const { toastError, toastSuccess } = useCustomToast();
-  const { error, showPassword, setShowPassword, handleSubmit, signupLoading } = useSignup();
+  const { error, showPassword, setShowPassword, handleSubmit, signupPending } = useSignup();
   const router = useRouter();
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -34,14 +38,14 @@ export const SignupForm: React.FC = () => {
             type="text"
             name="username"
             error={error.username}
-            loading={signupLoading}
+            loading={signupPending}
           />
           <PasswordField
             id="password"
             label="Password"
             name="password"
             error={error.password}
-            loading={signupLoading}
+            loading={signupPending}
             showPassword={showPassword}
             setShowPassword={setShowPassword}
           />
@@ -50,7 +54,7 @@ export const SignupForm: React.FC = () => {
             label="Confirm Password"
             name="confirmPassword"
             error={error.confirmPassword}
-            loading={signupLoading}
+            loading={signupPending}
             showPassword={showPassword}
             setShowPassword={setShowPassword}
           />
@@ -60,7 +64,7 @@ export const SignupForm: React.FC = () => {
               bg={'blue.400'}
               color={'white'}
               _hover={{ bg: 'blue.500' }}
-              isLoading={signupLoading}
+              isLoading={signupPending}
               spinner={<Spinner />}>
               Sign up
             </Button>
