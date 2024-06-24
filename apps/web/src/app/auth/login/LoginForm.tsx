@@ -1,10 +1,14 @@
 import { Box, Button, Stack, Text, Tooltip, useColorModeValue, Spinner, Checkbox, Link } from '@chakra-ui/react';
-import { useLogin } from './login.use';
+import { UseLogin, useLogin as defaultUseLogin } from './login.use';
 import { UsernameField } from './UsernameField';
 import { PasswordField } from './PasswordField';
 import { useCustomToast } from '@web/app/utils/toast-utils.use';
 
-export const LoginForm: React.FC = () => {
+interface LoginFormProps {
+  useLogin?: () => UseLogin;
+}
+
+export const LoginForm: React.FC<LoginFormProps> = ({ useLogin = defaultUseLogin }) => {
   const { toastError } = useCustomToast();
   const { error, showPassword, setShowPassword, handleSubmit, authLoading } = useLogin();
 

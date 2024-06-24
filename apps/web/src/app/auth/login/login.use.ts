@@ -1,21 +1,25 @@
 import { useState, useEffect } from 'react';
 import { validateLoginForm } from './validation';
 import { HttpStatus } from '@web/app/common/http-status.enum';
-import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
-import { useAuth } from '@web/app/auth/AuthContext';
+import { ActionErrorResponse } from '@web/app/common/action-response.type';
+import { useAuth as defaultUseAuth, AuthContextInterface } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';
 import { FormSubmitResult } from '@web/app/common/form-submit-result.interface';
 
-interface UseLogin {
+export interface UseLogin {
   error: LoginUserDto;
   showPassword: boolean;
   authLoading: boolean;
   setShowPassword: (showPassword: boolean) => void;
-  handleSubmit: (event: React.FormEvent) => Promise<FormSubmitResult>;
+  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<FormSubmitResult>;
 }
 
-export const useLogin = (): UseLogin => {
+export interface UseLoginDependencies {
+  useAuth?: () => AuthContextInterface;
+}
+
+export const useLogin = ({ useAuth = defaultUseAuth }: UseLoginDependencies = {}): UseLogin => {
   const { login, loading: authLoading, isAuthenticated } = useAuth();
   const [error, setError] = useState<LoginUserDto>({ username: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
@@ -42,12 +46,13 @@ export const useLogin = (): UseLogin => {
     }
   };
 
-  const handleSubmit = async (event: React.FormEvent): Promise<FormSubmitResult> => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<FormSubmitResult> => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget as HTMLFormElement);
-    const username = formData.get('username')!.toString().trim();
-    const password = formData.get('password')!.toString().trim();
-    const loginDto: LoginUserDto = { username, password };
+    const formData = new FormData(event.currentTarget);
+    const loginDto: LoginUserDto = {
+      username: (formData.get('username') as string).trim(),
+      password: (formData.get('password') as string).trim(),
+    };
 
     const validationErrors = validateLoginForm(loginDto);
     setError(validationErrors);
@@ -56,7 +61,7 @@ export const useLogin = (): UseLogin => {
       return {};
     }
 
-    const loginError = await login(loginDto);
+    const { error: loginError } = await login(loginDto);
 
     if (loginError) {
       return handleLoginError(loginError);
