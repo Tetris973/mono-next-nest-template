@@ -1,67 +1,65 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { loginAction, isAuthenticatedAction, getRolesAction } from '@web/app/auth/login/login.service';
-import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
 import { logoutAction } from '@web/app/auth/logout/logout.service';
 import { Role } from './role.enum';
 import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';
+import { ActionResponse } from '@web/app/common/action-response.type';
+import { useServerAction } from '@web/app/utils/server-action.use';
 
-interface AuthContextType {
-  login: (formData: LoginUserDto) => Promise<ActionErrorResponse | null>;
+export interface AuthContextInterface {
+  login: (formData: LoginUserDto) => Promise<ActionResponse<null>>;
   logout: () => void;
-  loading: boolean;
   isAuthenticated: boolean;
   roles: Role[];
+  loading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextInterface | undefined>(undefined);
 
 export const AuthProviderNew: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [roles, setRoles] = useState<Role[]>([]);
+  const [loginPending, performLogin] = useServerAction(loginAction);
+  const [logoutPending, performLogout] = useServerAction(logoutAction);
+  const [fetchRolesPending, fetchRoles] = useServerAction(getRolesAction);
   const router = useRouter();
+
+  const loading = loginPending || logoutPending || fetchRolesPending;
 
   useEffect(() => {
     const rehydrateAuth = async () => {
       const isAuthenticated = await isAuthenticatedAction();
-      setRoles(await getRolesAction());
-      setLoading(false);
+      const roles = await fetchRoles();
+      setRoles(roles);
       setIsAuthenticated(isAuthenticated);
     };
     rehydrateAuth();
-  }, []);
+  }, [fetchRoles]);
 
-  const login = async (formData: LoginUserDto): Promise<ActionErrorResponse | null> => {
-    setLoading(true);
-    const loginError = await loginAction(formData);
+  const login = async (formData: LoginUserDto): Promise<ActionResponse<null>> => {
+    const loginError = await performLogin(formData);
     if (loginError) {
-      setLoading(false);
-      return loginError;
+      return { error: loginError };
     }
     setIsAuthenticated(true);
-    setRoles(await getRolesAction());
-    setLoading(false);
-    return null;
+    setRoles(await fetchRoles());
+    return { result: null };
   };
 
   const logout = async () => {
-    setLoading(true);
-
-    await logoutAction();
+    await performLogout();
     setIsAuthenticated(false);
     setRoles([]);
     router.push('/');
-
-    setLoading(false);
   };
 
   return (
-    <AuthContext.Provider value={{ login, logout, loading, isAuthenticated, roles }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ login, logout, isAuthenticated, roles, loading }}>{children}</AuthContext.Provider>
   );
 };
 
-export const useAuth = (): AuthContextType => {
+export const useAuth = (): AuthContextInterface => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');

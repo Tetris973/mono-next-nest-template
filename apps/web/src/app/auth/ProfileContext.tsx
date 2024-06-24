@@ -6,13 +6,13 @@ import { useCustomToast } from '../utils/toast-utils.use';
 import { ActionErrorResponse } from '@web/app/common/action-error-reponse.interface';
 import { useServerAction } from '../utils/server-action.use';
 
-interface ProfileContextType {
+interface ProfileContextInterface {
   profile: UserDto | null;
   loading: boolean;
   loadProfile: () => Promise<ActionErrorResponse | void>;
 }
 
-const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
+const ProfileContext = createContext<ProfileContextInterface | undefined>(undefined);
 
 export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { toastError } = useCustomToast();
@@ -45,7 +45,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
   return <ProfileContext.Provider value={{ profile, loading, loadProfile }}>{children}</ProfileContext.Provider>;
 };
 
-export const useProfile = (): ProfileContextType => {
+export const useProfile = (): ProfileContextInterface => {
   const context = useContext(ProfileContext);
   if (!context) {
     throw new Error('useProfile must be used within a ProfileProvider');
