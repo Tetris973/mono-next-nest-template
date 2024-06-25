@@ -28,7 +28,7 @@ export const useSignup = ({
 }: UseSignupDependencies = {}): UseSignup => {
   const [error, setError] = useState<CreateUserDto>({ username: '', password: '', confirmPassword: '' });
   const [showPassword, setShowPassword] = useState(false);
-  const [signupPending, signup] = useServerAction(signupAction);
+  const [signupPending, signupActionM] = useServerAction(signupAction);
   const router = useRouter();
   const { isAuthenticated } = useAuth();
 
@@ -62,7 +62,7 @@ export const useSignup = ({
       return {};
     }
 
-    const { error: signupError } = await signup(createUserDto);
+    const { error: signupError } = await signupActionM(createUserDto);
     if (signupError) {
       return handleSignupError(signupError);
     }

@@ -6,6 +6,10 @@ import { useState, useCallback } from 'react';
  * This hook provides a way to execute an asynchronous or synchronous action
  * with automatic handling of loading state and optional callback on completion.
  *
+ * Naming Convention:
+ * - Server action functions should have `Action` at the end of their name.
+ * - The resulting function that manages the loading state should have `M` or `Managed` at the end of its name.
+ *
  * @template P - Parameters type of the action function.
  * @template R - Return type of the action function.
  *
@@ -17,15 +21,19 @@ import { useState, useCallback } from 'react';
  *  - `(...args: P) => Promise<R>`: Function to execute the action.
  *
  * @example
- * const [isLoading, executeAction] = useServerAction(async (data) => {
+ * const getDataAction = async (data) => {
  *   const response = await fetchData(data);
  *   return response;
- * }, (result) => {
+ * };
+ *
+ * const onFinished = (result) => {
  *   console.log('Action finished with result:', result);
- * });
+ * };
+ *
+ * const [getDataActionPending, getDataActionM] = useServerAction(getDataAction, onFinished);
  *
  * useEffect(() => {
- *   executeAction(someData);
+ *   getDataActionM(someData);
  * }, [someData]);
  */
 export const useServerAction = <P extends any[], R>(
@@ -34,7 +42,7 @@ export const useServerAction = <P extends any[], R>(
 ): [boolean, (...args: P) => Promise<R>] => {
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  const runAction = useCallback(
+  const runActionM = useCallback(
     async (...args: P): Promise<R> => {
       setSubmitLoading(true);
       try {
@@ -56,7 +64,7 @@ export const useServerAction = <P extends any[], R>(
     [action, onFinished],
   );
 
-  return [submitLoading, runAction];
+  return [submitLoading, runActionM];
 };
 
 /* Version with usage of useTransition if i ever need it */
