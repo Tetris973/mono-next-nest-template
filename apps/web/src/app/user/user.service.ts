@@ -1,40 +1,27 @@
 'use server';
 
 import { API_URL } from '@web/app/constants/api';
-import { cookies } from 'next/headers';
 import { HttpStatus } from '@web/app/common/http-status.enum';
 import { UpdateUserDto } from '@dto/user/dto/update-user.dto';
 import { UserDto } from '@dto/user/dto/user.dto';
 import { ActionResponse } from '@web/app/common/action-response.type';
+import { checkAuthentication } from '../utils/check-authentication.utils';
+import { safeFetch } from '@web/app/utils/safe-fetch.utils';
 
 export const getUserByIdAction = async (id: number): Promise<ActionResponse<UserDto>> => {
-  const cookieStore = cookies();
-  const token = cookieStore.get('Authentication')?.value;
-
-  if (!token) {
-    return {
-      error: {
-        status: HttpStatus.UNAUTHORIZED,
-        message: 'Not authenticated',
-      },
-    };
+  const { result: token, error } = checkAuthentication();
+  if (error) {
+    return { error };
   }
 
-  let response;
-  try {
-    response = await fetch(`${API_URL}/users/${id}`, {
-      method: 'GET',
-      headers: {
-        Cookie: `Authentication=${token}`,
-      },
-    });
-  } catch (error) {
-    return {
-      error: {
-        status: HttpStatus.SERVICE_UNAVAILABLE,
-        message: 'Failed to connect to the server. Please try again later.',
-      },
-    };
+  const { result: response, error: fetchError } = await safeFetch(`${API_URL}/users/${id}`, {
+    method: 'GET',
+    headers: {
+      Cookie: `Authentication=${token}`,
+    },
+  });
+  if (fetchError) {
+    return { error: fetchError };
   }
 
   if (!response.ok) {
@@ -53,16 +40,9 @@ export const updateUserAction = async (
   userId: number,
   updateUserDto: UpdateUserDto,
 ): Promise<ActionResponse<UserDto>> => {
-  const cookieStore = cookies();
-  const token = cookieStore.get('Authentication')?.value;
-
-  if (!token) {
-    return {
-      error: {
-        status: HttpStatus.UNAUTHORIZED,
-        message: 'Auth cookie missing, not authenticated',
-      },
-    };
+  const { result: token, error } = checkAuthentication();
+  if (error) {
+    return { error };
   }
 
   if (!userId) {
@@ -74,23 +54,16 @@ export const updateUserAction = async (
     };
   }
 
-  let response;
-  try {
-    response = await fetch(`${API_URL}/users/${userId}`, {
-      method: 'PATCH',
-      headers: {
-        Cookie: `Authentication=${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updateUserDto),
-    });
-  } catch (error) {
-    return {
-      error: {
-        status: HttpStatus.SERVICE_UNAVAILABLE,
-        message: 'Failed to connect to the server. Please try again later.',
-      },
-    };
+  const { result: response, error: fetchError } = await safeFetch(`${API_URL}/users/${userId}`, {
+    method: 'PATCH',
+    headers: {
+      Cookie: `Authentication=${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updateUserDto),
+  });
+  if (fetchError) {
+    return { error: fetchError };
   }
 
   if (!response.ok) {
@@ -114,33 +87,19 @@ export const updateUserAction = async (
 };
 
 export const getAllUsersAction = async (): Promise<ActionResponse<UserDto[]>> => {
-  const cookieStore = cookies();
-  const token = cookieStore.get('Authentication')?.value;
-
-  if (!token) {
-    return {
-      error: {
-        status: HttpStatus.UNAUTHORIZED,
-        message: 'Not authenticated',
-      },
-    };
+  const { result: token, error } = checkAuthentication();
+  if (error) {
+    return { error };
   }
 
-  let response;
-  try {
-    response = await fetch(`${API_URL}/users`, {
-      method: 'GET',
-      headers: {
-        Cookie: `Authentication=${token}`,
-      },
-    });
-  } catch (error) {
-    return {
-      error: {
-        status: HttpStatus.SERVICE_UNAVAILABLE,
-        message: 'Failed to connect to the server. Please try again later.',
-      },
-    };
+  const { result: response, error: fetchError } = await safeFetch(`${API_URL}/users`, {
+    method: 'GET',
+    headers: {
+      Cookie: `Authentication=${token}`,
+    },
+  });
+  if (fetchError) {
+    return { error: fetchError };
   }
 
   if (!response.ok) {
@@ -156,33 +115,19 @@ export const getAllUsersAction = async (): Promise<ActionResponse<UserDto[]>> =>
 };
 
 export const deleteUserAction = async (id: number): Promise<ActionResponse<null>> => {
-  const cookieStore = cookies();
-  const token = cookieStore.get('Authentication')?.value;
-
-  if (!token) {
-    return {
-      error: {
-        status: HttpStatus.UNAUTHORIZED,
-        message: 'Not authenticated',
-      },
-    };
+  const { result: token, error } = checkAuthentication();
+  if (error) {
+    return { error };
   }
 
-  let response;
-  try {
-    response = await fetch(`${API_URL}/users/${id}`, {
-      method: 'DELETE',
-      headers: {
-        Cookie: `Authentication=${token}`,
-      },
-    });
-  } catch (error) {
-    return {
-      error: {
-        status: HttpStatus.SERVICE_UNAVAILABLE,
-        message: 'Failed to connect to the server. Please try again later.',
-      },
-    };
+  const { result: response, error: fetchError } = await safeFetch(`${API_URL}/users/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Cookie: `Authentication=${token}`,
+    },
+  });
+  if (fetchError) {
+    return { error: fetchError };
   }
 
   if (!response.ok) {

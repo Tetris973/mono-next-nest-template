@@ -53,8 +53,8 @@ export function Dashboard(): JSX.Element {
   const {
     users,
     selectedUser,
-    loadingUsers,
-    loadingSelectedUser,
+    getAllUsersPending,
+    getUserByIdPending,
     error,
     showAdmin,
     loadUserById,
@@ -71,19 +71,17 @@ export function Dashboard(): JSX.Element {
 
   const confirmDelete = async () => {
     if (selectedUser) {
-      try {
-        await deleteUser(selectedUser.id);
+      const error = await deleteUser(selectedUser.id);
+      if (error) {
+        toastError(error);
+      } else {
         toastSuccess(`User ${selectedUser.username} deleted successfully!`);
-      } catch (err) {
-        toastError('Error deleting user.');
-      } finally {
-        setAlert.off();
       }
     }
   };
 
-  const onSubmitSuccess = () => {
-    loadUsers();
+  const onSubmitSuccess = async () => {
+    await loadUsers();
     if (selectedUser?.id === profile?.id) {
       loadProfile();
     }
@@ -106,7 +104,7 @@ export function Dashboard(): JSX.Element {
           <Spacer />
           <UserList
             users={users}
-            loading={loadingUsers}
+            loading={getAllUsersPending}
             error={error}
             onUserSelect={loadUserById}
             containerStyle={{ marginRight: '32px' }}
@@ -121,7 +119,7 @@ export function Dashboard(): JSX.Element {
           ) : (
             <UserCardContainer
               user={selectedUser}
-              loading={loadingSelectedUser}
+              loading={getUserByIdPending}
               onDelete={() => setAlert.on()}
               showAdmin={showAdmin}
               onEdit={setEditing.on}

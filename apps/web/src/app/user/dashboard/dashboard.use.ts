@@ -1,66 +1,90 @@
 import { useState, useEffect } from 'react';
-import { getAllUsersAction, getUserByIdAction, deleteUserAction } from '@web/app/user/user.service';
+import {
+  getAllUsersAction as defaultGetAllUsersAction,
+  getUserByIdAction as defaultGetUserByIdAction,
+  deleteUserAction as defaultDeleteUserAction,
+} from '@web/app/user/user.service';
 import { UserDto } from '@dto/user/dto/user.dto';
-import { useAuth } from '@web/app/auth/AuthContext';
+import { useAuth as defaultUseAuth, AuthContextInterface } from '@web/app/auth/AuthContext';
 import { Role } from '@web/app/auth/role.enum';
+import { useServerAction } from '@web/app/utils/server-action.use';
 
-interface useDashboard {
+export interface useDashboard {
   users: UserDto[];
   selectedUser: UserDto | null;
-  loadingUsers: boolean;
-  loadingSelectedUser: boolean;
+  getAllUsersPending: boolean;
+  getUserByIdPending: boolean;
   error: string;
   showAdmin: boolean;
-  loadUserById: (id: number) => void;
-  deleteUser: (id: number) => void;
-  loadUsers: () => void;
+  loadUserById: (id: number) => Promise<string | void>;
+  deleteUser: (id: number) => Promise<string | void>;
+  loadUsers: () => Promise<string | void>;
 }
 
-export const useDashboard = (): useDashboard => {
+export interface UseDashboardDependencies {
+  useAuth?: () => AuthContextInterface;
+  getAllUsersAction?: typeof defaultGetAllUsersAction;
+  getUserByIdAction?: typeof defaultGetUserByIdAction;
+  deleteUserAction?: typeof defaultDeleteUserAction;
+}
+
+export const useDashboard = ({
+  getAllUsersAction = defaultGetAllUsersAction,
+  getUserByIdAction = defaultGetUserByIdAction,
+  deleteUserAction = defaultDeleteUserAction,
+  useAuth = defaultUseAuth,
+}: UseDashboardDependencies = {}): useDashboard => {
+  const [getAllUsersPending, getAllUsersActionM] = useServerAction(getAllUsersAction);
+  const [getUserByIdPending, getUserByIdActionM] = useServerAction(getUserByIdAction);
+  const [, deleteUserActionM] = useServerAction(deleteUserAction);
   const [users, setUsers] = useState<UserDto[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserDto | null>(null);
-  const [loadingUsers, setLoadingUsers] = useState(true);
-  const [loadingSelectedUser, setLoadingSelectedUser] = useState(false); // TODO: replace by useServerAction!
   const [error, setError] = useState('');
   const [showAdmin, setShowAdmin] = useState(false);
   const { roles } = useAuth();
 
+  /**
+   * Load a user by id
+   * @param id - The id of the user to load
+   * @returns The error message if there is an error, otherwise undefined
+   */
   const loadUserById = async (id: number) => {
-    setLoadingSelectedUser(true);
-    const { result, error } = await getUserByIdAction(id);
+    const { result, error } = await getUserByIdActionM(id);
     if (error) {
       setError(error.message);
-    } else {
-      setSelectedUser(result);
+      return error.message;
     }
-    setLoadingSelectedUser(false);
+    setSelectedUser(result);
   };
 
+  /**
+   * Delete a user
+   * @param id - The id of the user to delete
+   * @returns The error message if there is an error, otherwise undefined
+   */
   const deleteUser = async (id: number) => {
-    setLoadingSelectedUser(true);
-    const { error } = await deleteUserAction(id);
+    const { error } = await deleteUserActionM(id);
     if (error) {
       setError(error.message);
-    } else {
-      setUsers(users.filter((user) => user.id !== id));
-      setSelectedUser(null);
+      return error.message;
     }
-    setLoadingSelectedUser(false);
+    setUsers(users.filter((user) => user.id !== id));
+    setSelectedUser(null);
   };
 
+  /**
+   * Load all users
+   * @returns The error message if there is an error, otherwise undefined
+   */
   const loadUsers = async () => {
-    setLoadingUsers(true);
-    setLoadingSelectedUser(true);
-    const { result, error } = await getAllUsersAction();
+    const { result, error } = await getAllUsersActionM();
     if (error) {
       setError(error.message);
-    } else {
-      setUsers(result);
-      const user = result.find((user) => user.id === selectedUser?.id);
-      setSelectedUser(user || null);
+      return error.message;
     }
-    setLoadingUsers(false);
-    setLoadingSelectedUser(false);
+    setUsers(result);
+    const user = result.find((user) => user.id === selectedUser?.id);
+    setSelectedUser(user || null);
   };
 
   useEffect(() => {
@@ -77,8 +101,8 @@ export const useDashboard = (): useDashboard => {
   return {
     users,
     selectedUser,
-    loadingUsers,
-    loadingSelectedUser,
+    getAllUsersPending,
+    getUserByIdPending,
     error,
     showAdmin,
     loadUserById,

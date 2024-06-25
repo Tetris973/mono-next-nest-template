@@ -35,12 +35,12 @@ export const useProfileForm = (
   const [user, setUser] = useState<UserDto | null>(null);
   const [profileError, setProfileError] = useState<UpdateUserDto>({ username: '' });
   const [newUsername, setNewUsername] = useState('');
-  const [submitPending, updateUser] = useServerAction(updateUserAction);
-  const [profilePending, getProfile] = useServerAction(getUserByIdAction);
+  const [submitPending, updateUserActionM] = useServerAction(updateUserAction);
+  const [profilePending, getProfileActionM] = useServerAction(getUserByIdAction);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const { result, error } = await getProfile(userId);
+      const { result, error } = await getProfileActionM(userId);
       if (error) {
         // Nothing when error for the moment
       } else {
@@ -50,7 +50,7 @@ export const useProfileForm = (
     };
 
     fetchUserProfile();
-  }, [userId, getProfile]);
+  }, [userId, getProfileActionM]);
 
   const handleSubmit = async (event: React.FormEvent): Promise<FormSubmitResult> => {
     if (!user) return { error: 'No user selected, cannot update profile' };
@@ -60,7 +60,7 @@ export const useProfileForm = (
     setProfileError(validationErrors);
     if (validationErrors.username) return {};
 
-    const { result, error } = await updateUser(user.id, { username: newUsername });
+    const { result, error } = await updateUserActionM(user.id, { username: newUsername });
     if (error) {
       if (error.status === HttpStatus.CONFLICT) {
         setProfileError({ username: error.message });

@@ -10,7 +10,12 @@ import { useServerAction } from '@web/app/utils/server-action.use';
 export interface AuthContextInterface {
   login: (formData: LoginUserDto) => Promise<ActionResponse<null>>;
   logout: () => void;
-  isAuthenticated: boolean;
+  /**
+   * Indicates whether the user is authenticated.
+   * Initially undefined as we don't know the authentication status,
+   * then it can be either true (authenticated) or false (not authenticated).
+   */
+  isAuthenticated: boolean | undefined;
   roles: Role[];
   loading: boolean;
 }
@@ -18,37 +23,37 @@ export interface AuthContextInterface {
 const AuthContext = createContext<AuthContextInterface | undefined>(undefined);
 
 export const AuthProviderNew: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined);
   const [roles, setRoles] = useState<Role[]>([]);
-  const [loginPending, performLogin] = useServerAction(loginAction);
-  const [logoutPending, performLogout] = useServerAction(logoutAction);
-  const [fetchRolesPending, fetchRoles] = useServerAction(getRolesAction);
+  const [loginPending, loginActionM] = useServerAction(loginAction);
+  const [logoutPending, logoutActionM] = useServerAction(logoutAction);
+  const [getRolesPending, getRolesActionM] = useServerAction(getRolesAction);
   const router = useRouter();
 
-  const loading = loginPending || logoutPending || fetchRolesPending;
+  const loading = loginPending || logoutPending || getRolesPending;
 
   useEffect(() => {
     const rehydrateAuth = async () => {
       const isAuthenticated = await isAuthenticatedAction();
-      const roles = await fetchRoles();
+      const roles = await getRolesActionM();
       setRoles(roles);
       setIsAuthenticated(isAuthenticated);
     };
     rehydrateAuth();
-  }, [fetchRoles]);
+  }, [getRolesActionM]);
 
   const login = async (formData: LoginUserDto): Promise<ActionResponse<null>> => {
-    const { error: loginError } = await performLogin(formData);
+    const { error: loginError } = await loginActionM(formData);
     if (loginError) {
       return { error: loginError };
     }
     setIsAuthenticated(true);
-    setRoles(await fetchRoles());
+    setRoles(await getRolesActionM());
     return { result: null };
   };
 
   const logout = async () => {
-    await performLogout();
+    await logoutActionM();
     setIsAuthenticated(false);
     setRoles([]);
     router.push('/');

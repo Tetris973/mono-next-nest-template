@@ -22,7 +22,7 @@ export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ childr
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    if (!loading && isAuthenticated !== undefined && !isAuthenticated) {
       router.push('/auth/login');
     }
   }, [isAuthenticated, loading, router]);
