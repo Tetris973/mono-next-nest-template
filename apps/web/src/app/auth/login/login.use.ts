@@ -6,9 +6,10 @@ import { useAuth as defaultUseAuth, AuthContextInterface } from '@web/app/auth/A
 import { useRouter } from 'next/navigation';
 import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';
 import { FormSubmitResult } from '@web/app/common/form-submit-result.interface';
+import { DtoValidationError } from '@web/app/common/dto-validation-error.type';
 
 export interface UseLogin {
-  error: LoginUserDto;
+  error: DtoValidationError<LoginUserDto>;
   showPassword: boolean;
   authLoading: boolean;
   setShowPassword: (showPassword: boolean) => void;
@@ -21,7 +22,7 @@ export interface UseLoginDependencies {
 
 export const useLogin = ({ useAuth = defaultUseAuth }: UseLoginDependencies = {}): UseLogin => {
   const { login, loading: authLoading, isAuthenticated } = useAuth();
-  const [error, setError] = useState<LoginUserDto>({ username: '', password: '' });
+  const [error, setError] = useState<DtoValidationError<LoginUserDto>>({ username: [], password: [] });
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
@@ -31,19 +32,13 @@ export const useLogin = ({ useAuth = defaultUseAuth }: UseLoginDependencies = {}
     }
   }, [isAuthenticated, router]);
 
-  const handleLoginError = (loginError: ActionErrorResponse): FormSubmitResult => {
-    switch (loginError.status) {
-      case HttpStatus.SERVICE_UNAVAILABLE:
-        return { error: loginError.message };
-      case HttpStatus.NOT_FOUND:
-        setError((prev) => ({ ...prev, username: loginError.message }));
-        return {};
-      case HttpStatus.UNAUTHORIZED:
-        setError((prev) => ({ ...prev, password: loginError.message }));
-        return {};
-      default:
-        return {};
+  const handleLoginError = (loginError: ActionErrorResponse<LoginUserDto>): FormSubmitResult => {
+    const formError = [HttpStatus.BAD_REQUEST, HttpStatus.NOT_FOUND, HttpStatus.UNAUTHORIZED];
+    if (formError.includes(loginError.status)) {
+      setError(loginError.details || {});
+      return {};
     }
+    return { error: loginError.message };
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<FormSubmitResult> => {
@@ -55,9 +50,8 @@ export const useLogin = ({ useAuth = defaultUseAuth }: UseLoginDependencies = {}
     };
 
     const validationErrors = validateLoginForm(loginDto);
-    setError(validationErrors);
-
-    if (validationErrors.username || validationErrors.password) {
+    if (validationErrors) {
+      setError(validationErrors);
       return {};
     }
 

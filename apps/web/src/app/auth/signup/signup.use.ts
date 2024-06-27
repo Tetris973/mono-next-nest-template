@@ -8,9 +8,10 @@ import { ActionErrorResponse } from '@web/app/common/action-response.type';
 import { HttpStatus } from '@web/app/common/http-status.enum';
 import { FormSubmitResult } from '@web/app/common/form-submit-result.interface';
 import { useServerAction } from '@web/app/utils/server-action.use';
+import { DtoValidationError } from '@web/app/common/dto-validation-error.type';
 
 export interface UseSignup {
-  error: CreateUserDto;
+  error: DtoValidationError<CreateUserDto>;
   showPassword: boolean;
   setShowPassword: (showPassword: boolean) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<FormSubmitResult>;
@@ -26,7 +27,11 @@ export const useSignup = ({
   useAuth = defaultUseAuth,
   signupAction = defaultSignupAction,
 }: UseSignupDependencies = {}): UseSignup => {
-  const [error, setError] = useState<CreateUserDto>({ username: '', password: '', confirmPassword: '' });
+  const [error, setError] = useState<DtoValidationError<CreateUserDto>>({
+    username: [],
+    password: [],
+    confirmPassword: [],
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [signupPending, signupActionM] = useServerAction(signupAction);
   const router = useRouter();
@@ -38,10 +43,9 @@ export const useSignup = ({
     }
   }, [isAuthenticated, router]);
 
-  const handleSignupError = (signupError: ActionErrorResponse): FormSubmitResult => {
-    const formErrorCode = [HttpStatus.CONFLICT];
-    if (formErrorCode.includes(signupError.status)) {
-      setError({ username: signupError.message, password: '', confirmPassword: '' });
+  const handleSignupError = (signupError: ActionErrorResponse<CreateUserDto>): FormSubmitResult => {
+    if (signupError.status === HttpStatus.CONFLICT || signupError.status === HttpStatus.BAD_REQUEST) {
+      setError(signupError.details || {});
       return {};
     }
     return { error: signupError.message };
@@ -57,7 +61,7 @@ export const useSignup = ({
     };
 
     const validationErrors = validateSignupForm(createUserDto);
-    if (validationErrors.username || validationErrors.password || validationErrors.confirmPassword) {
+    if (validationErrors) {
       setError(validationErrors);
       return {};
     }

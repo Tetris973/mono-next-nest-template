@@ -5,14 +5,14 @@ interface UsernameFieldProps {
   label: string;
   type: string;
   name: string;
-  error: string;
+  error: string[] | undefined;
   loading: boolean;
 }
 
 export const UsernameField: React.FC<UsernameFieldProps> = ({ id, label, type, name, error, loading }) => (
   <FormControl
     id={id}
-    isInvalid={!!error}>
+    isInvalid={error && error.length > 0}>
     <FormLabel>{label}</FormLabel>
     {loading ? (
       <Skeleton height="40px" />

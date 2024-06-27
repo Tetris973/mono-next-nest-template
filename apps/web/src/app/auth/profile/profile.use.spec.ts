@@ -63,7 +63,7 @@ describe('useProfileForm', () => {
 
     expect(result.current.user?.username).toBe(newUsername);
     expect(result.current.profilePending).toBe(false);
-    expect(result.current.profileError).toEqual({ username: '' });
+    expect(result.current.profileError).toEqual({ username: [] });
   });
 
   it('should handle validation errors', async () => {
@@ -82,7 +82,7 @@ describe('useProfileForm', () => {
       const submitResult = await result.current.handleSubmit({ preventDefault: () => {} } as React.FormEvent);
       expect(submitResult).toEqual({});
     });
-    expect(result.current.profileError.username).toBe('You must provide a username.');
+    expect(result.current.profileError).toEqual({ username: ['You must provide a username.'] });
   });
 
   it('should handle server errors, Conflict', async () => {
@@ -102,7 +102,7 @@ describe('useProfileForm', () => {
     });
 
     // CHECK RESULTS
-    expect(result.current.profileError.username).toBe(errorMessage);
+    expect(result.current.profileError).toEqual({ username: [errorMessage] });
   });
 
   it('should handle server errors, other errors', async () => {
@@ -119,7 +119,7 @@ describe('useProfileForm', () => {
     await act(async () => {
       const submitResult = await result.current.handleSubmit({ preventDefault: () => {} } as React.FormEvent);
       expect(submitResult).toEqual({ error: errorMessage });
-      expect(result.current.profileError.username).toBe('');
+      expect(result.current.profileError).toEqual({ username: [] });
     });
   });
 });

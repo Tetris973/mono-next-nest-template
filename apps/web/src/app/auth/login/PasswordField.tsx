@@ -15,7 +15,7 @@ interface PasswordFieldProps {
   id: string;
   label: string;
   name: string;
-  error: string;
+  error: string[] | undefined;
   loading: boolean;
   showPassword: boolean;
   setShowPassword: (show: boolean) => void;
@@ -32,7 +32,7 @@ export const PasswordField: React.FC<PasswordFieldProps> = ({
 }) => (
   <FormControl
     id={id}
-    isInvalid={!!error}>
+    isInvalid={error && error.length > 0}>
     <FormLabel>{label}</FormLabel>
     {loading ? (
       <Skeleton height="40px" />

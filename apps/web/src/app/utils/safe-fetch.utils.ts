@@ -3,9 +3,9 @@ import { ActionResponse } from '@web/app/common/action-response.type';
 
 /**
  * Safe fetch utility function to handle fetch errors and provide a consistent error response.
- * @param {RequestInfo} url - The URL to fetch.
- * @param {RequestInit} [options] - The options for the fetch request.
- * @returns {Promise<FetchResult<Response>>} The fetch result containing either the response or an error.
+ * @param url - The URL to fetch.
+ * @param options - The options for the fetch request.
+ * @returns - The fetch result containing either the response or an error.
  */
 export const safeFetch = async (url: RequestInfo, options?: RequestInit): Promise<ActionResponse<Response>> => {
   try {

@@ -9,9 +9,10 @@ import { HttpStatus } from '@web/app/common/http-status.enum';
 import { UpdateUserDto } from '@dto/user/dto/update-user.dto';
 import { FormSubmitResult } from '@web/app/common/form-submit-result.interface';
 import { useServerAction } from '../../utils/server-action.use';
+import { DtoValidationError } from '@web/app/common/dto-validation-error.type';
 
 interface UseProfileForm {
-  profileError: UpdateUserDto;
+  profileError: DtoValidationError<UpdateUserDto>;
   newUsername: string;
   submitPending: boolean;
   profilePending: boolean;
@@ -33,7 +34,7 @@ export const useProfileForm = (
   }: UseProfileFormDependencies = {},
 ): UseProfileForm => {
   const [user, setUser] = useState<UserDto | null>(null);
-  const [profileError, setProfileError] = useState<UpdateUserDto>({ username: '' });
+  const [profileError, setProfileError] = useState<DtoValidationError<UpdateUserDto>>({ username: [] });
   const [newUsername, setNewUsername] = useState('');
   const [submitPending, updateUserActionM] = useServerAction(updateUserAction);
   const [profilePending, getProfileActionM] = useServerAction(getUserByIdAction);
@@ -57,13 +58,15 @@ export const useProfileForm = (
     event.preventDefault();
 
     const validationErrors = validateUserProfileEditForm({ username: newUsername });
-    setProfileError(validationErrors);
-    if (validationErrors.username) return {};
+    if (validationErrors) {
+      setProfileError(validationErrors);
+      return {};
+    }
 
     const { result, error } = await updateUserActionM(user.id, { username: newUsername });
     if (error) {
       if (error.status === HttpStatus.CONFLICT) {
-        setProfileError({ username: error.message });
+        setProfileError({ username: [error.message] });
         return {};
       }
       return { error: error.message };
