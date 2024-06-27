@@ -78,7 +78,7 @@ export const updateUserAction = async (
     return {
       error: {
         status: response.status,
-        message: 'Failed to update profile',
+        message: 'Failed to update user',
       },
     };
   }
