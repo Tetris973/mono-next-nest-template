@@ -74,7 +74,7 @@ describe('useSignup', () => {
     });
 
     expect(mockSignupAction).toHaveBeenCalledWith(signupDto);
-    expect(result.current.error).toEqual({ username: '', password: '', confirmPassword: '' });
+    expect(result.current.error).toEqual({ username: [], password: [], confirmPassword: [] });
   });
 
   it('should handle validation errors', async () => {
@@ -91,18 +91,21 @@ describe('useSignup', () => {
       expect(submitResult).toEqual({});
     });
 
-    expect(result.current.error.username).toBe('You must provide a username.');
-    expect(result.current.error.password).toBe('You must provide a password.');
-    expect(result.current.error.confirmPassword).toBe('');
+    expect(result.current.error).toEqual({
+      username: ['You must provide a username.'],
+      password: ['You must provide a password.'],
+      confirmPassword: [],
+    });
   });
 
   it('should handle server errors, Errors set in error form state, Conflict', async () => {
     // INIT
-    const errorMessage = 'Username already exists';
+    const usernameError = 'Username already exists';
     mockSignupAction.mockResolvedValue({
       error: {
         status: HttpStatus.CONFLICT,
-        message: errorMessage,
+        message: usernameError,
+        details: { username: [usernameError] },
       },
     });
 
@@ -121,7 +124,42 @@ describe('useSignup', () => {
       } as unknown as React.FormEvent<HTMLFormElement>);
       expect(submitResult).toEqual({});
     });
-    expect(result.current.error.username).toBe(errorMessage);
+    expect(result.current.error).toEqual({ username: [usernameError] });
+  });
+
+  it('should handle server errors, Errors returned by submit, Bad Request', async () => {
+    // INIT
+    const errorMessage = 'validation errors';
+    const details: Record<keyof CreateUserDto, string[]> = {
+      username: ['username error', 'username error 2'],
+      password: ['password error', 'password error 2'],
+      confirmPassword: ['confirmPassword error', 'confirmPassword error 2'],
+    };
+    mockSignupAction.mockResolvedValue({
+      error: {
+        status: HttpStatus.BAD_REQUEST,
+        message: errorMessage,
+        details,
+      },
+    });
+
+    const { result } = renderHook(() => useSignup(dependencies));
+
+    // RUN & CHECK RESULTS
+    await act(async () => {
+      const submitResult = await result.current.handleSubmit({
+        preventDefault: () => {},
+        // input good crendentials to bypass client side validation
+        currentTarget: createFormElement({
+          username: 'testUser',
+          password: 'Chocolat123!',
+          confirmPassword: 'Chocolat123!',
+        }),
+      } as unknown as React.FormEvent<HTMLFormElement>);
+      expect(submitResult).toEqual({});
+    });
+
+    expect(result.current.error).toEqual(details);
   });
 
   it('should handle server errors, Errors returned by submit, other status', async () => {
@@ -149,8 +187,6 @@ describe('useSignup', () => {
       expect(submitResult).toEqual({ error: errorMessage });
     });
 
-    expect(result.current.error.username).toBe('');
-    expect(result.current.error.password).toBe('');
-    expect(result.current.error.confirmPassword).toBe('');
+    expect(result.current.error).toEqual({ username: [], password: [], confirmPassword: [] });
   });
 });

@@ -1,4 +1,4 @@
-import { Module, ValidationPipe, ClassSerializerInterceptor, MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { Module, ClassSerializerInterceptor, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -10,6 +10,7 @@ import { ConfigModule } from './config/config.module';
 import { APP_INTERCEPTOR, APP_PIPE, Reflector, APP_FILTER } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 import { AllExceptionsFilter } from './all-exceptions.filter';
+import { customValidationPipe } from './custom-validation.pipe';
 
 @Module({
   imports: [
@@ -27,12 +28,7 @@ import { AllExceptionsFilter } from './all-exceptions.filter';
     {
       provide: APP_PIPE,
       // Set validation for all incoming request using a DTO with class-validator
-      useValue: new ValidationPipe({
-        // Strip unknown properties from the request body
-        whitelist: true,
-        // Transform the request body to the DTO instance
-        transform: true,
-      }),
+      useValue: customValidationPipe,
     },
     {
       provide: APP_INTERCEPTOR,

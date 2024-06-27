@@ -66,7 +66,7 @@ describe('useLogin', () => {
     });
 
     expect(mockAuth.login).toHaveBeenCalledWith(loginDto);
-    expect(result.current.error).toEqual({ username: '', password: '' });
+    expect(result.current.error).toEqual({ username: [], password: [] });
   });
 
   it('should handle validation errors', async () => {
@@ -83,15 +83,17 @@ describe('useLogin', () => {
       expect(submitResult).toEqual({});
     });
 
-    expect(result.current.error.username).toBe('You must provide a username.');
-    expect(result.current.error.password).toBe('You must provide a password.');
+    expect(result.current.error).toEqual({
+      username: ['You must provide a username.'],
+      password: ['You must provide a password.'],
+    });
   });
 
   it('should handle server errors, Errors set in error form state, Not Found', async () => {
     // INIT
-    const errorMessage = 'Username not found';
+    const details = { username: ['Username not found'] };
     mockAuth.login.mockResolvedValue({
-      error: { status: HttpStatus.NOT_FOUND, message: errorMessage },
+      error: { status: HttpStatus.NOT_FOUND, message: 'Username not found', details },
     });
     const formElement = createFormElement({
       username: 'testUser',
@@ -107,14 +109,14 @@ describe('useLogin', () => {
       } as unknown as React.FormEvent<HTMLFormElement>);
       expect(submitResult).toEqual({});
     });
-    expect(result.current.error.username).toBe(errorMessage);
+    expect(result.current.error).toEqual(details);
   });
 
   it('should handle server errors, Errors set in error state, Unauthorized', async () => {
     // INIT
-    const errorMessage = 'Unauthorized';
+    const details = { password: ['Incorrect password'] };
     mockAuth.login.mockResolvedValue({
-      error: { status: HttpStatus.UNAUTHORIZED, message: errorMessage },
+      error: { status: HttpStatus.UNAUTHORIZED, message: 'Unauthorized', details },
     });
     const formElement = createFormElement({
       username: 'testUser',
@@ -130,7 +132,33 @@ describe('useLogin', () => {
       } as unknown as React.FormEvent<HTMLFormElement>);
       expect(submitResult).toEqual({});
     });
-    expect(result.current.error.password).toBe(errorMessage);
+    expect(result.current.error).toEqual(details);
+  });
+
+  it('should handle server errors, Errors set in error state, Bad Request', async () => {
+    // INIT
+    const errorMessage = 'Password is not strong enough';
+    // This enable to bypass the client side validation and receive the errors from the backend server
+    // Usualy this case is not possible, unless the client manualy modify the web page
+    const validCredentials = { username: 'testUser', password: 'Chocolat123!' };
+    const details: Record<keyof LoginUserDto, string[]> = {
+      username: ['username error', 'username error 2'],
+      password: ['password error', 'password error 2'],
+    };
+    mockAuth.login.mockResolvedValue({
+      error: { status: HttpStatus.BAD_REQUEST, message: errorMessage, details },
+    });
+    const { result } = renderHook(() => useLogin(dependencies));
+
+    // RUN & CHECK RESULTS
+    await act(async () => {
+      const submitResult = await result.current.handleSubmit({
+        preventDefault: () => {},
+        currentTarget: createFormElement(validCredentials),
+      } as unknown as React.FormEvent<HTMLFormElement>);
+      expect(submitResult).toEqual({});
+    });
+    expect(result.current.error).toEqual(details);
   });
 
   it('should handle server errors, Errors returned by submit, Service Unavailable', async () => {
@@ -153,7 +181,6 @@ describe('useLogin', () => {
       expect(submitResult).toEqual({ error: errorMessage });
     });
 
-    expect(result.current.error.username).toBe('');
-    expect(result.current.error.password).toBe('');
+    expect(result.current.error).toEqual({ username: [], password: [] });
   });
 });

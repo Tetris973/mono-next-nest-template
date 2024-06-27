@@ -51,7 +51,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ userId, onCancel, onSu
         id="createdAt"
         label="Created At"
         value={user ? new Date(user.createdAt).toLocaleString() : ''}
-        error=""
+        error={undefined}
         loading={profilePending}
         isReadOnly
       />
@@ -59,7 +59,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ userId, onCancel, onSu
         id="updatedAt"
         label="Updated At"
         value={user ? new Date(user.updatedAt).toLocaleString() : ''}
-        error=""
+        error={undefined}
         loading={profilePending}
         isReadOnly
       />

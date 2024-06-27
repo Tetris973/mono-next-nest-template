@@ -8,7 +8,7 @@ import { ActionResponse } from '@web/app/common/action-response.type';
 import { useServerAction } from '@web/app/utils/server-action.use';
 
 export interface AuthContextInterface {
-  login: (formData: LoginUserDto) => Promise<ActionResponse<null>>;
+  login: (formData: LoginUserDto) => Promise<ActionResponse<null, LoginUserDto>>;
   logout: () => void;
   /**
    * Indicates whether the user is authenticated.
@@ -42,7 +42,7 @@ export const AuthProviderNew: React.FC<{ children: React.ReactNode }> = ({ child
     rehydrateAuth();
   }, [getRolesActionM]);
 
-  const login = async (formData: LoginUserDto): Promise<ActionResponse<null>> => {
+  const login = async (formData: LoginUserDto): Promise<ActionResponse<null, LoginUserDto>> => {
     const { error: loginError } = await loginActionM(formData);
     if (loginError) {
       return { error: loginError };

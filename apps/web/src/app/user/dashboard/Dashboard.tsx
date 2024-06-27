@@ -70,6 +70,7 @@ export function Dashboard(): JSX.Element {
   const cancelRef = useRef<HTMLButtonElement>(null);
 
   const confirmDelete = async () => {
+    setAlert.off();
     if (selectedUser) {
       const error = await deleteUser(selectedUser.id);
       if (error) {

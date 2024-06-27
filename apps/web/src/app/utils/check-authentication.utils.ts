@@ -8,7 +8,7 @@ import { ActionResponse } from '../common/action-response.type';
  * @remarks
  * This action should never be called on the client side to get the token, as it is a breach of security.
  *
- * @returns {ActionResponse<string>} An object containing either the token or an error response.
+ * @returns - An object containing either the token or an error response.
  */
 export const checkAuthentication = (): ActionResponse<string> => {
   const cookieStore = cookies();

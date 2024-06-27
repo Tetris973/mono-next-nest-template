@@ -13,8 +13,8 @@ import { useState, useCallback } from 'react';
  * @template P - Parameters type of the action function.
  * @template R - Return type of the action function.
  *
- * @param {(...args: P) => R | Promise<R>} action - The action to be executed, which can be either synchronous or asynchronous.
- * @param {(result: R) => void} [onFinished] - Optional callback to be invoked when the action is finished.
+ * @param action - The action to be executed, which can be either synchronous or asynchronous.
+ * @param onFinished - Optional callback to be invoked when the action is finished.
  *
  * @returns {[boolean, (...args: P) => Promise<R>]} - Returns a tuple:
  *  - `boolean`: Indicates whether the action is currently loading.

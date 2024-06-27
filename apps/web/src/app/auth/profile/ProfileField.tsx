@@ -4,7 +4,7 @@ interface ProfileFieldProps {
   id: string;
   label: string;
   value: string;
-  error: string;
+  error: string[] | undefined;
   loading: boolean;
   isReadOnly?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -21,7 +21,7 @@ export const ProfileField: React.FC<ProfileFieldProps> = ({
 }) => (
   <FormControl
     id={id}
-    isInvalid={!!error}
+    isInvalid={error && error.length > 0}
     isRequired={!isReadOnly}>
     <FormLabel>{label}</FormLabel>
     {loading ? (

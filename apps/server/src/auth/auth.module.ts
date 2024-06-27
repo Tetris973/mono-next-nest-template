@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
@@ -9,6 +9,7 @@ import { JwtStrategy } from './passport/jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './passport/jwt-auth.guard';
 import { AuthzService } from '@server/authz/authz.service';
+import { customValidationPipe } from '@server/custom-validation.pipe';
 
 @Module({
   imports: [
@@ -26,11 +27,18 @@ import { AuthzService } from '@server/authz/authz.service';
     AuthService,
     AuthzService,
     {
+      // TODO: Maybe move this to the app module ?
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     } /* Bind the JwtAuth Guard globaly so all endpoint are protected by default */,
     LocalStrategy,
     JwtStrategy,
+    {
+      // Provide a custom validation pipe for at least LocalAuthGuard
+      // The global APP_PIPE was not working for LocalAuthGuard
+      provide: ValidationPipe,
+      useValue: customValidationPipe,
+    },
   ],
   controllers: [AuthController],
 })

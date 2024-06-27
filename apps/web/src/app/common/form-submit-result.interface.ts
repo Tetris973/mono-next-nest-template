@@ -6,9 +6,8 @@
  * - `error`: Indicates an HTTP error from the backend.
  * - Both `success` and `error` are empty: Indicates client-side validation failure.
  *
- * @typedef {Object} FormSubmitResult
- * @property {string} [success] - The success message if the form submission is successful.
- * @property {string} [error] - The error message if there is an HTTP error from the backend.
+ * @property success - The success message if the form submission is successful.
+ * @property error - The error message if there is an HTTP error from the backend.
  */
 export type FormSubmitResult =
   | {
