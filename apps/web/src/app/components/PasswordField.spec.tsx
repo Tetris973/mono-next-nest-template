@@ -1,6 +1,6 @@
 import React from 'react';
 import { it, expect, vi, describe, beforeEach } from 'vitest';
-import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup, within } from '@testing-library/react';
 import { PasswordField } from './PasswordField';
 
 describe('PasswordField', () => {
@@ -109,18 +109,21 @@ describe('PasswordField', () => {
     expect(screen.getByTestId('eye-icon')).toBeInTheDocument();
   });
 
-  it('should display error message when error is provided', () => {
+  it('should display all error messages when errors are provided', () => {
     // INIT
-    const error = ['Password is required'];
+    const errors = ['Password is required', 'Password must be at least 8 characters'];
     render(
       <PasswordField
         {...defaultProps}
-        error={error}
+        error={errors}
       />,
     );
 
     // CHECK RESULTS
-    expect(screen.getByText('Password is required')).toBeInTheDocument();
+    const errorContainer = screen.getByTestId('password-field');
+    errors.forEach((errorMessage) => {
+      expect(within(errorContainer).getByText(errorMessage, { exact: false })).toBeInTheDocument();
+    });
   });
 
   it('should set FormControl isInvalid on password-input correctly based on error presence', () => {
