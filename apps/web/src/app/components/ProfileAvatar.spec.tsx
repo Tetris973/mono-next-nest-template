@@ -1,5 +1,5 @@
-import { describe, it, beforeEach } from 'vitest';
-import { render, cleanup } from '@testing-library/react';
+import { describe, it } from 'vitest';
+import { render } from '@testing-library/react';
 import { ProfileAvatar } from './ProfileAvatar';
 
 describe('ProfileAvatar', () => {
@@ -7,10 +7,6 @@ describe('ProfileAvatar', () => {
     username: 'testuser',
     loading: false,
   };
-
-  beforeEach(() => {
-    cleanup();
-  });
 
   it('renders the component', () => {
     render(<ProfileAvatar {...defaultProps} />);

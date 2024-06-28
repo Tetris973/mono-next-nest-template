@@ -1,6 +1,6 @@
 import React from 'react';
-import { it, expect, describe, beforeEach } from 'vitest';
-import { render, screen, cleanup, within } from '@testing-library/react';
+import { it, expect, describe } from 'vitest';
+import { render, screen, within } from '@testing-library/react';
 import { UsernameField } from './UsernameField';
 
 describe('UsernameField', () => {
@@ -12,10 +12,6 @@ describe('UsernameField', () => {
     error: undefined,
     loading: false,
   };
-
-  beforeEach(() => {
-    cleanup();
-  });
 
   it('should render the UsernameField component with required props', () => {
     render(<UsernameField {...defaultProps} />);

@@ -1,6 +1,6 @@
 import React from 'react';
-import { it, expect, vi, describe, beforeEach } from 'vitest';
-import { render, screen, fireEvent, cleanup, within } from '@testing-library/react';
+import { it, expect, vi, describe } from 'vitest';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { PasswordField } from './PasswordField';
 
 describe('PasswordField', () => {
@@ -13,11 +13,6 @@ describe('PasswordField', () => {
     showPassword: false,
     setShowPassword: vi.fn(),
   };
-
-  beforeEach(() => {
-    // cleanup the screen
-    cleanup();
-  });
 
   it('should render the PasswordField component with required props', () => {
     // INIT
