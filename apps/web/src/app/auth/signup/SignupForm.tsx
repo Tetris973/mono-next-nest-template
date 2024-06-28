@@ -1,6 +1,6 @@
 import { Box, Button, Stack, useColorModeValue, Spinner, Text, Link } from '@chakra-ui/react';
 import { UseSignup, useSignup as defaultUseSignup } from './signup.use';
-import { UsernameField } from '@web/app/auth/login/UsernameField';
+import { UsernameField } from '@web/app/components/UsernameField';
 import { PasswordField } from '@web/app/components/PasswordField';
 import { useCustomToast } from '@web/app/utils/toast-utils.use';
 import { useRouter } from 'next/navigation';
