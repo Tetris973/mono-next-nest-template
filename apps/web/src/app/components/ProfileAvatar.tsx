@@ -6,7 +6,9 @@ interface ProfileAvatarProps {
 }
 
 export const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ username, loading }) => (
-  <FormControl id="userIcon">
+  <FormControl
+    id="userIcon"
+    data-testid="profile-avatar-form">
     <FormLabel>User Icon</FormLabel>
     <Stack
       direction={['column', 'row']}
@@ -16,6 +18,7 @@ export const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ username, loading 
           name={loading ? '' : username}
           size="xl"
           mr={4}
+          data-testid="profile-avatar"
         />
       </Center>
     </Stack>
