@@ -32,21 +32,37 @@ export const PasswordField: React.FC<PasswordFieldProps> = ({
 }) => (
   <FormControl
     id={id}
-    isInvalid={error && error.length > 0}>
+    isInvalid={error && error.length > 0}
+    data-testid="password-field">
     <FormLabel>{label}</FormLabel>
     {loading ? (
-      <Skeleton height="40px" />
+      <Skeleton
+        height="40px"
+        data-testid="skeleton-loader"
+      />
     ) : (
       <InputGroup>
         <Input
           type={showPassword ? 'text' : 'password'}
           name={name}
+          data-testid="password-input"
         />
         <InputRightElement h={'full'}>
           <Button
             variant={'ghost'}
-            onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}
+            onClick={() => setShowPassword(!showPassword)}
+            data-testid="toggle-button">
+            {showPassword ? (
+              <FontAwesomeIcon
+                icon={faEye}
+                data-testid="eye-icon"
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faEyeSlash}
+                data-testid="eye-slash-icon"
+              />
+            )}
           </Button>
         </InputRightElement>
       </InputGroup>
