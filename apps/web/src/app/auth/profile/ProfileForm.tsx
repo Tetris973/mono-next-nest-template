@@ -1,6 +1,6 @@
 import { Button, Stack, Spinner } from '@chakra-ui/react';
 import { useProfileForm } from './profile.use';
-import { ProfileField } from './ProfileField';
+import { ProfileField } from '../../components/ProfileField';
 import { ProfileAvatar } from '../../components/ProfileAvatar';
 import { useCustomToast } from '@web/app/utils/toast-utils.use';
 

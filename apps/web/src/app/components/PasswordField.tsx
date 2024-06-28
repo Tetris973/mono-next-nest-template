@@ -29,44 +29,50 @@ export const PasswordField: React.FC<PasswordFieldProps> = ({
   loading,
   showPassword,
   setShowPassword,
-}) => (
-  <FormControl
-    id={id}
-    isInvalid={error && error.length > 0}
-    data-testid="password-field">
-    <FormLabel>{label}</FormLabel>
-    {loading ? (
-      <Skeleton
-        height="40px"
-        data-testid="skeleton-loader"
+}) => {
+  const renderSkeleton = () => (
+    <Skeleton
+      height="40px"
+      data-testid="skeleton-loader"
+    />
+  );
+
+  const renderInputGroup = () => (
+    <InputGroup>
+      <Input
+        type={showPassword ? 'text' : 'password'}
+        name={name}
+        data-testid="password-input"
       />
-    ) : (
-      <InputGroup>
-        <Input
-          type={showPassword ? 'text' : 'password'}
-          name={name}
-          data-testid="password-input"
-        />
-        <InputRightElement h={'full'}>
-          <Button
-            variant={'ghost'}
-            onClick={() => setShowPassword(!showPassword)}
-            data-testid="toggle-button">
-            {showPassword ? (
-              <FontAwesomeIcon
-                icon={faEye}
-                data-testid="eye-icon"
-              />
-            ) : (
-              <FontAwesomeIcon
-                icon={faEyeSlash}
-                data-testid="eye-slash-icon"
-              />
-            )}
-          </Button>
-        </InputRightElement>
-      </InputGroup>
-    )}
-    <FormErrorMessage>{error}</FormErrorMessage>
-  </FormControl>
-);
+      <InputRightElement h={'full'}>
+        <Button
+          variant={'ghost'}
+          onClick={() => setShowPassword(!showPassword)}
+          data-testid="toggle-button">
+          {showPassword ? (
+            <FontAwesomeIcon
+              icon={faEye}
+              data-testid="eye-icon"
+            />
+          ) : (
+            <FontAwesomeIcon
+              icon={faEyeSlash}
+              data-testid="eye-slash-icon"
+            />
+          )}
+        </Button>
+      </InputRightElement>
+    </InputGroup>
+  );
+
+  return (
+    <FormControl
+      id={id}
+      isInvalid={error && error.length > 0}
+      data-testid="password-field">
+      <FormLabel>{label}</FormLabel>
+      {loading ? renderSkeleton() : renderInputGroup()}
+      {error && error.map((error) => <FormErrorMessage key={error}>{error}</FormErrorMessage>)}
+    </FormControl>
+  );
+};
