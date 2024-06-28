@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { ProfileField } from './ProfileField';
 
 describe('ProfileField', () => {
@@ -11,10 +11,6 @@ describe('ProfileField', () => {
     loading: false,
     onChange: vi.fn(),
   };
-
-  beforeEach(() => {
-    cleanup();
-  });
 
   it('renders correctly with all props provided', () => {
     render(<ProfileField {...defaultProps} />);
