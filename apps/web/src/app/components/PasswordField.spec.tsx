@@ -19,8 +19,9 @@ describe('PasswordField', () => {
     render(<PasswordField {...defaultProps} />);
 
     // CHECK RESULTS
-    expect(screen.getByTestId('password-field')).toBeInTheDocument();
-    expect(screen.getByTestId('password-input')).toHaveAttribute('type', 'password');
+    const input = screen.getByLabelText(defaultProps.label);
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveAttribute('type', 'password');
   });
 
   it('should display Skeleton when loading is true', () => {
@@ -59,12 +60,13 @@ describe('PasswordField', () => {
     );
 
     // RUN
-    const button = screen.getByTestId('toggle-button');
+    const button = screen.getByRole('button', { name: 'Toggle password visibility' });
     fireEvent.click(button);
 
     // CHECK RESULTS
     expect(defaultProps.setShowPassword).toHaveBeenCalledWith(true);
-    expect(screen.getByTestId('password-input')).toHaveAttribute('type', 'password');
+    const input = screen.getByLabelText(defaultProps.label);
+    expect(input).toHaveAttribute('type', 'password');
 
     // RUN for toggle off
     rerender(
@@ -77,7 +79,7 @@ describe('PasswordField', () => {
 
     // CHECK RESULTS
     expect(defaultProps.setShowPassword).toHaveBeenCalledWith(false);
-    expect(screen.getByTestId('password-input')).toHaveAttribute('type', 'text');
+    expect(input).toHaveAttribute('type', 'text');
   });
 
   it('should display the correct icon based on showPassword state', () => {
@@ -104,7 +106,7 @@ describe('PasswordField', () => {
     expect(screen.getByTestId('eye-icon')).toBeInTheDocument();
   });
 
-  it('should display all error messages when errors are provided', () => {
+  it('should display all error messages within the FormControl when errors are provided', () => {
     // INIT
     const errors = ['Password is required', 'Password must be at least 8 characters'];
     render(
@@ -115,9 +117,12 @@ describe('PasswordField', () => {
     );
 
     // CHECK RESULTS
-    const errorContainer = screen.getByTestId('password-field');
+    const formControl = screen.getByRole('group');
+    expect(formControl).toHaveAttribute('data-invalid');
+
     errors.forEach((errorMessage) => {
-      expect(within(errorContainer).getByText(errorMessage, { exact: false })).toBeInTheDocument();
+      const errorElement = within(formControl).getByText(errorMessage);
+      expect(errorElement).toBeInTheDocument();
     });
   });
 
@@ -131,7 +136,7 @@ describe('PasswordField', () => {
     );
 
     // CHECK RESULTS
-    expect(screen.getByTestId('password-input')).not.toHaveAttribute('aria-invalid');
+    expect(screen.getByLabelText(defaultProps.label)).not.toHaveAttribute('aria-invalid');
 
     // RUN
     rerender(
@@ -142,6 +147,6 @@ describe('PasswordField', () => {
     );
 
     // CHECK RESULTS
-    expect(screen.getByTestId('password-input')).toHaveAttribute('aria-invalid', 'true');
+    expect(screen.getByLabelText(defaultProps.label)).toHaveAttribute('aria-invalid', 'true');
   });
 });

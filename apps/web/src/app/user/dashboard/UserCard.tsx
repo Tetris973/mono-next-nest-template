@@ -32,7 +32,6 @@ const renderAdminButtons = (onDelete: () => void, onEdit: () => void) => (
       top={2}
       right={2}
       onClick={onDelete}
-      data-testid="user-card-delete-button"
     />
     <IconButton
       aria-label="Edit user"
@@ -43,7 +42,6 @@ const renderAdminButtons = (onDelete: () => void, onEdit: () => void) => (
       top={2}
       right={12}
       onClick={onEdit}
-      data-testid="user-card-edit-button"
     />
   </>
 );
@@ -52,8 +50,7 @@ const renderUserInfo = (user: UserDto | null) => (
   <Stack
     direction="column"
     alignItems="center"
-    spacing={4}
-    data-testid="user-card-info">
+    spacing={4}>
     <Avatar
       name={user?.username}
       size="xl"
@@ -61,26 +58,22 @@ const renderUserInfo = (user: UserDto | null) => (
     />
     <Text
       fontSize="lg"
-      fontWeight="bold"
-      data-testid="user-card-username">
+      fontWeight="bold">
       {user?.username}
     </Text>
     <Text
       fontSize="sm"
-      color="gray.500"
-      data-testid="user-card-id">
+      color="gray.500">
       ID: {user?.id}
     </Text>
     <Text
       fontSize="sm"
-      color="gray.500"
-      data-testid="user-card-created-at">
+      color="gray.500">
       Created At: {user && new Date(user.createdAt).toLocaleString()}
     </Text>
     <Text
       fontSize="sm"
-      color="gray.500"
-      data-testid="user-card-updated-at">
+      color="gray.500">
       Updated At: {user && new Date(user.updatedAt).toLocaleString()}
     </Text>
   </Stack>
@@ -97,8 +90,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, loading, onDelete, sho
       boxShadow={'lg'}
       p={6}
       w={'full'}
-      maxW={'md'}
-      data-testid="user-card">
+      maxW={'md'}>
       {loading && renderLoading()}
       {user && showAdmin && renderAdminButtons(onDelete, onEdit)}
       {renderUserInfo(user)}

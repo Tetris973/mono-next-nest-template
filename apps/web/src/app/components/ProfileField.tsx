@@ -29,14 +29,13 @@ export const ProfileField: React.FC<ProfileFieldProps> = ({
       isReadOnly={isReadOnly}
       _readOnly={{ opacity: 0.6, cursor: 'not-allowed' }}
       onChange={onChange}
-      data-testid="profile-input"
     />
   );
 
   const renderSkeleton = () => (
     <Skeleton
       height="40px"
-      data-testid="skeleton-loader"
+      data-testid="profile-field-skeleton"
     />
   );
 
@@ -44,8 +43,7 @@ export const ProfileField: React.FC<ProfileFieldProps> = ({
     <FormControl
       id={id}
       isInvalid={error && error.length > 0}
-      isRequired={!isReadOnly}
-      data-testid="profile-field">
+      isRequired={!isReadOnly}>
       <FormLabel>{label}</FormLabel>
       {loading ? renderSkeleton() : renderInput()}
       {error && error.map((error) => <FormErrorMessage key={error}>{error}</FormErrorMessage>)}

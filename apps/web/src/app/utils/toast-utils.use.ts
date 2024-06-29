@@ -1,7 +1,15 @@
 import { useToast, UseToastOptions } from '@chakra-ui/react';
 import { useCallback } from 'react';
 
-const useCustomToast = () => {
+export interface ToastUtils {
+  toastSuccess: (description: string) => void;
+  toastError: (description: string) => void;
+  toastInfo: (description: string) => void;
+  toastWarning: (description: string) => void;
+  closeAllToasts: () => void;
+}
+
+const useCustomToast = (): ToastUtils => {
   const toast = useToast();
 
   // Memoize: useCallback is used to prevent unnecessary re-renders

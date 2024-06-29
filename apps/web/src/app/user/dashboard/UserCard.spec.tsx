@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { UserCard } from './UserCard';
 import { UserDto } from '@dto/user/dto/user.dto';
 
@@ -19,11 +19,6 @@ describe('UserCard', () => {
     showAdmin: false,
     onEdit: vi.fn(),
   };
-
-  it('renders correctly with all props provided', () => {
-    render(<UserCard {...defaultProps} />);
-    expect(screen.getByTestId('user-card')).toBeInTheDocument();
-  });
 
   it('displays loading spinner when loading prop is true', () => {
     render(
@@ -47,17 +42,14 @@ describe('UserCard', () => {
 
   it('renders user information when user prop is provided', () => {
     render(<UserCard {...defaultProps} />);
-    const userInfo = screen.getByTestId('user-card-info');
-    expect(within(userInfo).getByTestId('user-card-username')).toHaveTextContent(mockUser.username);
-    expect(within(userInfo).getByTestId('user-card-id')).toHaveTextContent(`ID: ${mockUser.id}`);
-
-    const createdAtElement = within(userInfo).getByTestId('user-card-created-at');
-    expect(createdAtElement).toHaveTextContent('Created At:');
-    expect(createdAtElement).toHaveTextContent(mockUser.createdAt.toLocaleDateString());
-
-    const updatedAtElement = within(userInfo).getByTestId('user-card-updated-at');
-    expect(updatedAtElement).toHaveTextContent('Updated At:');
-    expect(updatedAtElement).toHaveTextContent(mockUser.updatedAt.toLocaleDateString());
+    expect(screen.getByText(mockUser.username)).toBeInTheDocument();
+    expect(screen.getByText(`ID: ${mockUser.id}`)).toBeInTheDocument();
+    expect(
+      screen.getByText(`Updated At: ${mockUser.updatedAt.toLocaleDateString()}`, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(`Created At: ${mockUser.createdAt.toLocaleDateString()}`, { exact: false }),
+    ).toBeInTheDocument();
   });
 
   it('render with empty user information when user prop is null', () => {
@@ -67,11 +59,9 @@ describe('UserCard', () => {
         user={null}
       />,
     );
-    expect(screen.getByTestId('user-card-info')).toBeInTheDocument();
-    expect(screen.getByTestId('user-card-username')).toHaveTextContent('');
-    expect(screen.getByTestId('user-card-id')).toHaveTextContent('ID:');
-    expect(screen.getByTestId('user-card-created-at')).toHaveTextContent('Created At:');
-    expect(screen.getByTestId('user-card-updated-at')).toHaveTextContent('Updated At:');
+    expect(screen.getByText('ID:')).toBeInTheDocument();
+    expect(screen.getByText('Created At:')).toBeInTheDocument();
+    expect(screen.getByText('Updated At:')).toBeInTheDocument();
   });
 
   it('displays admin buttons when showAdmin prop is true', () => {
@@ -81,8 +71,8 @@ describe('UserCard', () => {
         showAdmin={true}
       />,
     );
-    expect(screen.getByTestId('user-card-delete-button')).toBeInTheDocument();
-    expect(screen.getByTestId('user-card-edit-button')).toBeInTheDocument();
+    expect(screen.getByLabelText('Delete user')).toBeInTheDocument();
+    expect(screen.getByLabelText('Edit user')).toBeInTheDocument();
   });
 
   it('does not display admin buttons when showAdmin prop is false', () => {
@@ -92,8 +82,8 @@ describe('UserCard', () => {
         showAdmin={false}
       />,
     );
-    expect(screen.queryByTestId('user-card-delete-button')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('user-card-edit-button')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Delete user')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Edit user')).not.toBeInTheDocument();
   });
 
   it('calls onDelete function when delete button is clicked', () => {
@@ -103,7 +93,7 @@ describe('UserCard', () => {
         showAdmin={true}
       />,
     );
-    const deleteButton = screen.getByTestId('user-card-delete-button');
+    const deleteButton = screen.getByLabelText('Delete user');
     fireEvent.click(deleteButton);
     expect(defaultProps.onDelete).toHaveBeenCalled();
   });
@@ -115,7 +105,7 @@ describe('UserCard', () => {
         showAdmin={true}
       />,
     );
-    const editButton = screen.getByTestId('user-card-edit-button');
+    const editButton = screen.getByLabelText('Edit user');
     fireEvent.click(editButton);
     expect(defaultProps.onEdit).toHaveBeenCalled();
   });

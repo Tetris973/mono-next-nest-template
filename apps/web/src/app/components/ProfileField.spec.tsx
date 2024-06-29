@@ -14,7 +14,10 @@ describe('ProfileField', () => {
 
   it('renders correctly with all props provided', () => {
     render(<ProfileField {...defaultProps} />);
-    expect(screen.getByTestId('profile-field')).toBeInTheDocument();
+    const field = screen.getByText(defaultProps.label);
+    expect(field).toBeInTheDocument();
+    const input = screen.getByDisplayValue(defaultProps.value);
+    expect(input).toBeInTheDocument();
   });
 
   it('displays the correct label', () => {
@@ -24,7 +27,8 @@ describe('ProfileField', () => {
 
   it('renders input field when not loading', () => {
     render(<ProfileField {...defaultProps} />);
-    expect(screen.getByTestId('profile-input')).toBeInTheDocument();
+    const input = screen.getByDisplayValue(defaultProps.value);
+    expect(input).toBeInTheDocument();
   });
 
   it('renders skeleton loader when loading', () => {
@@ -34,17 +38,18 @@ describe('ProfileField', () => {
         loading={true}
       />,
     );
-    expect(screen.getByTestId('skeleton-loader')).toBeInTheDocument();
+    expect(screen.getByTestId('profile-field-skeleton')).toBeInTheDocument();
   });
 
   it('displays the correct value in the input field', () => {
     render(<ProfileField {...defaultProps} />);
-    expect(screen.getByTestId('profile-input')).toHaveValue(defaultProps.value);
+    const input = screen.getByDisplayValue(defaultProps.value);
+    expect(input).toHaveValue(defaultProps.value);
   });
 
   it('handles onChange event correctly', () => {
     render(<ProfileField {...defaultProps} />);
-    const input = screen.getByTestId('profile-input');
+    const input = screen.getByDisplayValue(defaultProps.value);
     fireEvent.change(input, { target: { value: 'New Value' } });
     expect(defaultProps.onChange).toHaveBeenCalled();
   });
@@ -59,7 +64,7 @@ describe('ProfileField', () => {
     );
 
     // Check for invalid state
-    const field = screen.getByTestId('profile-field');
+    const field = screen.getByText(defaultProps.label);
     expect(field).toHaveAttribute('data-invalid');
 
     // Check for error messages
@@ -70,7 +75,7 @@ describe('ProfileField', () => {
 
   it('does not display error message or apply invalid state when no error is provided', () => {
     render(<ProfileField {...defaultProps} />);
-    const field = screen.getByTestId('profile-field');
+    const field = screen.getByText(defaultProps.label);
     expect(field).not.toHaveAttribute('data-invalid');
   });
 
@@ -81,7 +86,7 @@ describe('ProfileField', () => {
         isReadOnly={true}
       />,
     );
-    const input = screen.getByTestId('profile-input');
+    const input = screen.getByDisplayValue(defaultProps.value);
     expect(input).toHaveAttribute('readonly');
     expect(input).toHaveStyle('cursor: not-allowed');
   });
@@ -93,18 +98,13 @@ describe('ProfileField', () => {
         isReadOnly={false}
       />,
     );
-    const input = screen.getByTestId('profile-input');
+    const input = screen.getByDisplayValue(defaultProps.value);
     expect(input).not.toHaveAttribute('readonly');
   });
 
   it('renders placeholder text correctly', () => {
-    render(
-      <ProfileField
-        {...defaultProps}
-        value=""
-      />,
-    );
-    const input = screen.getByTestId('profile-input');
+    render(<ProfileField {...defaultProps} />);
+    const input = screen.getByDisplayValue(defaultProps.value);
     expect(input).toHaveAttribute('placeholder', defaultProps.label);
   });
 });

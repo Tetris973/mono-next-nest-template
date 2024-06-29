@@ -4,6 +4,12 @@ import { afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import { safeFetch } from '@web/app/utils/safe-fetch.utils';
 import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
+import { mockToast } from '@web/app/utils/test/mock-toast.utils';
+
+
+vi.mock('@web/app/utils/toast-utils.use', () => ({
+    useCustomToast: () => mockToast,
+}));
 
 /**
  * Mock for utility function.
@@ -21,7 +27,6 @@ import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
 function exampleMock() {
     throw new Error('exampleMock was called but not mocked in this test, refer to the documentaion in vitest.setup.mts');
 }
-
 
 /**
  * Mock for the safeFetch utility function.
