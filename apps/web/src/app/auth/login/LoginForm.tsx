@@ -25,7 +25,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ useLogin = defaultUseLogin
       bg={useColorModeValue('white', 'gray.700')}
       boxShadow={'lg'}
       p={8}>
-      <form onSubmit={handleFormSubmit}>
+      <form
+        onSubmit={handleFormSubmit}
+        aria-label="Login form">
         <Stack spacing={4}>
           <UsernameField
             id="username"
@@ -72,11 +74,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ useLogin = defaultUseLogin
               </Tooltip>
             </Stack>
             <Button
+              aria-label="Sign in"
               type="submit"
               bg={'blue.400'}
               color={'white'}
               _hover={{ bg: 'blue.500' }}
               isLoading={authLoading}
+              isDisabled={authLoading}
               spinner={<Spinner />}>
               Sign in
             </Button>
