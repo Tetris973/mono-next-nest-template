@@ -6,10 +6,6 @@ import { CreateUserDto } from '@dto/user/dto/create-user.dto';
 import { safeFetch } from '@web/app/utils/safe-fetch.utils';
 
 describe('signup.service', () => {
-  vi.mock('@web/app/utils/safe-fetch.utils', () => ({
-    safeFetch: vi.fn(),
-  }));
-
   beforeEach(() => {
     vi.clearAllMocks();
   });

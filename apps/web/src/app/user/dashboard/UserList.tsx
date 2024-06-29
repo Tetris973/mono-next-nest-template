@@ -5,21 +5,73 @@ import { UserDto } from '@dto/user/dto/user.dto';
 interface UserListProps {
   users: UserDto[];
   loading: boolean;
-  error: string;
+  error: string | null;
   onUserSelect: (id: number) => void;
   containerStyle?: CSSProperties;
 }
 
+const renderLoading = () => <Spinner data-testid="user-list-loading" />;
+
+const renderError = (error: string) => (
+  <Text
+    color="red.500"
+    data-testid="user-list-error">
+    {error}
+  </Text>
+);
+
 export const UserList: React.FC<UserListProps> = ({ users, loading, error, onUserSelect, containerStyle }) => {
   const [filter, setFilter] = useState('');
   const [filteredUsers, setFilteredUsers] = useState<UserDto[]>(users);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
   const bgHover = useColorModeValue('gray.100', 'gray.600');
+  const bgSelected = useColorModeValue('gray.200', 'gray.600');
   const bg = useColorModeValue('gray.200', 'gray.600');
 
   useEffect(() => {
-    setFilteredUsers(users.filter((user) => user.username.toLowerCase().includes(filter.toLowerCase())));
+    const lowercasedFilter = filter.toLowerCase();
+    setFilteredUsers(users.filter((user) => user.username.toLowerCase().includes(lowercasedFilter)));
   }, [filter, users]);
+
+  const handleUserSelect = (id: number) => {
+    setSelectedUserId(id);
+    onUserSelect(id);
+  };
+
+  const renderUserItem = (user: UserDto) => {
+    const isSelected = user.id === selectedUserId;
+    return (
+      <ListItem
+        key={user.id}
+        bg={isSelected ? bgSelected : 'transparent'}
+        _hover={{ bg: isSelected ? bgSelected : bgHover }}
+        p={2}
+        cursor="pointer"
+        onClick={() => handleUserSelect(user.id)}
+        data-testid={`user-list-item-${user.id}`}
+        borderRadius="md"
+        transition="background-color 0.2s">
+        <Text fontWeight={isSelected ? 'bold' : 'normal'}>
+          <Box
+            as="span"
+            fontWeight="bold"
+            mr={2}>
+            {user.id}
+          </Box>
+          {user.username}
+        </Text>
+      </ListItem>
+    );
+  };
+
+  const renderUserList = () => (
+    <List
+      spacing={3}
+      data-testid="user-list">
+      {filteredUsers.map(renderUserItem)}
+    </List>
+  );
 
   return (
     <Box
@@ -27,37 +79,18 @@ export const UserList: React.FC<UserListProps> = ({ users, loading, error, onUse
       p={4}
       overflowY="auto"
       borderColor={bg}
-      style={containerStyle}>
+      style={containerStyle}
+      data-testid="user-list-container">
       <Input
         placeholder="Filter users"
         mb={4}
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
+        data-testid="user-list-filter-input"
       />
-      {loading && <Spinner />}
-      {error && <Text color="red.500">{error}</Text>}
-      {!loading && !error && (
-        <List spacing={3}>
-          {filteredUsers.map((user: UserDto) => (
-            <ListItem
-              key={user.id}
-              _hover={{ bg: bgHover }}
-              p={2}
-              cursor="pointer"
-              onClick={() => onUserSelect(user.id)}>
-              <Text>
-                <Box
-                  as="span"
-                  fontWeight="bold"
-                  mr={2}>
-                  {user.id}
-                </Box>
-                {user.username}
-              </Text>
-            </ListItem>
-          ))}
-        </List>
-      )}
+      {loading && renderLoading()}
+      {error && renderError(error)}
+      {!loading && !error && renderUserList()}
     </Box>
   );
 };

@@ -18,10 +18,6 @@ describe('login.service', () => {
     cookies: vi.fn(),
   }));
 
-  vi.mock('@web/app/utils/safe-fetch.utils', () => ({
-    safeFetch: vi.fn(),
-  }));
-
   vi.mock('jwt-decode', () => {
     return {
       jwtDecode: vi.fn(),

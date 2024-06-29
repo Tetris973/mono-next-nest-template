@@ -7,14 +7,6 @@ import { UserDto } from '@dto/user/dto/user.dto';
 import { HttpStatus } from '@web/app/common/http-status.enum';
 
 describe('profile.service', () => {
-  vi.mock('@web/app/utils/safe-fetch.utils', () => ({
-    safeFetch: vi.fn(),
-  }));
-
-  vi.mock('@web/app/utils/check-authentication.utils', () => ({
-    checkAuthentication: vi.fn(),
-  }));
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
