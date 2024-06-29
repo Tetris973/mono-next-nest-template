@@ -13,7 +13,7 @@ export const UsernameField: React.FC<UsernameFieldProps> = ({ id, label, type, n
   const renderSkeleton = () => (
     <Skeleton
       height="40px"
-      data-testid="skeleton-loader"
+      data-testid="field-skeleton-loader"
     />
   );
 

@@ -28,7 +28,7 @@ describe('UsernameField', () => {
       />,
     );
 
-    expect(screen.getByTestId('skeleton-loader')).toBeInTheDocument();
+    expect(screen.getByTestId('field-skeleton-loader')).toBeInTheDocument();
   });
 
   it('should not display Skeleton when loading is false', () => {

@@ -33,7 +33,7 @@ export const PasswordField: React.FC<PasswordFieldProps> = ({
   const renderSkeleton = () => (
     <Skeleton
       height="40px"
-      data-testid="skeleton-loader"
+      data-testid="field-skeleton-loader"
     />
   );
 
