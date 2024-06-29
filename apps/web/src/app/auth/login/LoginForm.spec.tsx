@@ -34,6 +34,7 @@ describe('LoginForm', () => {
     });
     render(<LoginForm useLogin={loadingMockUseLogin} />);
     expect(screen.getByRole('button', { name: /Sign in/i })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Sign in/i }).querySelector('.chakra-spinner')).toBeInTheDocument();
     expect(screen.getAllByTestId('field-skeleton-loader')).toHaveLength(2);
   });
 

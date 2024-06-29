@@ -22,10 +22,6 @@ describe('useSignup', () => {
     signupAction: mockSignupAction,
   };
 
-  vi.mock('next/navigation', () => ({
-    useRouter: () => mockRouter,
-  }));
-
   beforeEach(() => {
     vi.clearAllMocks();
   });

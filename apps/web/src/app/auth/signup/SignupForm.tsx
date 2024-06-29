@@ -30,7 +30,9 @@ export const SignupForm: React.FC<SignupFormProps> = ({ useSignup = defaultUseSi
       bg={useColorModeValue('white', 'gray.700')}
       boxShadow={'lg'}
       p={8}>
-      <form onSubmit={handleFormSubmit}>
+      <form
+        onSubmit={handleFormSubmit}
+        aria-label="Sign up form">
         <Stack spacing={4}>
           <UsernameField
             id="username"
@@ -65,7 +67,9 @@ export const SignupForm: React.FC<SignupFormProps> = ({ useSignup = defaultUseSi
               color={'white'}
               _hover={{ bg: 'blue.500' }}
               isLoading={signupPending}
-              spinner={<Spinner />}>
+              isDisabled={signupPending}
+              spinner={<Spinner />}
+              aria-label="Sign up">
               Sign up
             </Button>
           </Stack>

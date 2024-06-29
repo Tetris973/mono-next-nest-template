@@ -19,10 +19,6 @@ describe('useLogin', () => {
     useAuth: () => mockAuth,
   };
 
-  vi.mock('next/navigation', () => ({
-    useRouter: () => mockRouter,
-  }));
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
