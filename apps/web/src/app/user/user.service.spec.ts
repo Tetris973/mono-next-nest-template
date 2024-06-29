@@ -8,14 +8,6 @@ import { safeFetch } from '@web/app/utils/safe-fetch.utils';
 import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
 
 describe('user.service', () => {
-  vi.mock('@web/app/utils/safe-fetch.utils', () => ({
-    safeFetch: vi.fn(),
-  }));
-
-  vi.mock('@web/app/utils/check-authentication.utils', () => ({
-    checkAuthentication: vi.fn(),
-  }));
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
