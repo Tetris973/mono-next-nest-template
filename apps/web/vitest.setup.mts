@@ -5,7 +5,11 @@ import { cleanup } from '@testing-library/react';
 import { safeFetch } from '@web/app/utils/safe-fetch.utils';
 import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
 import { mockToast } from '@web/app/utils/test/mock-toast.utils';
+import { mockRouter } from '@web/app/utils/test/mock-router.utils';
 
+vi.mock('next/navigation', () => ({
+    useRouter: () => mockRouter,
+}));
 
 vi.mock('@web/app/utils/toast-utils.use', () => ({
     useCustomToast: () => mockToast,
