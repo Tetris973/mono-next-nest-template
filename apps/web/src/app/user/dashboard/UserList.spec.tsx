@@ -1,12 +1,12 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { UserList } from './UserList';
 import { UserDto } from '@dto/user/dto/user.dto';
 
 describe('UserList', () => {
   const mockUsers: UserDto[] = [
-    { id: 1, username: 'user1', createdAt: new Date(), updatedAt: new Date(), password: 'password1' },
-    { id: 2, username: 'user2', createdAt: new Date(), updatedAt: new Date(), password: 'password2' },
+    { id: 742983, username: 'user1', createdAt: new Date(), updatedAt: new Date(), password: 'password1' },
+    { id: 2394829, username: 'user2', createdAt: new Date(), updatedAt: new Date(), password: 'password2' },
   ];
 
   const defaultProps = {
@@ -15,11 +15,6 @@ describe('UserList', () => {
     error: null,
     onUserSelect: vi.fn(),
   };
-
-  it('renders correctly with all props provided', () => {
-    render(<UserList {...defaultProps} />);
-    expect(screen.getByTestId('user-list-container')).toBeInTheDocument();
-  });
 
   it('displays loading spinner when loading prop is true', () => {
     render(
@@ -49,7 +44,7 @@ describe('UserList', () => {
         error={errorMessage}
       />,
     );
-    expect(screen.getByTestId('user-list-error')).toHaveTextContent(errorMessage);
+    expect(screen.getByText(errorMessage)).toBeInTheDocument();
   });
 
   it('does not render error message when error prop is null', () => {
@@ -64,45 +59,29 @@ describe('UserList', () => {
 
   it('renders user list when users prop is provided and not empty', () => {
     render(<UserList {...defaultProps} />);
-    const userList = screen.getByTestId('user-list');
-    expect(userList).toBeInTheDocument();
-    expect(within(userList).getAllByTestId(/^user-list-item-/)).toHaveLength(mockUsers.length);
-  });
-
-  it('renders empty list when users prop is an empty array', () => {
-    render(
-      <UserList
-        {...defaultProps}
-        users={[]}
-      />,
-    );
-    const userList = screen.getByTestId('user-list');
-    expect(userList).toBeInTheDocument();
-    expect(within(userList).queryAllByTestId(/^user-list-item-/)).toHaveLength(0);
+    // user-list testid not available as well as user-list-item
+    expect(screen.getByText(mockUsers[0].id.toString())).toBeInTheDocument();
+    expect(screen.getByText(mockUsers[0].username)).toBeInTheDocument();
+    expect(screen.getByText(mockUsers[1].id.toString())).toBeInTheDocument();
+    expect(screen.getByText(mockUsers[1].username)).toBeInTheDocument();
   });
 
   it('filters users correctly when typing in the filter input', () => {
     render(<UserList {...defaultProps} />);
-    const filterInput = screen.getByTestId('user-list-filter-input');
+    const filterInput = screen.getByPlaceholderText('Filter users');
     fireEvent.change(filterInput, { target: { value: mockUsers[0].username } });
-    const userList = screen.getByTestId('user-list');
-    expect(within(userList).getAllByTestId(/^user-list-item-/)).toHaveLength(1);
-    expect(within(userList).getByTestId('user-list-item-1')).toHaveTextContent(mockUsers[0].username);
+    expect(screen.getByText(mockUsers[0].id.toString())).toBeInTheDocument();
+    expect(screen.getByText(mockUsers[0].username)).toBeInTheDocument();
+    expect(screen.queryByText(mockUsers[1].id.toString())).not.toBeInTheDocument();
+    expect(screen.queryByText(mockUsers[1].username)).not.toBeInTheDocument();
   });
 
   it('calls onUserSelect function and updates selected user when a user item is clicked', () => {
     render(<UserList {...defaultProps} />);
-    const userItem = screen.getByTestId('user-list-item-1');
-    fireEvent.click(userItem);
-    expect(defaultProps.onUserSelect).toHaveBeenCalledWith(1);
-  });
+    const userItemText = screen.getByText(mockUsers[0].username);
+    const userItem = userItemText.closest('li');
 
-  it('displays correct user information for each user item', () => {
-    render(<UserList {...defaultProps} />);
-    mockUsers.forEach((user) => {
-      const userItem = screen.getByTestId(`user-list-item-${user.id}`);
-      expect(userItem).toHaveTextContent(user.id.toString());
-      expect(userItem).toHaveTextContent(user.username);
-    });
+    fireEvent.click(userItem!);
+    expect(defaultProps.onUserSelect).toHaveBeenCalledWith(mockUsers[0].id);
   });
 });

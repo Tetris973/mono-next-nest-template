@@ -11,7 +11,7 @@ import { FormSubmitResult } from '@web/app/common/form-submit-result.interface';
 import { useServerAction } from '../../utils/server-action.use';
 import { DtoValidationError } from '@web/app/common/dto-validation-error.type';
 
-interface UseProfileForm {
+export interface UseProfileForm {
   profileError: DtoValidationError<UpdateUserDto>;
   newUsername: string;
   submitPending: boolean;

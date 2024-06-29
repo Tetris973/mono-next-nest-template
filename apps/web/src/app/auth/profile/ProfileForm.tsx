@@ -1,5 +1,5 @@
 import { Button, Stack, Spinner } from '@chakra-ui/react';
-import { useProfileForm } from './profile.use';
+import { useProfileForm as defaultUseProfileForm } from './profile.use';
 import { ProfileField } from '../../components/ProfileField';
 import { ProfileAvatar } from '../../components/ProfileAvatar';
 import { useCustomToast } from '@web/app/utils/toast-utils.use';
@@ -8,9 +8,15 @@ interface ProfileFormProps {
   userId: number;
   onCancel: () => void;
   onSubmitSuccess: () => void;
+  useProfileForm?: typeof defaultUseProfileForm;
 }
 
-export const ProfileForm: React.FC<ProfileFormProps> = ({ userId, onCancel, onSubmitSuccess }) => {
+export const ProfileForm: React.FC<ProfileFormProps> = ({
+  userId,
+  onCancel,
+  onSubmitSuccess,
+  useProfileForm = defaultUseProfileForm,
+}) => {
   const { user, profileError, newUsername, profilePending, submitPending, setNewUsername, handleSubmit } =
     useProfileForm(userId);
   const { toastError, toastSuccess } = useCustomToast();
@@ -67,6 +73,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ userId, onCancel, onSu
         spacing={6}
         direction={['column', 'row']}>
         <Button
+          aria-label="Cancel editing profile"
           onClick={onCancel}
           bg={'red.400'}
           color={'white'}
@@ -75,6 +82,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ userId, onCancel, onSu
           Cancel
         </Button>
         <Button
+          aria-label="Submit profile changes"
           bg={'blue.400'}
           color={'white'}
           w="full"

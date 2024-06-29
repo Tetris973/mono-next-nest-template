@@ -16,8 +16,8 @@ describe('UsernameField', () => {
   it('should render the UsernameField component with required props', () => {
     render(<UsernameField {...defaultProps} />);
 
-    expect(screen.getByTestId('username-field')).toBeInTheDocument();
-    expect(screen.getByTestId('username-input')).toHaveAttribute('type', 'text');
+    expect(screen.getByLabelText(defaultProps.label)).toBeInTheDocument();
+    expect(screen.getByLabelText(defaultProps.label)).toHaveAttribute('type', 'text');
   });
 
   it('should display Skeleton when loading is true', () => {
@@ -51,9 +51,12 @@ describe('UsernameField', () => {
       />,
     );
 
-    const errorContainer = screen.getByTestId('username-field');
+    const formControl = screen.getByRole('group');
+    expect(formControl).toHaveAttribute('data-invalid');
+
     errors.forEach((errorMessage) => {
-      expect(within(errorContainer).getByText(errorMessage, { exact: false })).toBeInTheDocument();
+      const errorElement = within(formControl).getByText(errorMessage);
+      expect(errorElement).toBeInTheDocument();
     });
   });
 
@@ -65,7 +68,7 @@ describe('UsernameField', () => {
       />,
     );
 
-    expect(screen.getByTestId('username-input')).not.toHaveAttribute('aria-invalid');
+    expect(screen.getByLabelText(defaultProps.label)).not.toHaveAttribute('aria-invalid');
 
     rerender(
       <UsernameField
@@ -74,7 +77,7 @@ describe('UsernameField', () => {
       />,
     );
 
-    expect(screen.getByTestId('username-input')).toHaveAttribute('aria-invalid', 'true');
+    expect(screen.getByLabelText(defaultProps.label)).toHaveAttribute('aria-invalid', 'true');
   });
 
   it('should render the correct label', () => {
@@ -91,6 +94,6 @@ describe('UsernameField', () => {
       />,
     );
 
-    expect(screen.getByTestId('username-input')).toHaveAttribute('type', 'email');
+    expect(screen.getByLabelText(defaultProps.label)).toHaveAttribute('type', 'email');
   });
 });

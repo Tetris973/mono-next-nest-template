@@ -42,13 +42,12 @@ export const PasswordField: React.FC<PasswordFieldProps> = ({
       <Input
         type={showPassword ? 'text' : 'password'}
         name={name}
-        data-testid="password-input"
       />
       <InputRightElement h={'full'}>
         <Button
+          aria-label="Toggle password visibility"
           variant={'ghost'}
-          onClick={() => setShowPassword(!showPassword)}
-          data-testid="toggle-button">
+          onClick={() => setShowPassword(!showPassword)}>
           {showPassword ? (
             <FontAwesomeIcon
               icon={faEye}
@@ -68,8 +67,7 @@ export const PasswordField: React.FC<PasswordFieldProps> = ({
   return (
     <FormControl
       id={id}
-      isInvalid={error && error.length > 0}
-      data-testid="password-field">
+      isInvalid={error && error.length > 0}>
       <FormLabel>{label}</FormLabel>
       {loading ? renderSkeleton() : renderInputGroup()}
       {error && error.map((error) => <FormErrorMessage key={error}>{error}</FormErrorMessage>)}

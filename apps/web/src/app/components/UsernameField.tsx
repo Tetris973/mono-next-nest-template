@@ -21,14 +21,12 @@ export const UsernameField: React.FC<UsernameFieldProps> = ({ id, label, type, n
     <Input
       type={type}
       name={name}
-      data-testid="username-input"
     />
   );
   return (
     <FormControl
       id={id}
-      isInvalid={error && error.length > 0}
-      data-testid="username-field">
+      isInvalid={error && error.length > 0}>
       <FormLabel>{label}</FormLabel>
       {loading ? renderSkeleton() : renderInput()}
       {error && error.map((error) => <FormErrorMessage key={error}>{error}</FormErrorMessage>)}

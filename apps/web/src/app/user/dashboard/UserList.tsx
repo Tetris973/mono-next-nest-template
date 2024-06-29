@@ -12,13 +12,7 @@ interface UserListProps {
 
 const renderLoading = () => <Spinner data-testid="user-list-loading" />;
 
-const renderError = (error: string) => (
-  <Text
-    color="red.500"
-    data-testid="user-list-error">
-    {error}
-  </Text>
-);
+const renderError = (error: string) => <Text color="red.500">{error}</Text>;
 
 export const UserList: React.FC<UserListProps> = ({ users, loading, error, onUserSelect, containerStyle }) => {
   const [filter, setFilter] = useState('');
@@ -49,7 +43,6 @@ export const UserList: React.FC<UserListProps> = ({ users, loading, error, onUse
         p={2}
         cursor="pointer"
         onClick={() => handleUserSelect(user.id)}
-        data-testid={`user-list-item-${user.id}`}
         borderRadius="md"
         transition="background-color 0.2s">
         <Text fontWeight={isSelected ? 'bold' : 'normal'}>
@@ -65,13 +58,7 @@ export const UserList: React.FC<UserListProps> = ({ users, loading, error, onUse
     );
   };
 
-  const renderUserList = () => (
-    <List
-      spacing={3}
-      data-testid="user-list">
-      {filteredUsers.map(renderUserItem)}
-    </List>
-  );
+  const renderUserList = () => <List spacing={3}>{filteredUsers.map(renderUserItem)}</List>;
 
   return (
     <Box
@@ -79,14 +66,12 @@ export const UserList: React.FC<UserListProps> = ({ users, loading, error, onUse
       p={4}
       overflowY="auto"
       borderColor={bg}
-      style={containerStyle}
-      data-testid="user-list-container">
+      style={containerStyle}>
       <Input
         placeholder="Filter users"
         mb={4}
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
-        data-testid="user-list-filter-input"
       />
       {loading && renderLoading()}
       {error && renderError(error)}
