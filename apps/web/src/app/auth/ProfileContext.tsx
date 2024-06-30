@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
-import { getProfileAction } from '@web/app/auth/profile/profile.service';
+import { getProfileAction as defaultGetProfileAction } from '@web/app/auth/profile/profile.service';
+import { useAuth as defaultUseAuth } from './AuthContext';
 import { UserDto } from '@dto/user/dto/user.dto';
-import { useAuth } from './AuthContext';
 import { useCustomToast } from '../utils/toast-utils.use';
 import { ActionErrorResponse } from '@web/app/common/action-response.type';
 import { useServerAction } from '../utils/server-action.use';
@@ -12,9 +12,18 @@ export interface ProfileContextInterface {
   loadProfile: () => Promise<ActionErrorResponse | void>;
 }
 
+export interface ProfileProviderDependencies {
+  getProfileAction?: typeof defaultGetProfileAction;
+  useAuth?: typeof defaultUseAuth;
+}
+
 const ProfileContext = createContext<ProfileContextInterface | undefined>(undefined);
 
-export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ProfileProvider: React.FC<React.PropsWithChildren<ProfileProviderDependencies>> = ({
+  children,
+  getProfileAction = defaultGetProfileAction,
+  useAuth = defaultUseAuth,
+}) => {
   const { toastError } = useCustomToast();
   const [profile, setProfile] = useState<UserDto | null>(null);
   const { isAuthenticated } = useAuth();
