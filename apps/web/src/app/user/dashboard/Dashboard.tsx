@@ -1,55 +1,24 @@
 'use client';
 
-import React, { useRef } from 'react';
-import {
-  Flex,
-  Box,
-  useColorModeValue,
-  VStack,
-  Spacer,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogOverlay,
-  Button,
-  useBoolean,
-} from '@chakra-ui/react';
-import { useDashboard } from './dashboard.use';
+import React from 'react';
+import { Flex, Box, useColorModeValue, VStack, Spacer, useBoolean } from '@chakra-ui/react';
+import { useDashboard as defaultUseDashboard } from './dashboard.use';
 import { UserCard } from './UserCard';
 import { UserList } from './UserList';
-import { UserDto } from '@dto/user/dto/user.dto';
-import { Header } from '@web/app/components/Header';
 import { ProfileForm } from '@web/app/auth/profile/ProfileForm';
-import { useProfile } from '@web/app/auth/ProfileContext';
+import { useProfile as defaultUseProfile } from '@web/app/auth/ProfileContext';
 import { useCustomToast } from '@web/app/utils/toast-utils.use';
+import { DeleteConfirmationDialog } from '@web/app/components/DeleteConfirmationDialog';
 
-const UserCardContainer: React.FC<{
-  user: UserDto | null;
-  loading: boolean;
-  onDelete: () => void;
-  showAdmin: boolean;
-  onEdit: () => void;
-}> = ({ user, loading, onDelete, showAdmin, onEdit }) => (
-  <VStack
-    spacing={8}
-    align="center"
-    justify="center"
-    minW={'25%'}>
-    <Box w={'full'}>
-      <UserCard
-        user={user}
-        loading={loading}
-        onDelete={onDelete}
-        showAdmin={showAdmin}
-        onEdit={onEdit}
-      />
-    </Box>
-  </VStack>
-);
+export interface DashboardProps {
+  useDashboard?: typeof defaultUseDashboard;
+  useProfile?: typeof defaultUseProfile;
+}
 
-export function Dashboard(): JSX.Element {
+export function Dashboard({
+  useDashboard = defaultUseDashboard,
+  useProfile = defaultUseProfile,
+}: DashboardProps): JSX.Element {
   const {
     users,
     selectedUser,
@@ -67,7 +36,6 @@ export function Dashboard(): JSX.Element {
 
   const [alert, setAlert] = useBoolean();
   const [editing, setEditing] = useBoolean();
-  const cancelRef = useRef<HTMLButtonElement>(null);
 
   const confirmDelete = async () => {
     setAlert.off();
@@ -91,7 +59,6 @@ export function Dashboard(): JSX.Element {
 
   return (
     <>
-      <Header />
       <Flex
         minH={'100vh'}
         align={'center'}
@@ -118,46 +85,31 @@ export function Dashboard(): JSX.Element {
               onSubmitSuccess={onSubmitSuccess}
             />
           ) : (
-            <UserCardContainer
-              user={selectedUser}
-              loading={getUserByIdPending}
-              onDelete={() => setAlert.on()}
-              showAdmin={showAdmin}
-              onEdit={setEditing.on}
-            />
+            <VStack
+              spacing={8}
+              align="center"
+              justify="center"
+              minW={'25%'}>
+              <Box w={'full'}>
+                <UserCard
+                  user={selectedUser}
+                  loading={getUserByIdPending}
+                  onDelete={() => setAlert.on()}
+                  showAdmin={showAdmin}
+                  onEdit={setEditing.on}
+                />
+              </Box>
+            </VStack>
           )}
           <Spacer />
         </Box>
       </Flex>
 
-      <AlertDialog
+      <DeleteConfirmationDialog
         isOpen={alert}
-        leastDestructiveRef={cancelRef}
-        onClose={() => setAlert.on}>
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader
-              fontSize="lg"
-              fontWeight="bold">
-              Delete User
-            </AlertDialogHeader>
-            <AlertDialogBody>Are you sure? You can&apos;t undo this action afterwards.</AlertDialogBody>
-            <AlertDialogFooter>
-              <Button
-                ref={cancelRef}
-                onClick={setAlert.off}>
-                Cancel
-              </Button>
-              <Button
-                colorScheme="red"
-                onClick={confirmDelete}
-                ml={3}>
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+        onClose={setAlert.off}
+        onConfirm={confirmDelete}
+      />
     </>
   );
 }
