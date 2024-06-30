@@ -35,9 +35,10 @@ describe('useProfileForm', () => {
     const { result } = renderHook(() => useProfileForm(userId, dependencies));
 
     // CHECK RESULTS
-    await waitFor(() => {});
-    expect(result.current.user).toEqual(user);
-    expect(result.current.newUsername).toBe(user.username);
+    await waitFor(() => {
+      expect(result.current.user).toEqual(user);
+      expect(result.current.newUsername).toBe(user.username);
+    });
   });
 
   it('should handle form submission', async () => {

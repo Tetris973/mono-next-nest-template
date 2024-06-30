@@ -6,7 +6,7 @@ import { useCustomToast } from '../utils/toast-utils.use';
 import { ActionErrorResponse } from '@web/app/common/action-response.type';
 import { useServerAction } from '../utils/server-action.use';
 
-interface ProfileContextInterface {
+export interface ProfileContextInterface {
   profile: UserDto | null;
   loading: boolean;
   loadProfile: () => Promise<ActionErrorResponse | void>;
