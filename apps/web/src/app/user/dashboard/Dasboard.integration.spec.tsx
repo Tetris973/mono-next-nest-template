@@ -11,7 +11,7 @@ import { safeFetch } from '@web/app/utils/safe-fetch.utils';
 
 /**
  * Example of how an integration test would be done
- * Unfortunately, it's not possible to test the ProfileForm component without mocking the checkAuthentication and safeFetch functions
+ * Unfortunately, it's not possible to test the Dashboard component without mocking the checkAuthentication and safeFetch functions
  * because they are used by the useProfile hook, which is used by the ProfileForm component.
  *
  * We could add as props to the Dahboard component the useProfile hook and pass it to the ProfileForm.
