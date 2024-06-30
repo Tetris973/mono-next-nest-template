@@ -13,16 +13,78 @@ import {
   MenuDivider,
   Spinner,
 } from '@chakra-ui/react';
-import { useProfile } from '@web/app/auth/ProfileContext';
-import { useAuth } from '@web/app/auth/AuthContext';
+import { useProfile as defaultUseProfile } from '@web/app/auth/ProfileContext';
+import { useAuth as defaultUseAuth } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSignOutAlt, faSignInAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 
-export const Header: React.FC = () => {
+export interface HeaderProps {
+  useAuth?: typeof defaultUseAuth;
+  useProfile?: typeof defaultUseProfile;
+}
+
+export const Header: React.FC<HeaderProps> = ({ useAuth = defaultUseAuth, useProfile = defaultUseProfile }) => {
   const { logout } = useAuth();
   const { profile, loading } = useProfile();
   const router = useRouter();
+
+  const handleHomeClick = () => router.push('/');
+  const handleProfileClick = () => router.push('/auth/profile');
+  const handleSignupClick = () => router.push('/auth/signup');
+
+  const renderAuthenticatedMenu = () => (
+    <Flex align="center">
+      <Menu>
+        <MenuButton
+          as={Button}
+          bg="transparent"
+          p={0}
+          cursor="pointer">
+          <Avatar
+            name={profile?.username}
+            size="sm"
+          />
+        </MenuButton>
+        <MenuList>
+          <MenuItem onClick={handleProfileClick}>
+            <FontAwesomeIcon
+              icon={faUser}
+              style={{ marginRight: '10px' }}
+            />
+            Profile
+          </MenuItem>
+          <MenuDivider />
+          <MenuItem onClick={logout}>
+            <FontAwesomeIcon
+              icon={faSignOutAlt}
+              style={{ marginRight: '10px' }}
+            />
+            Logout
+          </MenuItem>
+        </MenuList>
+      </Menu>
+    </Flex>
+  );
+
+  const renderUnauthenticatedMenu = () => (
+    <Button
+      onClick={handleSignupClick}
+      leftIcon={<FontAwesomeIcon icon={faSignInAlt} />}
+      colorScheme="teal">
+      Signup
+    </Button>
+  );
+
+  const renderMenuContent = () => {
+    if (loading) {
+      return <Spinner data-testid="header-loading-spinner" />;
+    }
+    if (profile) {
+      return renderAuthenticatedMenu();
+    }
+    return renderUnauthenticatedMenu();
+  };
 
   return (
     <Box
@@ -34,62 +96,22 @@ export const Header: React.FC = () => {
         align="center"
         justify="space-between">
         <Flex alignItems="center">
-          <Box mr={4}>
-            <Button
-              onClick={() => router.push('/')}
-              leftIcon={
-                <FontAwesomeIcon
-                  icon={faHome}
-                  size="2x"
-                  color="gray.600"
-                />
-              }
-              fontWeight="bold"
-              fontSize="xl">
-              My App
-            </Button>
-          </Box>
-        </Flex>
-        {loading && <Spinner />}
-        {!loading && profile && (
-          <Flex align="center">
-            <Menu>
-              <MenuButton>
-                <Avatar
-                  name={profile.username}
-                  size="sm"
-                  mr={4}
-                  cursor="pointer"
-                />
-              </MenuButton>
-              <MenuList>
-                <MenuItem onClick={() => router.push('/auth/profile')}>
-                  <FontAwesomeIcon
-                    icon={faUser}
-                    style={{ marginRight: '10px' }}
-                  />
-                  Profile
-                </MenuItem>
-                <MenuDivider />
-                <MenuItem onClick={logout}>
-                  <FontAwesomeIcon
-                    icon={faSignOutAlt}
-                    style={{ marginRight: '10px' }}
-                  />
-                  Logout
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </Flex>
-        )}
-        {!loading && !profile && (
           <Button
-            onClick={() => router.push('/auth/signup')}
-            leftIcon={<FontAwesomeIcon icon={faSignInAlt} />}
-            colorScheme="teal">
-            Signup
+            onClick={handleHomeClick}
+            leftIcon={
+              <FontAwesomeIcon
+                icon={faHome}
+                size="2x"
+                color="gray.600"
+              />
+            }
+            fontWeight="bold"
+            fontSize="xl"
+            variant="ghost">
+            My App
           </Button>
-        )}
+        </Flex>
+        {renderMenuContent()}
       </Flex>
     </Box>
   );
