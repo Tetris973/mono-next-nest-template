@@ -25,7 +25,7 @@ export interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ useAuth = defaultUseAuth, useProfile = defaultUseProfile }) => {
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
   const { profile, loading } = useProfile();
   const router = useRouter();
 
@@ -77,7 +77,7 @@ export const Header: React.FC<HeaderProps> = ({ useAuth = defaultUseAuth, usePro
   );
 
   const renderMenuContent = () => {
-    if (loading) {
+    if (loading || isAuthenticated === undefined) {
       return <Spinner data-testid="header-loading-spinner" />;
     }
     if (profile) {

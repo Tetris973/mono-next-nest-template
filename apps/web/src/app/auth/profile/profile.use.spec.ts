@@ -74,7 +74,7 @@ describe('useProfileForm', () => {
     await waitFor(() => {});
 
     // Input empty username
-    act(() => {
+    await act(() => {
       result.current.setNewUsername('');
     });
 
@@ -86,6 +86,19 @@ describe('useProfileForm', () => {
     expect(result.current.profileError).toEqual({ username: ['You must provide a username.'] });
   });
 
+  /**
+   *  @note
+   *  This test cause sometimes error, but i don't know why.
+   *  Restarting the test make it work most of the time.
+   *  This note is here to prevent from taking too much time trying to resolve this error
+   *
+   * - Expected
+   * - Received
+   * - Object {}
+   * - Object {
+   *     "error": "No user selected, cannot update profile",
+   * }
+   */
   it('should handle server errors, Conflict', async () => {
     // INIT
     mockGetUserByIdAction.mockResolvedValue({ result: user });
