@@ -1,7 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { loginAction, isAuthenticatedAction, getRolesAction } from '@web/app/auth/login/login.service';
-import { logoutAction } from '@web/app/auth/logout/logout.service';
+import {
+  loginAction as defaultLoginAction,
+  isAuthenticatedAction as defaultIsAuthenticatedAction,
+  getRolesAction as defaultGetRolesAction,
+} from '@web/app/auth/login/login.service';
+import { logoutAction as defaultLogoutAction } from '@web/app/auth/logout/logout.service';
 import { Role } from './role.enum';
 import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';
 import { ActionResponse } from '@web/app/common/action-response.type';
@@ -20,9 +24,22 @@ export interface AuthContextInterface {
   loading: boolean;
 }
 
+export interface AuthProviderDependencies {
+  loginAction?: typeof defaultLoginAction;
+  logoutAction?: typeof defaultLogoutAction;
+  isAuthenticatedAction?: typeof defaultIsAuthenticatedAction;
+  getRolesAction?: typeof defaultGetRolesAction;
+}
+
 const AuthContext = createContext<AuthContextInterface | undefined>(undefined);
 
-export const AuthProviderNew: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<React.PropsWithChildren<AuthProviderDependencies>> = ({
+  children,
+  loginAction = defaultLoginAction,
+  logoutAction = defaultLogoutAction,
+  isAuthenticatedAction = defaultIsAuthenticatedAction,
+  getRolesAction = defaultGetRolesAction,
+}) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined);
   const [roles, setRoles] = useState<Role[]>([]);
   const [loginPending, loginActionM] = useServerAction(loginAction);
@@ -40,7 +57,7 @@ export const AuthProviderNew: React.FC<{ children: React.ReactNode }> = ({ child
       setIsAuthenticated(isAuthenticated);
     };
     rehydrateAuth();
-  }, [getRolesActionM]);
+  }, [getRolesActionM, isAuthenticatedAction]);
 
   const login = async (formData: LoginUserDto): Promise<ActionResponse<null, LoginUserDto>> => {
     const { error: loginError } = await loginActionM(formData);
