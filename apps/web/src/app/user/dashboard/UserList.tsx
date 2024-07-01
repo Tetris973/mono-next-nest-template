@@ -2,7 +2,7 @@ import { useState, useEffect, CSSProperties } from 'react';
 import { Box, Input, List, ListItem, Text, useColorModeValue, Spinner } from '@chakra-ui/react';
 import { UserDto } from '@dto/user/dto/user.dto';
 
-interface UserListProps {
+export interface UserListProps {
   users: UserDto[];
   loading: boolean;
   error: string | null;

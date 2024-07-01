@@ -1,6 +1,6 @@
 import { FormControl, FormLabel, FormErrorMessage, Input, Skeleton } from '@chakra-ui/react';
 
-interface UsernameFieldProps {
+export interface UsernameFieldProps {
   id: string;
   label: string;
   type: string;

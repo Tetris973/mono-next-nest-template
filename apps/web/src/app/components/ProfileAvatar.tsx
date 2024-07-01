@@ -1,6 +1,6 @@
 import { Avatar, Center, Stack, FormControl, FormLabel } from '@chakra-ui/react';
 
-interface ProfileAvatarProps {
+export interface ProfileAvatarProps {
   username: string;
   loading: boolean;
 }

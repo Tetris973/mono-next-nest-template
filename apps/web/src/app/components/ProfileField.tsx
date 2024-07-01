@@ -1,7 +1,7 @@
 import { FormControl, FormLabel, FormErrorMessage, Input, Skeleton } from '@chakra-ui/react';
 import React from 'react';
 
-interface ProfileFieldProps {
+export interface ProfileFieldProps {
   id: string;
   label: string;
   value: string;
