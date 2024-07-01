@@ -17,7 +17,7 @@ export interface UseProfileForm {
   submitPending: boolean;
   profilePending: boolean;
   setNewUsername: (username: string) => void;
-  handleSubmit: (event: React.FormEvent) => Promise<FormSubmitResult>;
+  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<FormSubmitResult>;
   user: UserDto | null;
 }
 
@@ -53,7 +53,7 @@ export const useProfileForm = (
     fetchUserProfile();
   }, [userId, getProfileActionM]);
 
-  const handleSubmit = async (event: React.FormEvent): Promise<FormSubmitResult> => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<FormSubmitResult> => {
     if (!user) return { error: 'No user selected, cannot update profile' };
     event.preventDefault();
 

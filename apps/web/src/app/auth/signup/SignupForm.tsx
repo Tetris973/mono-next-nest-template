@@ -5,7 +5,7 @@ import { PasswordField } from '@web/app/components/PasswordField';
 import { useCustomToast } from '@web/app/utils/toast-utils.use';
 import { useRouter } from 'next/navigation';
 
-interface SignupFormProps {
+export interface SignupFormProps {
   useSignup?: () => UseSignup;
 }
 

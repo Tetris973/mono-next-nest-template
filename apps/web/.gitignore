@@ -10,3 +10,5 @@
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+*storybook.log

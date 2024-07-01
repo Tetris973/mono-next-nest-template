@@ -4,7 +4,7 @@ import { UsernameField } from '../../components/UsernameField';
 import { PasswordField } from '@web/app/components/PasswordField';
 import { useCustomToast } from '@web/app/utils/toast-utils.use';
 
-interface LoginFormProps {
+export interface LoginFormProps {
   useLogin?: () => UseLogin;
 }
 

@@ -11,7 +11,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
-interface PasswordFieldProps {
+export interface PasswordFieldProps {
   id: string;
   label: string;
   name: string;

@@ -3,7 +3,7 @@ import { UserDto } from '@dto/user/dto/user.dto';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faEdit } from '@fortawesome/free-solid-svg-icons';
 
-interface UserCardProps {
+export interface UserCardProps {
   user: UserDto | null;
   loading: boolean;
   onDelete: () => void;
