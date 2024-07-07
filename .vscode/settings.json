@@ -1,0 +1,8 @@
+{
+    /** 
+     * To be able to select the workspace typescript
+     * This typescript version is a custom typescript provided by NextJs to perform extended verification
+     * such as use of async for every Nextjs server side functions, useffect only in client, etc;
+     */
+    "typescript.tsdk": "./apps/web/node_modules/typescript/lib",
+}

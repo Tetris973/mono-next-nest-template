@@ -48,7 +48,8 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
             loading={profilePending}
           />
           <ProfileField
-            id="userName"
+            id="username"
+            name="username"
             label="User name"
             value={newUsername}
             error={profileError.username}
@@ -57,6 +58,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
           />
           <ProfileField
             id="createdAt"
+            name="createdAt"
             label="Created At"
             value={user ? new Date(user.createdAt).toLocaleString() : ''}
             error={undefined}
@@ -65,6 +67,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
           />
           <ProfileField
             id="updatedAt"
+            name="updatedAt"
             label="Updated At"
             value={user ? new Date(user.updatedAt).toLocaleString() : ''}
             error={undefined}

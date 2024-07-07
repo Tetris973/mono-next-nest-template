@@ -3,7 +3,7 @@
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
 import { ActionErrorResponse, ActionResponse } from '@web/app/common/action-response.type';
-import { API_URL } from '@web/app/constants/api';
+import { BACKEND_URL } from '@web/app/constants/api';
 import { HttpStatus } from '@web/app/common/http-status.enum';
 import { Role } from '@web/app/auth/role.enum';
 import { JwtPayload } from '@web/app/auth/jwt-payload.interface';
@@ -31,6 +31,7 @@ const setAuthCookie = (response: Response) => {
   cookies().set({
     name: 'Authentication',
     value: token,
+    // Warning: safari does not allow secure cookie to be set over http
     secure: true,
     httpOnly: true,
     expires: new Date(decodedToken.exp * SECONDS_TO_MILLISECONDS),
@@ -57,7 +58,7 @@ const formatLoginError = (
 };
 
 export const loginAction = async (loginData: LoginUserDto): Promise<ActionResponse<null, LoginUserDto>> => {
-  const { result: res, error } = await safeFetch(`${API_URL}/auth/login`, {
+  const { result: res, error } = await safeFetch(`${BACKEND_URL}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(loginData),
@@ -83,13 +84,13 @@ export const loginAction = async (loginData: LoginUserDto): Promise<ActionRespon
   return { error: formatLoginError(res.status, parsedRes) };
 };
 
-export const isAuthenticatedAction = () => {
+export const isAuthenticatedAction = async (): Promise<boolean> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
   return !!token;
 };
 
-export const getRolesAction = (): Role[] => {
+export const getRolesAction = async (): Promise<Role[]> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value || '';
   if (!token) {

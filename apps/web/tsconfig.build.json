@@ -1,8 +1,23 @@
 {
     "extends": "./tsconfig.json",
+    "compilerOptions": {
+        // Required otherwise Next build throw a warning during build time because it can't resolve the plugin 
+        // extended from tsconfig.json. The next plugin must be present in the config file directly impoted by next.config build.
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ],
+    },
     "exclude": [
         "**/*.spec.ts",
         "**/*.spec.tsx",
         "**/utils/test/*",
+        "**/playwright/*",
+        "**/playwright-report/*",
+        "**/test/*",
+        "**/*.stories.ts",
+        "**/*.stories.tsx",
+        "**/.github/*"
     ]
 }
