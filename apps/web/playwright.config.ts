@@ -67,12 +67,6 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      // This command will remove all data from database and seed with testing data from backend
-      command: 'npm run db-seed:force',
-      cwd: '../server',
-      stdout: 'pipe',
-    },
-    {
       // This command will start the Nestjs server
       command: 'npm run start',
       url: 'http://127.0.0.1:4000',
