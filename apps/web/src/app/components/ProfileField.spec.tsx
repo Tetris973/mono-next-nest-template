@@ -6,6 +6,7 @@ describe('ProfileField', () => {
   const defaultProps = {
     id: 'test-field',
     label: 'Test Label',
+    name: 'test-field',
     value: 'Test Value',
     error: undefined,
     loading: false,

@@ -17,6 +17,7 @@ export const Default: Story = {
   args: {
     id: 'username',
     label: 'Username',
+    name: 'username',
     value: 'johndoe',
     error: undefined,
     loading: false,

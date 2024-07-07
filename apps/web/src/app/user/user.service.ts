@@ -1,6 +1,6 @@
 'use server';
 
-import { API_URL } from '@web/app/constants/api';
+import { BACKEND_URL } from '@web/app/constants/api';
 import { HttpStatus } from '@web/app/common/http-status.enum';
 import { UpdateUserDto } from '@dto/user/dto/update-user.dto';
 import { UserDto } from '@dto/user/dto/user.dto';
@@ -14,7 +14,7 @@ export const getUserByIdAction = async (id: number): Promise<ActionResponse<User
     return { error };
   }
 
-  const { result: response, error: fetchError } = await safeFetch(`${API_URL}/users/${id}`, {
+  const { result: response, error: fetchError } = await safeFetch(`${BACKEND_URL}/users/${id}`, {
     method: 'GET',
     headers: {
       Cookie: `Authentication=${token}`,
@@ -54,7 +54,7 @@ export const updateUserAction = async (
     };
   }
 
-  const { result: response, error: fetchError } = await safeFetch(`${API_URL}/users/${userId}`, {
+  const { result: response, error: fetchError } = await safeFetch(`${BACKEND_URL}/users/${userId}`, {
     method: 'PATCH',
     headers: {
       Cookie: `Authentication=${token}`,
@@ -92,7 +92,7 @@ export const getAllUsersAction = async (): Promise<ActionResponse<UserDto[]>> =>
     return { error };
   }
 
-  const { result: response, error: fetchError } = await safeFetch(`${API_URL}/users`, {
+  const { result: response, error: fetchError } = await safeFetch(`${BACKEND_URL}/users`, {
     method: 'GET',
     headers: {
       Cookie: `Authentication=${token}`,
@@ -120,7 +120,7 @@ export const deleteUserAction = async (id: number): Promise<ActionResponse<null>
     return { error };
   }
 
-  const { result: response, error: fetchError } = await safeFetch(`${API_URL}/users/${id}`, {
+  const { result: response, error: fetchError } = await safeFetch(`${BACKEND_URL}/users/${id}`, {
     method: 'DELETE',
     headers: {
       Cookie: `Authentication=${token}`,

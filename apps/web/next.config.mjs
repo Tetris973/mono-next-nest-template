@@ -5,6 +5,11 @@ const nextConfig = {
   // throw error if only one page extension
   // With multiple extension, the pages are not found 404 error
   // pageExtensions: ['page.tsx'],
+
+  // Required otherwise next build with unwanted files, like .stories.tsx, spec, ...
+  typescript: {
+    tsconfigPath: './tsconfig.build.json',
+  },
 };
 
 export default nextConfig;

@@ -191,5 +191,16 @@ describe('UserController (e2e)', () => {
       // RUN & CHECK RESULT
       await request(app.getHttpServer()).delete(`/users/${Users.testUser}`).expect(HttpStatus.UNAUTHORIZED);
     });
+
+    it('should return Bad Request when param is not a number', async () => {
+      // INIT
+      const authCookie = await loginAsTetris();
+
+      // RUN & CHECK RESULT
+      await request(app.getHttpServer())
+        .delete('/users/not-a-number')
+        .set('Cookie', authCookie)
+        .expect(HttpStatus.BAD_REQUEST);
+    });
   });
 });

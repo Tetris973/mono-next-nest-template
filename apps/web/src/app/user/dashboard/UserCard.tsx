@@ -84,6 +84,7 @@ export const UserCard: React.FC<UserCardProps> = ({ user, loading, onDelete, sho
 
   return (
     <Box
+      aria-label="User card"
       position="relative"
       rounded={'xl'}
       bg={bg}

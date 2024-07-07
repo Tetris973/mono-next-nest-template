@@ -8,6 +8,8 @@
     "build": "next build",
     "start": "next start",
     "test": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "lint": "next lint --fix",
     "ts-check": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
@@ -29,6 +31,7 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@playwright/test": "^1.45.0",
     "@storybook/addon-essentials": "^8.1.11",
     "@storybook/blocks": "^8.1.11",
     "@storybook/nextjs": "^8.1.11",
@@ -44,7 +47,7 @@
     "eslint-plugin-storybook": "^0.8.0",
     "jsdom": "^24.1.0",
     "storybook": "^8.1.11",
-    "typescript": "^5",
+    "typescript": "^5.5.3",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^1.4.0"
   }

@@ -58,7 +58,9 @@ describe('useProfileForm', () => {
 
     // Submit form
     await act(async () => {
-      const submitResult = await result.current.handleSubmit({ preventDefault: () => {} } as React.FormEvent);
+      const submitResult = await result.current.handleSubmit({
+        preventDefault: () => {},
+      } as React.FormEvent<HTMLFormElement>);
       expect(submitResult).toEqual({ success: `Profile of ${newUsername} updated successfully` });
     });
 
@@ -80,7 +82,9 @@ describe('useProfileForm', () => {
 
     // RUN & CHECK RESULTS
     await act(async () => {
-      const submitResult = await result.current.handleSubmit({ preventDefault: () => {} } as React.FormEvent);
+      const submitResult = await result.current.handleSubmit({
+        preventDefault: () => {},
+      } as React.FormEvent<HTMLFormElement>);
       expect(submitResult).toEqual({});
     });
     expect(result.current.profileError).toEqual({ username: ['You must provide a username.'] });
@@ -111,7 +115,9 @@ describe('useProfileForm', () => {
 
     // RUN
     await act(async () => {
-      const submitResult = await result.current.handleSubmit({ preventDefault: () => {} } as React.FormEvent);
+      const submitResult = await result.current.handleSubmit({
+        preventDefault: () => {},
+      } as React.FormEvent<HTMLFormElement>);
       expect(submitResult).toEqual({});
     });
 
@@ -131,7 +137,9 @@ describe('useProfileForm', () => {
 
     // RUN & CHECK RESULTS
     await act(async () => {
-      const submitResult = await result.current.handleSubmit({ preventDefault: () => {} } as React.FormEvent);
+      const submitResult = await result.current.handleSubmit({
+        preventDefault: () => {},
+      } as React.FormEvent<HTMLFormElement>);
       expect(submitResult).toEqual({ error: errorMessage });
       expect(result.current.profileError).toEqual({ username: [] });
     });

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { getUserByIdAction, updateUserAction, getAllUsersAction, deleteUserAction } from './user.service';
-import { API_URL } from '@web/app/constants/api';
+import { BACKEND_URL } from '@web/app/constants/api';
 import { HttpStatus } from '@web/app/common/http-status.enum';
 import { UserDto } from '@dto/user/dto/user.dto';
 import { UpdateUserDto } from '@dto/user/dto/update-user.dto';
@@ -36,7 +36,7 @@ describe('user.service', () => {
 
       // CHECK RESULTS
       expect(result).toEqual({ result: mockUser });
-      expect(safeFetch).toHaveBeenCalledWith(`${API_URL}/users/${userId}`, {
+      expect(safeFetch).toHaveBeenCalledWith(`${BACKEND_URL}/users/${userId}`, {
         method: 'GET',
         headers: {
           Cookie: `Authentication=${mockToken}`,
@@ -94,7 +94,7 @@ describe('user.service', () => {
 
       // CHECK RESULTS
       expect(result).toEqual({ result: mockUser });
-      expect(safeFetch).toHaveBeenCalledWith(`${API_URL}/users/${userId}`, {
+      expect(safeFetch).toHaveBeenCalledWith(`${BACKEND_URL}/users/${userId}`, {
         method: 'PATCH',
         headers: {
           Cookie: `Authentication=${mockToken}`,
@@ -175,7 +175,7 @@ describe('user.service', () => {
 
       // CHECK RESULTS
       expect(result).toEqual({ result: mockUsers });
-      expect(safeFetch).toHaveBeenCalledWith(`${API_URL}/users`, {
+      expect(safeFetch).toHaveBeenCalledWith(`${BACKEND_URL}/users`, {
         method: 'GET',
         headers: {
           Cookie: `Authentication=${mockToken}`,
@@ -224,7 +224,7 @@ describe('user.service', () => {
 
       // CHECK RESULTS
       expect(result).toEqual({ result: null });
-      expect(safeFetch).toHaveBeenCalledWith(`${API_URL}/users/${userId}`, {
+      expect(safeFetch).toHaveBeenCalledWith(`${BACKEND_URL}/users/${userId}`, {
         method: 'DELETE',
         headers: {
           Cookie: `Authentication=${mockToken}`,

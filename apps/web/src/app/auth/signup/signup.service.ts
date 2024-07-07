@@ -1,6 +1,6 @@
 'use server';
 import { ActionResponse } from '@web/app/common/action-response.type';
-import { API_URL } from '@web/app/constants/api';
+import { BACKEND_URL } from '@web/app/constants/api';
 import { HttpStatus } from '@web/app/common/http-status.enum';
 import { CreateUserDto } from '@dto/user/dto/create-user.dto';
 import { safeFetch } from '@web/app/utils/safe-fetch.utils';
@@ -8,7 +8,7 @@ import { safeFetch } from '@web/app/utils/safe-fetch.utils';
 export const signupAction = async (
   createUserDto: CreateUserDto,
 ): Promise<ActionResponse<CreateUserDto, CreateUserDto>> => {
-  const { result: res, error: fetchError } = await safeFetch(`${API_URL}/auth/signup`, {
+  const { result: res, error: fetchError } = await safeFetch(`${BACKEND_URL}/auth/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 'use server';
 
-import { API_URL } from '@web/app/constants/api';
+import { BACKEND_URL } from '@web/app/constants/api';
 import { UserDto } from '@dto/user/dto/user.dto';
 import { ActionResponse } from '@web/app/common/action-response.type';
 import { safeFetch } from '@web/app/utils/safe-fetch.utils';
@@ -8,12 +8,11 @@ import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
 
 export async function getProfileAction(): Promise<ActionResponse<UserDto>> {
   const { result: token, error: authError } = checkAuthentication();
-
   if (authError) {
     return { error: authError };
   }
 
-  const { result: response, error: fetchError } = await safeFetch(`${API_URL}/auth/profile`, {
+  const { result: response, error: fetchError } = await safeFetch(`${BACKEND_URL}/auth/profile`, {
     headers: {
       Cookie: `Authentication=${token}`,
     },

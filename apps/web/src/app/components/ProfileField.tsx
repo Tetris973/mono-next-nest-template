@@ -4,6 +4,7 @@ import React from 'react';
 export interface ProfileFieldProps {
   id: string;
   label: string;
+  name: string;
   value: string;
   error: string[] | undefined;
   loading: boolean;
@@ -14,6 +15,7 @@ export interface ProfileFieldProps {
 export const ProfileField: React.FC<ProfileFieldProps> = ({
   id,
   label,
+  name,
   value,
   error,
   loading,
@@ -23,6 +25,7 @@ export const ProfileField: React.FC<ProfileFieldProps> = ({
   const renderInput = () => (
     <Input
       placeholder={label}
+      name={name}
       _placeholder={{ color: 'gray.500' }}
       type="text"
       value={value}
