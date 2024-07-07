@@ -178,23 +178,23 @@ describe('login.service', () => {
   });
 
   describe('isAuthenticatedAction', () => {
-    it('should return true if authentication cookie is present', () => {
+    it('should return true if authentication cookie is present', async () => {
       // INIT
       mockCookies.get.mockReturnValue({ value: 'token' });
 
       // RUN
-      const result = isAuthenticatedAction();
+      const result = await isAuthenticatedAction();
 
       // CHECK RESULTS
       expect(result).toBe(true);
     });
 
-    it('should return false if authentication cookie is not present', () => {
+    it('should return false if authentication cookie is not present', async () => {
       // INIT
       mockCookies.get.mockReturnValue(undefined);
 
       // RUN
-      const result = isAuthenticatedAction();
+      const result = await isAuthenticatedAction();
 
       // CHECK RESULTS
       expect(result).toBe(false);
@@ -202,7 +202,7 @@ describe('login.service', () => {
   });
 
   describe('getRolesAction', () => {
-    it('should return roles from decoded token', () => {
+    it('should return roles from decoded token', async () => {
       // INIT
       const roles: Role[] = [Role.USER, Role.ADMIN];
       (jwtDecode as Mock).mockReturnValue({ roles });
@@ -210,24 +210,24 @@ describe('login.service', () => {
       mockCookies.get.mockReturnValue({ value: 'token' });
 
       // RUN
-      const result = getRolesAction();
+      const result = await getRolesAction();
 
       // CHECK RESULTS
       expect(result).toEqual(roles);
     });
 
-    it('should return empty array if no token is present', () => {
+    it('should return empty array if no token is present', async () => {
       // INIT
       mockCookies.get.mockReturnValue(undefined);
 
       // RUN
-      const result = getRolesAction();
+      const result = await getRolesAction();
 
       // CHECK RESULTS
       expect(result).toEqual([]);
     });
 
-    it('should return empty array on invalid token', () => {
+    it('should return empty array on invalid token', async () => {
       // INIT
       (jwtDecode as Mock).mockImplementation(() => {
         throw new Error('Invalid token');
@@ -236,7 +236,7 @@ describe('login.service', () => {
       mockCookies.get.mockReturnValue({ value: 'token' });
 
       // RUN
-      const result = getRolesAction();
+      const result = await getRolesAction();
 
       // CHECK RESULTS
       expect(result).toEqual([]);
