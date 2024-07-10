@@ -48,7 +48,9 @@ describe('useProfileForm', () => {
     mockGetUserByIdAction.mockResolvedValue({ result: user });
     mockUpdateUserAction.mockResolvedValue({ result: newUserData });
     const { result } = renderHook(() => useProfileForm(userId, dependencies));
-    await waitFor(() => {});
+
+    // Wait for the user to be set
+    await waitFor(() => expect(result.current.user).not.toBeNull());
 
     // RUN & CHECK RESULTS
     // Input new user data
@@ -73,7 +75,9 @@ describe('useProfileForm', () => {
     // INIT
     mockGetUserByIdAction.mockResolvedValue({ result: user });
     const { result } = renderHook(() => useProfileForm(userId, dependencies));
-    await waitFor(() => {});
+
+    // Wait for the user to be set
+    await waitFor(() => expect(result.current.user).not.toBeNull());
 
     // Input empty username
     await act(() => {
@@ -90,19 +94,6 @@ describe('useProfileForm', () => {
     expect(result.current.profileError).toEqual({ username: ['You must provide a username.'] });
   });
 
-  /**
-   *  @note
-   *  This test cause sometimes error, but i don't know why.
-   *  Restarting the test make it work most of the time.
-   *  This note is here to prevent from taking too much time trying to resolve this error
-   *
-   * - Expected
-   * - Received
-   * - Object {}
-   * - Object {
-   *     "error": "No user selected, cannot update profile",
-   * }
-   */
   it('should handle server errors, Conflict', async () => {
     // INIT
     mockGetUserByIdAction.mockResolvedValue({ result: user });
@@ -111,7 +102,9 @@ describe('useProfileForm', () => {
       error: { status: HttpStatus.CONFLICT, message: errorMessage },
     });
     const { result } = renderHook(() => useProfileForm(userId, dependencies));
-    await waitFor(() => {});
+
+    // Wait for the user to be set
+    await waitFor(() => expect(result.current.user).not.toBeNull());
 
     // RUN
     await act(async () => {
@@ -133,7 +126,9 @@ describe('useProfileForm', () => {
       error: { status: HttpStatus.SERVICE_UNAVAILABLE, message: errorMessage },
     });
     const { result } = renderHook(() => useProfileForm(userId, dependencies));
-    await waitFor(() => {});
+
+    // Wait for the user to be set
+    await waitFor(() => expect(result.current.user).not.toBeNull());
 
     // RUN & CHECK RESULTS
     await act(async () => {
