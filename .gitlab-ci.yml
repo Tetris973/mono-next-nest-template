@@ -9,6 +9,7 @@ stages:
   - install
   - lint
   - build
+  - test
 
 # variables: Sets environment variables that can be used throughout the pipeline.
 variables:
@@ -56,8 +57,8 @@ build-backend-frontend:
   script:
     # Build backend
     # Copy gitlab env file needed for Nest
-    - cp $NEST_ENV_FILE apps/server/.env.production.local
     - cd apps/server
+    - cp $NEST_ENV_FILE ./.env.production.local
     - pnpm db-generate
     # - pnpm db-migrate:prod
     - pnpm run build
@@ -67,12 +68,27 @@ build-backend-frontend:
     - cd ../web
     - export NODE_ENV=production # production is needed for Next build otherwise error
     - pnpm run build
-    - export NODE_ENV=development # reset to development for the next job
   artifacts:
     paths:
       - apps/server/dist
       - apps/server/shared/dto
       - apps/web/.next
+
+
+unit-test-backend:
+  stage: test
+  script:
+    - cd apps/server
+    - export NODE_ENV=test # the test will look for an env file with the name corresponding to the current NODE_ENV
+    - cp $NEST_ENV_FILE ./.env.test.local # Test env file is needed instead of prod for the test to run, Because when running vitest, NODE_ENV is set to test always.
+    - pnpm db-generate # Generate the prisma client needed for tests
+    - pnpm run test
+
+unit-test-frontend:
+  stage: test
+  script:
+    - cd apps/web
+    - pnpm run test
 
 
   # for e2e test jobs
