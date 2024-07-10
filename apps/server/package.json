@@ -10,7 +10,7 @@
     "env:prod": "dotenv -e .env.production.local",
     "env:test": "dotenv -e .env.test.local",
     "preinstall": "npx only-allow pnpm",
-    "compose:dev": "pnpm env:dev -- docker-compose up -d",
+    "compose:dev": "pnpm env:dev -- docker compose up -d",
     "build": "nest build",
     "build:dto": "tsc -p tsconfig.dto.json",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -24,11 +24,13 @@
     "test:cov": "vitest --coverage --config ./vitest.config.unit.mts",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/vitest --runInBand",
     "test:e2e": "vitest --config ./vitest.config.e2e.mts",
+    "db-generate": "npx prisma generate",
     "db-migrate": "pnpm env:dev -- npx prisma migrate dev",
+    "db-migrate:test": "pnpm env:test -- npx prisma migrate deploy",
+    "db-migrate:prod": "pnpm env:prod -- npx prisma migrate deploy",
     "db-studio": "pnpm env:dev -- npx prisma studio",
     "db-seed": "pnpm env:dev -- npx prisma db seed",
-    "db-seed:force": "pnpm env:dev -- sh -c 'npx prisma db push --force-reset && npx prisma db seed'",
-    "db-migrate:test": "pnpm env:test -- npx prisma migrate dev"
+    "db-seed:force": "pnpm env:dev -- sh -c 'npx prisma db push --force-reset && npx prisma db seed'"
   },
   "prisma": {
     "schema": "src/prisma/schema.prisma",

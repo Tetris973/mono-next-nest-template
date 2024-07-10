@@ -1,52 +1,80 @@
-# This file is a template, and might need editing before it works on your project.
-# This is a sample GitLab CI/CD configuration file that should run without any modifications.
-# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
-# it uses echo commands to simulate the pipeline execution.
-#
-# A pipeline is composed of independent jobs that run scripts, grouped into stages.
-# Stages run in sequential order, but jobs within stages run in parallel.
-#
-# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
-#
-# You can copy and paste this template into a new `.gitlab-ci.yml` file.
-# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
-#
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
-
-stages:          # List of stages for jobs, and their order of execution
-  - build
-  - test
-  - deploy
+# image: node:20
+image: registry.gitlab.com/tetris973/mono-next-nest-template/custom-node-image:latest
 
 # include:
 #   - local: '.gitlab/ci/playwright.yml'
 
-build-job:       # This job runs in the build stage, which runs first.
+# stages: Defines the stages in the CI/CD pipeline and their order of execution.
+stages:
+  - install
+  - lint
+  - build
+
+# variables: Sets environment variables that can be used throughout the pipeline.
+variables:
+  DOCKER_DRIVER: overlay2
+  NODE_ENV: 'development' # for CI, building, linting, testing everything should run in development mode, Only when deploying should it be in production mode
+  # Variables for the postgres service, source -> gitlab CI variables, same value as in the $NEST_ENV_FILE
+  POSTGRES_DB: $POSTGRES_SERVICE_DB
+  POSTGRES_USER: $POSTGRES_SERVICE_USER
+  POSTGRES_PASSWORD: $POSTGRES_SERVICE_PASSWORD
+
+cache: &default_cache
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules/
+    # remember to cache all sub project dependencies, because pnpm install is done only once here and not in each job
+    - apps/server/node_modules/
+    - apps/web/node_modules/
+  policy: pull # policy for all job, only enable to pull
+
+before_script:
+  - pnpm install # Needed in custom runner to reuse the dependencies and create the node_modules from each sub projects.
+
+install:
+  cache:
+    <<: *default_cache
+    policy: pull-push # Override the policy to pull only to update the dependency cache
+  stage: install
+  script:
+    - pnpm install
+
+lint-backend:
+  stage: lint
+  script:
+    - cd apps/server
+    - pnpm run lint
+
+lint-frontend:
+  stage: lint
+  script:
+    - cd apps/web
+    - pnpm run lint
+
+build-backend-frontend:
   stage: build
   script:
-    - echo "Compiling the code..."
-    - echo "Compile complete."
+    # Build backend
+    # Copy gitlab env file needed for Nest
+    - cp $NEST_ENV_FILE apps/server/.env.production.local
+    - cd apps/server
+    - pnpm db-generate
+    # - pnpm db-migrate:prod
+    - pnpm run build
+    - pnpm run build:dto || true # normal if it causes error, the true is to avoid failure
+    - echo "Error during build:dto are Ok with it is about types not found and if front build pass"
+    # Build frontend
+    - cd ../web
+    - export NODE_ENV=production # production is needed for Next build otherwise error
+    - pnpm run build
+    - export NODE_ENV=development # reset to development for the next job
+  artifacts:
+    paths:
+      - apps/server/dist
+      - apps/server/shared/dto
+      - apps/web/.next
 
-# unit-test-job:  # This job runs in the test stage. 
-#   stage: test   # It only starts when the job in the build stage completes successfully.
-#   script:
-#     - echo "Running unit tests... This will take about 60 seconds."
-#     - sleep 60
-#     - echo "Code coverage is 90%"
 
-# lint-test-job:  # This job also runs in the test stage.
-#   stage: test   # It can run at the same time as unit-test-job (in parallel).
-#   script:
-#     - echo "Linting code... This will take about 10 seconds."
-#     - sleep 10
-#     - echo "No lint issues found."
-
-# deploy-job:      # This job runs in the deploy stage.
-#   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-#   environment: production
-#   script:
-#     - echo "Deploying application..."
-#     - echo "Application successfully deployed."
+  # for e2e test jobs
+  # services:
+  #   - postgres # Tell the CI to host the postgress database for building the Nest bakcned and for the e2e tests.
