@@ -9,10 +9,10 @@ services:
     container_name: local_pgdb
     # The container will always restart if it stops. Useful for realiability of database services.
     restart: always
-    env_file:
-      # Loads the environment variables for inside the container from the specified file.
-      - .env.production.local
-      - .env.development.local # Latest file will override the previous one.
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
     volumes:
       # Mounts a volume named postgres (define below) at /var/lib/postgresql/data inside the container.
       # This is done so that the data persists even if the container is stopped or removed.

@@ -18,6 +18,7 @@
         "**/test/*",
         "**/*.stories.ts",
         "**/*.stories.tsx",
-        "**/.github/*"
+        "**/.github/*",
+        "playwright.config.ts"
     ]
 }
