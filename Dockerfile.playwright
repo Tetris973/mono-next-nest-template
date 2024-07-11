@@ -1,0 +1,7 @@
+# Extend our custom node image
+FROM registry.gitlab.com/tetris973/mono-next-nest-template/custom-node-image:latest
+
+# Install the playwright browser with all its dependencies, needed for the e2e tests from the frontend
+RUN npx -y playwright@1.45.1 install --with-deps
+
+CMD ["node"]

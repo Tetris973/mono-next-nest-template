@@ -8,7 +8,8 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: ['plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended', 'next/core-web-vitals', 'plugin:storybook/recommended'],
+  // Prettier must be the last, to avoit conflicts with other plugins
+  extends: ['plugin:@typescript-eslint/recommended', 'next/core-web-vitals', 'plugin:storybook/recommended', 'plugin:prettier/recommended'],
   root: true,
   env: {
     node: true,
@@ -19,5 +20,7 @@ module.exports = {
     ...sharedRules,
     // To remove a warning from eslint, this rule target the old version of next.js with pages routing
     '@next/next/no-html-link-for-pages': 'off',
+    // Added so that lint command also fix prettier errors
+    'prettier/prettier': 'error',
   },
 };

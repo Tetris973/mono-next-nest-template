@@ -105,6 +105,9 @@ describe('ProfileContext', () => {
   });
 
   it('throws error when useProfile is used outside of ProfileProvider', () => {
-    expect(() => renderHook(() => useProfile())).toThrowError('useProfile must be used within a ProfileProvider');
+    const errorMessage = 'useProfile must be used within a ProfileProvider';
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() => renderHook(() => useProfile())).toThrowError(errorMessage);
+    expect(consoleErrorSpy).toHaveBeenNthCalledWith(1, expect.stringMatching(errorMessage), expect.any(Error));
   });
 });

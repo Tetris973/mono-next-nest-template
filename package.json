@@ -17,6 +17,22 @@
     "apps/server/test/**/*.ts": [
       "eslint --fix",
       "prettier --write"
+    ],
+    "apps/web/src/**/*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "apps/web/src/**/*.tsx": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "apps/web/test/**/*.tsx": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "apps/web/test/**/*.ts": [
+      "eslint --fix",
+      "prettier --write"
     ]
   },
   "keywords": [],

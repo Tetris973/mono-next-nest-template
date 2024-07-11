@@ -122,6 +122,9 @@ describe('AuthContext', () => {
 
   it('throws error when useAuth is used outside of AuthProvider', () => {
     // expect an error thrown
-    expect(() => renderHook(() => useAuth())).toThrowError('useAuth must be used within an AuthProvider');
+    const errorMessage = 'useAuth must be used within an AuthProvider';
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() => renderHook(() => useAuth())).toThrowError(errorMessage);
+    expect(consoleErrorSpy).toHaveBeenNthCalledWith(1, expect.stringMatching(errorMessage), expect.any(Error));
   });
 });
