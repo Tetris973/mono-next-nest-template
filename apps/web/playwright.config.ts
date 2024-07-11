@@ -68,7 +68,7 @@ export default defineConfig({
   webServer: [
     {
       // This command will start the Nestjs server
-      command: 'npm run start',
+      command: 'npm run start:prod',
       url: 'http://127.0.0.1:4000',
       reuseExistingServer: !process.env.CI,
       cwd: '../server',

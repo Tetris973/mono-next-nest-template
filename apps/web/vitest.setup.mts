@@ -1,6 +1,6 @@
 // To extend the the expect object with jest-dom suach as toHaveAttribute
 import '@testing-library/jest-dom/vitest'
-import { afterEach, vi } from 'vitest';
+import { afterEach, vi, beforeEach } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import { safeFetch } from '@web/app/utils/safe-fetch.utils';
 import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
@@ -82,6 +82,20 @@ function mockCheckAuthentication() {
 vi.mock('@web/app/utils/check-authentication.utils', () => ({
     checkAuthentication: vi.fn().mockImplementation(mockCheckAuthentication),
 }));
+
+beforeEach(() => {
+    /** 
+     * Sometimes we mock the console.error because jsdom display error from component in the console as error even if catched, which pollutes the test output.
+     * So to prevent forgetting about resetting the console.error, we reset it here before each test.
+     * To check for the jsom error in test, use the following template
+     * 
+     * @example
+     * const errorMessage = 'Error message';
+     * const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+     * expect(consoleErrorSpy).toHaveBeenNthCalledWith(1, expect.stringMatching(errorMessage), expect.any(Error));
+     */
+    vi.spyOn(console, 'error').mockRestore();
+});
 
 afterEach(() => {
     /**

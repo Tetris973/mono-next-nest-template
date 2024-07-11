@@ -90,7 +90,30 @@ unit-test-frontend:
     - cd apps/web
     - pnpm run test
 
+e2e-test-backend:
+  services:
+    - postgres # Tell the CI to host the postgress database for tests
+  stage: test
+  script:
+    - export NODE_ENV=test
+    - cd apps/server
+    - cp $NEST_ENV_FILE ./.env.test.local
+    - pnpm db-generate
+    - pnpm db-migrate:test # Create and seed the test_db database
+    - pnpm run test:e2e
 
-  # for e2e test jobs
-  # services:
-  #   - postgres # Tell the CI to host the postgress database for building the Nest bakcned and for the e2e tests.
+e2e-test-frontend:
+  image: registry.gitlab.com/tetris973/mono-next-nest-template/custom-playwright-image:latest # Use custom playwright image built with all its dependencies
+  services:
+    - postgres
+  stage: test
+  script:
+    - export NODE_ENV=production
+    # setup the backend that is used for the frontend test
+    - cd apps/server
+    - cp $NEST_ENV_FILE ./.env.production.local
+    - pnpm db-generate # needs the prisma client to seed the database
+    - pnpm db-migrate:prod # Create and seed the prod_db database, because starting nest in prod mode
+    - cd ../web
+    - pnpm exec playwright install # Install the playwright browser needed for tests
+    - pnpm run test:e2e # This command will seed the prod_db database and run the playwright test that runs both server in production mode

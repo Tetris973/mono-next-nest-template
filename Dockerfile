@@ -1,4 +1,9 @@
 # Platform is necessary otherwise when building the image on mac, the platform is ARM
+# We use node:20.13.1-bookworm-slim because:
+# 1. It's based on Debian Bookworm (stable, long support)
+# 2. Uses Node.js LTS version for stability
+# 3. Slim variant reduces image size and potential vulnerabilities
+# 4. Maintains glibc compatibility for better runtime support
 FROM --platform=linux/amd64 node:20.13.1-bookworm-slim
 
 # Install OpenSSL needed for Prisma

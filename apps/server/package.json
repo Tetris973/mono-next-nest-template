@@ -30,6 +30,7 @@
     "db-migrate:prod": "pnpm env:prod -- npx prisma migrate deploy",
     "db-studio": "pnpm env:dev -- npx prisma studio",
     "db-seed": "pnpm env:dev -- npx prisma db seed",
+    "db-seed:prod": "pnpm env:prod -- npx prisma db seed",
     "db-seed:force": "pnpm env:dev -- sh -c 'npx prisma db push --force-reset && npx prisma db seed'"
   },
   "prisma": {
