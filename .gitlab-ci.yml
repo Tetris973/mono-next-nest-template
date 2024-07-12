@@ -27,6 +27,7 @@ cache: &default_cache
     # remember to cache all sub project dependencies, because pnpm install is done only once here and not in each job
     - apps/server/node_modules/
     - apps/web/node_modules/
+    - apps/web/.next/cache/
   policy: pull # policy for all job, only enable to pull
 
 before_script:

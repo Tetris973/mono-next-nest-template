@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { INestApplication } from '@nestjs/common';
 import metadata from './metadata';
 import helmet from 'helmet';
+import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 
 /**
  * Setup Swagger documentation as web service for the application
@@ -37,7 +38,10 @@ export async function setupSwagger(app: INestApplication) {
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // bufferLogs: true is needed for PinoLoggin to work
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  app.useLogger(app.get(Logger));
+  app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
   // Add security headers
   // Helmet and CORS must be added before module that may use app.use(...)
