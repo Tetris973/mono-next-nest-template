@@ -11,16 +11,19 @@ import { APP_INTERCEPTOR, APP_PIPE, Reflector, APP_FILTER } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 import { AllExceptionsFilter } from './all-exceptions.filter';
 import { customValidationPipe } from './custom-validation.pipe';
+import { PinoLoggerModule } from './pino-logger.module';
+import { LoggerErrorInterceptor } from 'nestjs-pino';
 
 @Module({
   imports: [
     // !!! This import must be before any other !!!
-    ConfigModule, // Custom config modul
+    ConfigModule, // Custom config module
     PrismaModule,
     AuthModule,
     UserModule,
     AuthzModule,
     RoleModule,
+    PinoLoggerModule,
   ],
   controllers: [AppController],
   providers: [
@@ -41,6 +44,11 @@ import { customValidationPipe } from './custom-validation.pipe';
         }),
       // This tells NestJS to inject the Reflector service into the factory
       inject: [Reflector],
+    },
+    {
+      // Enable auto loggin of server errors in Tests
+      provide: APP_INTERCEPTOR,
+      useClass: LoggerErrorInterceptor,
     },
     {
       provide: APP_FILTER,
