@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Providers } from './providers';
-import '@web/library/fontawesome';
+import '@web/lib/fontawesome';
 
 const inter = Inter({ subsets: ['latin'] });
 

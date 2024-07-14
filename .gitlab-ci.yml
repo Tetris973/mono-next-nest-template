@@ -55,6 +55,9 @@ lint-frontend:
 
 build-backend-frontend:
   stage: build
+  cache:
+    <<: *default_cache
+    policy: pull-push # Override the policy to pull only to update the next build cache
   script:
     # Build backend
     # Copy gitlab env file needed for Nest
