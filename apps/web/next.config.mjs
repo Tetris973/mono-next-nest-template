@@ -6,9 +6,18 @@ const nextConfig = {
   // With multiple extension, the pages are not found 404 error
   // pageExtensions: ['page.tsx'],
 
+  // Developement only feature to highlight potential issues in the code
+  reactStrictMode: true,
+
   // Required otherwise next build with unwanted files, like .stories.tsx, spec, ...
   typescript: {
     tsconfigPath: './tsconfig.build.json',
+  },
+
+  experimental: {
+    // Enable the use of root intrumentation hook, loaded at the start of the application
+    // Used for loading environment variables and configuration
+    instrumentationHook: true,
   },
 };
 

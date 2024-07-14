@@ -40,7 +40,8 @@ test.describe('Protected Routes', () => {
 
     test('should redirect to login page when login out', async ({ page }) => {
       // Go to profile page as logged in user
-      await navigateWithRetry(page, PROFILE_URL);
+      await page.goto(PROFILE_URL);
+      await page.waitForURL(PROFILE_URL);
 
       // Logout
       await page.getByRole('button', { name: 'testUser' }).click();
@@ -62,12 +63,12 @@ test.describe('Protected Routes', () => {
 
     test('should redirect to login page when logging out', async ({ page }) => {
       // Go to dashboard page as logged in user
-      await navigateWithRetry(page, USER_DASHBOARD_URL);
+      await page.goto(USER_DASHBOARD_URL);
+      await page.waitForURL(USER_DASHBOARD_URL);
 
       // Logout
       await page.getByRole('button', { name: 'testUser' }).click();
       await page.getByRole('menuitem', { name: 'Logout' }).click();
-
       await expect(page).toHaveURL(LOGIN_URL);
     });
   });

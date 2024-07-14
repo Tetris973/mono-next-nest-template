@@ -12,6 +12,6 @@ export default () => ({
   runSwagger: process.env.NODE_ENV === 'development',
   // Log to console prettified by default
   logTarget: (process.env.LOG_TARGET as LogTarget) || LogTarget.PinoPretty,
-  // Log level is set to SILENT by default
-  logLevel: (process.env.LOG_LEVEL as LogLevel) || LogLevel.SILENT,
+  // Log level is set to INFO by default
+  logLevel: (process.env.LOG_LEVEL as LogLevel) || LogLevel.INFO,
 });
