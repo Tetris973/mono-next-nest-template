@@ -6,6 +6,9 @@ import { safeFetch } from '@web/app/utils/safe-fetch.utils';
 import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
 import { mockToast } from '@web/app/utils/test/mock-toast.utils';
 import { mockRouter } from '@web/app/utils/test/mock-router.utils';
+import { getLogger, clearLogs, getLogs } from '@web/app/utils/test/test-logger.utils';
+
+
 
 vi.mock('next/navigation', () => ({
     useRouter: () => mockRouter,
@@ -13,6 +16,10 @@ vi.mock('next/navigation', () => ({
 
 vi.mock('@web/app/utils/toast-utils.use', () => ({
     useCustomToast: () => mockToast,
+}));
+
+vi.mock('@web/lib/logger', () => ({
+  getLogger: vi.fn().mockImplementation((context?: string) => getLogger(context)),
 }));
 
 /**
@@ -95,6 +102,11 @@ beforeEach(() => {
      * expect(consoleErrorSpy).toHaveBeenNthCalledWith(1, expect.stringMatching(errorMessage), expect.any(Error));
      */
     vi.spyOn(console, 'error').mockRestore();
+
+    /**
+     * Clear the logs of the mock test-logger before each test
+     */
+    clearLogs();
 });
 
 afterEach(() => {

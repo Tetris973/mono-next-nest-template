@@ -74,5 +74,10 @@
   "devDependencies": {
     "husky": "^9.0.11",
     "lint-staged": "^15.2.5"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "next@14.2.4": "patches/next@14.2.4.patch"
+    }
   }
 }

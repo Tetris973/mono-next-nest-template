@@ -18,6 +18,9 @@ const nextConfig = {
     // Enable the use of root intrumentation hook, loaded at the start of the application
     // Used for loading environment variables and configuration
     instrumentationHook: true,
+
+    // Needed for the logger to work in the server components
+    serverComponentsExternalPackages: ['pino', 'pino-pretty'],
   },
 };
 

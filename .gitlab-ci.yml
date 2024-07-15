@@ -1,9 +1,6 @@
 # image: node:20
 image: registry.gitlab.com/tetris973/mono-next-nest-template/custom-node-image:latest
 
-# include:
-#   - local: '.gitlab/ci/playwright.yml'
-
 # stages: Defines the stages in the CI/CD pipeline and their order of execution.
 stages:
   - install

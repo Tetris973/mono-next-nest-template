@@ -1,5 +1,8 @@
 import { HttpStatus } from '@web/app/common/http-status.enum';
 import { ActionResponse } from '@web/app/common/action-response.type';
+import { getLogger } from '@web/app/utils/test/test-logger.utils';
+
+const logger = getLogger('safeFetch');
 
 /**
  * Safe fetch utility function to handle fetch errors and provide a consistent error response.
@@ -13,8 +16,8 @@ export const safeFetch = async (url: RequestInfo, options?: RequestInit): Promis
     return { result: response };
   } catch (error: any) {
     // Determine the type of error
-    // TODO determine if the message are okay
-    let message = 'An unknown error occurred. Please try again later.';
+    // TODO: determine if the message are okay
+    let message = 'An unknown error occurred!';
     if (error instanceof TypeError) {
       message = 'Network error or invalid URL.';
     } else if (error.name === 'AbortError') {
@@ -22,9 +25,7 @@ export const safeFetch = async (url: RequestInfo, options?: RequestInit): Promis
     } else if (error.message && error.message.includes('CORS')) {
       message = 'CORS error: The request was blocked by the browser due to same-origin policy.';
     }
-
-    // Log the error for debugging
-    console.error(`Fetch error: ${message}`, error);
+    logger.error(error, `Fetch error: ${message}`);
 
     // Return a consistent error response
     return {

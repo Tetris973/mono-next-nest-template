@@ -13,7 +13,7 @@ import {
 import { Logger } from '@nestjs/common';
 import { LogLevel, LogTarget } from './log.config';
 
-enum Environment {
+enum NodeEnv {
   Development = 'development',
   Production = 'production',
   Test = 'test',
@@ -25,8 +25,8 @@ enum Environment {
  */
 class EnvironmentVariables {
   @Expose()
-  @IsEnum(Environment)
-  readonly NODE_ENV!: Environment;
+  @IsEnum(NodeEnv)
+  readonly NODE_ENV!: NodeEnv;
 
   @Expose()
   @IsOptional() // If not given it will defualt to 4000, see ./configuration.ts file
