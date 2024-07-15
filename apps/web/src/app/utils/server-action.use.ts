@@ -1,4 +1,7 @@
 import { useState, useCallback } from 'react';
+import { getLogger } from '@web/app/utils/test/test-logger.utils';
+
+const logger = getLogger('useServerAction');
 
 /**
  * Custom hook to handle server actions with loading state management.
@@ -55,7 +58,7 @@ export const useServerAction = <P extends any[], R>(
         if (onFinished) onFinished(result);
         return result;
       } catch (error) {
-        console.error('Error during action execution:', error);
+        logger.error(error, 'Error during server action execution');
         throw error;
       } finally {
         setSubmitLoading(false);

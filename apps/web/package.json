@@ -13,7 +13,8 @@
     "lint": "next lint --fix",
     "ts-check": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "debug": "NODE_OPTIONS='--inspect' next dev"
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.2.0",
@@ -27,6 +28,9 @@
     "jwt-decode": "^4.0.0",
     "next": "14.2.4",
     "nookies": "^2.5.2",
+    "path": "^0.12.7",
+    "pino": "^9.2.0",
+    "pino-http": "^10.2.0",
     "react": "^18",
     "react-dom": "^18",
     "zod": "^3.23.8"
@@ -47,6 +51,7 @@
     "eslint-config-next": "14.2.4",
     "eslint-plugin-storybook": "^0.8.0",
     "jsdom": "^24.1.0",
+    "pino-pretty": "^11.2.1",
     "storybook": "^8.1.11",
     "typescript": "^5.5.3",
     "vite-tsconfig-paths": "^4.3.2",

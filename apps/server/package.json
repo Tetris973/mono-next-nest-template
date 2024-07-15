@@ -61,7 +61,6 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pino-http": "^10.2.0",
-    "pino-pretty": "^11.2.1",
     "prisma-extension-kysely": "^2.1.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
@@ -86,6 +85,7 @@
     "eslint": "^8",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
+    "pino-pretty": "^11.2.1",
     "prettier": "^3.0.0",
     "prisma": "^5.12.1",
     "prisma-kysely": "^1.8.0",

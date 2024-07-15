@@ -1,0 +1,25 @@
+{
+    // Launch.json to be able to debug the Nextjs app
+    // First start the app with npm debug (it should be of the form "NODE_OPTIONS='--inspect' next dev")
+    // Then start the "attach to Node" configuration in VSCode debuger
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach to Node",
+            "port": 9230,
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "cwd": "${workspaceFolder}/apps/web"
+        },
+        {
+            "name": "Next.js: debug client-side",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000",
+            "cwd": "${workspaceFolder}/apps/web",
+        },
+    ]
+}

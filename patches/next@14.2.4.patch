@@ -1,0 +1,24 @@
+diff --git a/dist/server/lib/start-server.js b/dist/server/lib/start-server.js
+index 43b044d7519175ec4de684d3eb042d6b0506295b..2a378758f106653c5b5817f0c8a30d04866b70e0 100644
+--- a/dist/server/lib/start-server.js
++++ b/dist/server/lib/start-server.js
+@@ -39,6 +39,9 @@ const _appinfolog = require("./app-info-log");
+ const _turbopackwarning = require("../../lib/turbopack-warning");
+ const _trace = require("../../trace");
+ const _ispostpone = require("./router-utils/is-postpone");
++// Custom patch of Nextjs to be able to log the request and response with pino-http
++const createPinoHttpLogger = require(_path.default.resolve(process.cwd(), 'src/lib/http-logger'));
++const _logger = createPinoHttpLogger();
+ function _interop_require_default(obj) {
+     return obj && obj.__esModule ? obj : {
+         default: obj
+@@ -133,6 +136,9 @@ async function startServer(serverOptions) {
+         throw new Error("Using a self signed certificate is only supported with `next dev`.");
+     }
+     async function requestListener(req, res) {
++        // Custom patch of Nextjs to be able to log the request and response with pino-http
++        // Skip loggins static assets
++        if (!/^(\/_next\/static|\/_next\/image|\/favicon.ico)/.test(req.url)) _logger(req, res);
+         try {
+             if (handlersPromise) {
+                 await handlersPromise;

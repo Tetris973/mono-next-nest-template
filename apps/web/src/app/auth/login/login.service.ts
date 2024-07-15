@@ -10,6 +10,9 @@ import { JwtPayload } from '@web/app/auth/jwt-payload.interface';
 import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';
 import { safeFetch } from '@web/app/utils/safe-fetch.utils';
 import { DtoValidationError } from '@web/app/common/dto-validation-error.type';
+import { getLogger } from '@web/lib/logger';
+
+const logger = getLogger('Login');
 
 /**
  * Set the authentication cookie from the response.
@@ -72,7 +75,7 @@ export const loginAction = async (loginData: LoginUserDto): Promise<ActionRespon
     try {
       setAuthCookie(res);
     } catch (error) {
-      console.error('Fatal Error setting authentication cookie', error);
+      logger.error({ error }, 'Error setting authentication cookie');
       return {
         error: { message: 'An unexpected error occurred, please try again', status: HttpStatus.INTERNAL_SERVER_ERROR },
       };
@@ -100,7 +103,7 @@ export const getRolesAction = async (): Promise<Role[]> => {
     const decodedToken = jwtDecode<JwtPayload>(token);
     return decodedToken.roles;
   } catch (error) {
-    console.error('Error decoding token for roles', error);
+    logger.error({ error }, 'Error decoding token for roles');
     return [];
   }
 };
