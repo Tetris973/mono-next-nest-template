@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ProfileForm } from './ProfileForm';
 import { UserDto } from '@dto/user/dto/user.dto';
-import { mockToast } from '@web/app/utils/test/mock-toast.utils';
+import { mockToast } from '@testWeb/utils/unit-test/mock-toast.utils';
 
 describe('ProfileForm', () => {
   const mockUser: UserDto = {

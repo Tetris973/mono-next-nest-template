@@ -125,11 +125,14 @@
     //"strictPropertyInitialization": true, // Ensures class properties are correctly initialized.
     //"strictNullChecks": true, // Enforces strict null and undefined checks.
     "paths": {
-      "@server/*": [
-        "./apps/server/src/*"
-      ],
       "@web/*": [
         "./apps/web/src/*"
+      ],
+      "@testWeb/*": [
+        "./apps/web/test/*"
+      ],
+      "@server/*": [
+        "./apps/server/src/*"
       ],
       "@testServer/*": [
         "./apps/server/test/*"

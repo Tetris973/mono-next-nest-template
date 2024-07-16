@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { LoginForm } from './LoginForm';
-import { mockToast } from '@web/app/utils/test/mock-toast.utils';
+import { mockToast } from '@testWeb/utils/unit-test/mock-toast.utils';
 
 describe('LoginForm', () => {
   const mockUseLoginProps = {

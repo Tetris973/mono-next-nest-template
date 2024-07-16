@@ -1,4 +1,4 @@
-import { BASE_URL } from '../config/urls';
+import { BASE_URL } from '@testWeb/config/urls';
 import { Page } from '@playwright/test';
 
 /**

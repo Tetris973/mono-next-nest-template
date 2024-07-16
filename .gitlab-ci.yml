@@ -88,6 +88,7 @@ unit-test-backend:
 unit-test-frontend:
   stage: test
   script:
+    - export NODE_ENV=test
     - cd apps/web
     - pnpm run test
 

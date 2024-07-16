@@ -1,5 +1,5 @@
 import { Page, expect } from '@playwright/test';
-import { LOGIN_URL, BASE_URL } from '../config/urls';
+import { LOGIN_URL, BASE_URL } from '@testWeb/config/urls';
 
 /**
  * Login a test user through the UI and go to the home page

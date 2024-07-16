@@ -1,4 +1,4 @@
-import { describe, beforeEach, it, expect } from 'vitest';
+import { describe, beforeAll, beforeEach, it, expect } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, HttpStatus } from '@nestjs/common';
 import request from 'supertest';
@@ -6,7 +6,7 @@ import { AppModule } from './../src/app.module';
 import { CreateUserDto } from '@server/user/dto/create-user.dto';
 import { seedRoles } from '@server/prisma/seeding/role.seed';
 import { PrismaService } from '@server/prisma/prisma.service';
-import { TestPrismaService } from './testPrisma.service';
+import { TestPrismaService } from './utils/testPrisma.service';
 import { LoginUserDto } from '@server/user/dto/log-in-user.dto';
 import { ConfigService } from '@nestjs/config';
 import ms from 'ms';
@@ -15,7 +15,7 @@ describe('AuthController (e2e)', () => {
   let app: INestApplication;
   let prisma: PrismaService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
       providers: [{ provide: PrismaService, useValue: TestPrismaService.getInstance() }],
@@ -24,9 +24,11 @@ describe('AuthController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     prisma = moduleFixture.get<PrismaService>(PrismaService);
 
-    await seedRoles(prisma);
-
     await app.init();
+  });
+
+  beforeEach(async () => {
+    await seedRoles(prisma);
   });
 
   describe('/auth/profile (GET)', () => {

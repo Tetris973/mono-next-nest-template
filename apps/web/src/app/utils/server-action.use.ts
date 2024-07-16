@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { getLogger } from '@web/app/utils/test/test-logger.utils';
+import { getLogger } from '@web/lib/logger';
 
 const logger = getLogger('useServerAction');
 

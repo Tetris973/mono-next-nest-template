@@ -30,6 +30,11 @@ export const rootLogger = pino(
  * @returns The logger
  */
 export function getLogger(context?: string) {
+  if (process.env.NODE_ENV !== 'test') {
+    throw new Error(
+      'This testLogger should only be used in test environment, you may have mistaken this loggger with the app/lib/logger.ts',
+    );
+  }
   return context ? rootLogger.child({ context }) : rootLogger;
 }
 
