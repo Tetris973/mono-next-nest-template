@@ -10,7 +10,7 @@ import { seedResources } from '@server/prisma/seeding/resource.seed';
 import { seedPermissions, Permissions } from '@server/prisma/seeding/permission.seed';
 import { seedRolePermission } from '@server/prisma/seeding/role-permission.seed';
 import { BaseRoles } from '@server/authz/baseRoles.enum';
-import { TestPrismaService } from '@testServer/testPrisma.service';
+import { TestPrismaService } from '@testServer/utils/testPrisma.service';
 
 describe('UserRepository', () => {
   let repository: UserRepository;

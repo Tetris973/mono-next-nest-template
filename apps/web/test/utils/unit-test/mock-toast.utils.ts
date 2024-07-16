@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import { ToastUtils } from '../toast-utils.use';
+import { ToastUtils } from '@web/app/utils/toast-utils.use';
 
 /**
  * This is a mock implementation of the toast utils. It is used to mock the toast utils in the test environment.

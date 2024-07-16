@@ -9,7 +9,7 @@ import { LogLevel } from './config/log.config';
  *
  * @see https://github.com/iamolegga/nestjs-pino
  */
-export const loggerConfig: LoggerModuleAsyncParams = {
+const loggerConfig: LoggerModuleAsyncParams = {
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: async (configService: ConfigService): Promise<PinoParams> => {

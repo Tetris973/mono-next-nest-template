@@ -1,6 +1,6 @@
 import { HttpStatus } from '@web/app/common/http-status.enum';
 import { ActionResponse } from '@web/app/common/action-response.type';
-import { getLogger } from '@web/app/utils/test/test-logger.utils';
+import { getLogger } from '@web/lib/logger';
 
 const logger = getLogger('safeFetch');
 
