@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   loginAction as defaultLoginAction,
   isAuthenticatedAction as defaultIsAuthenticatedAction,
@@ -45,7 +44,6 @@ export const AuthProvider: React.FC<React.PropsWithChildren<AuthProviderDependen
   const [loginPending, loginActionM] = useServerAction(loginAction);
   const [logoutPending, logoutActionM] = useServerAction(logoutAction);
   const [getRolesPending, getRolesActionM] = useServerAction(getRolesAction);
-  const router = useRouter();
 
   const loading = loginPending || logoutPending || getRolesPending;
 
@@ -73,7 +71,6 @@ export const AuthProvider: React.FC<React.PropsWithChildren<AuthProviderDependen
     await logoutActionM();
     setIsAuthenticated(false);
     setRoles([]);
-    router.push('/');
   };
 
   return (

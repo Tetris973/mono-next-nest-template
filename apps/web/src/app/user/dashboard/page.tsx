@@ -1,12 +1,13 @@
 import { Dashboard } from './Dashboard';
-import { ProtectedRoute } from '@web/app/auth/ProtectedRoute';
+import { ProtectedRoute } from '@web/app/auth/protected-route.service';
 import { Header } from '@web/app/components/Header';
 
-export default function DashboardPage(): JSX.Element {
+export default async function DashboardPage(): Promise<JSX.Element> {
+  await ProtectedRoute();
   return (
-    <ProtectedRoute>
+    <>
       <Header />
       <Dashboard />
-    </ProtectedRoute>
+    </>
   );
 }

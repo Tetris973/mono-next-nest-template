@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { AuthProvider, useAuth, AuthProviderDependencies } from './AuthContext';
 import { Role } from './role.enum';
-import { mockRouter } from '@testWeb/utils/unit-test/mock-router.utils';
 
 describe('AuthContext', () => {
   const mockLoginAction = vi.fn();
@@ -117,7 +116,6 @@ describe('AuthContext', () => {
     expect(result.current.isAuthenticated).toBe(false);
     expect(result.current.roles).toEqual([]);
     expect(result.current.loading).toBe(false);
-    expect(mockRouter.push).toHaveBeenCalledWith('/');
   });
 
   it('throws error when useAuth is used outside of AuthProvider', () => {
