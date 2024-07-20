@@ -1,20 +1,4 @@
-import { User } from '@prisma/client';
-import { Expose } from 'class-transformer';
-import { ApiHideProperty } from '@nestjs/swagger';
+import { OmitType } from '@nestjs/swagger';
+import { FullUserDto } from './full-user.dto';
 
-export class UserDto implements User {
-  @Expose()
-  readonly id!: number;
-
-  @Expose()
-  readonly username!: string;
-
-  @Expose()
-  readonly createdAt!: Date;
-
-  @Expose()
-  readonly updatedAt!: Date;
-
-  @ApiHideProperty()
-  readonly password!: string;
-}
+export class UserDto extends OmitType(FullUserDto, ['password'] as const) {}

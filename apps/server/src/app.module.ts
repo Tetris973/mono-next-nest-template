@@ -2,12 +2,13 @@ import { Module, ClassSerializerInterceptor, MiddlewareConsumer, NestModule } fr
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { JwtAuthGuard } from './auth/passport/jwt-auth.guard';
 import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthzModule } from './authz/authz.module';
 import { RoleModule } from './role/role.module';
 import { ConfigModule } from './config/config.module';
-import { APP_INTERCEPTOR, APP_PIPE, Reflector, APP_FILTER } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_PIPE, Reflector, APP_FILTER, APP_GUARD } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 import { AllExceptionsFilter } from './all-exceptions.filter';
 import { customValidationPipe } from './custom-validation.pipe';
@@ -54,6 +55,11 @@ import { LoggerErrorInterceptor } from 'nestjs-pino';
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
     },
+    {
+      // TODO: Maybe move this to the app module ?
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    } /* Bind the JwtAuth Guard globaly so all endpoint are protected by default */,
   ],
 })
 export class AppModule implements NestModule {
