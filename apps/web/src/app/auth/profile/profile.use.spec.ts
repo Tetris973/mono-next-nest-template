@@ -19,7 +19,6 @@ describe('useProfileForm', () => {
     username: 'testUser',
     createdAt: new Date(),
     updatedAt: new Date(),
-    password: 'password', // TODO: check what to do about this
   };
 
   beforeEach(() => {
