@@ -9,25 +9,50 @@ export function createServerLogger() {
   }
 
   const { NODE_ENV, LOG_LEVEL, LOG_TARGET } = getConfig();
-  const isTargetFile = LOG_TARGET === LogTarget.PinoFile;
+
+  const fileTransport = {
+    target: 'pino/file',
+    options: {
+      destination: join(process.cwd(), 'logs', `${NODE_ENV}.log`),
+      mkdir: true,
+    },
+  };
+
+  const consoleTransport = {
+    target: 'pino-pretty',
+    options: {
+      colorize: true,
+      singleLine: true,
+    },
+  };
+
+  const defaultConsoleTransport = {
+    target: 'pino/file',
+    options: {
+      destination: 1, // stdout
+    },
+  };
 
   let transport;
-  if (isTargetFile) {
-    transport = {
-      target: 'pino/file',
-      options: {
-        destination: join(process.cwd(), 'logs', `${NODE_ENV}.log`),
-        mkdir: true,
-      },
-    };
-  } else {
-    transport = {
-      target: 'pino-pretty',
-      options: {
-        colorize: true,
-        singleLine: true,
-      },
-    };
+  switch (LOG_TARGET) {
+    case LogTarget.PinoPretty:
+      transport = consoleTransport;
+      break;
+    case LogTarget.PinoFile:
+      transport = fileTransport;
+      break;
+    case LogTarget.PinoPrettyAndFile:
+      transport = {
+        targets: [fileTransport, consoleTransport],
+      };
+      break;
+    case LogTarget.PinoDefaultAndFile:
+      transport = {
+        targets: [fileTransport, defaultConsoleTransport],
+      };
+      break;
+    default:
+      transport = defaultConsoleTransport;
   }
 
   const logger = pino({
