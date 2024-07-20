@@ -1,7 +1,7 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule, LoggerModuleAsyncParams, Params as PinoParams } from 'nestjs-pino';
 import { join } from 'path';
-import { LogLevel } from './config/log.config';
+import { LogLevel, LogTarget } from './config/log.config';
 
 /**
  * Pino logger module for NestJS
@@ -15,25 +15,51 @@ const loggerConfig: LoggerModuleAsyncParams = {
   useFactory: async (configService: ConfigService): Promise<PinoParams> => {
     const nodeEnv = configService.get<string>('NODE_ENV');
     const logLevel = configService.get<LogLevel>('logLevel');
-    const isTargetFile = configService.get<string>('logTarget') === 'pino/file';
+    const logTarget = configService.get<LogTarget>('logTarget');
 
-    let transportOptions;
-    if (isTargetFile) {
-      transportOptions = {
-        target: 'pino/file',
-        options: {
-          destination: join(process.cwd(), 'logs', `${nodeEnv}.log`),
-          mkdir: true,
-        },
-      };
-    } else {
-      transportOptions = {
-        target: 'pino-pretty',
-        options: {
-          colorize: true,
-          singleLine: true,
-        },
-      };
+    const fileTransport = {
+      target: 'pino/file',
+      options: {
+        destination: join(process.cwd(), 'logs', `${nodeEnv}.log`),
+        mkdir: true,
+      },
+    };
+
+    const consoleTransport = {
+      target: 'pino-pretty',
+      options: {
+        colorize: true,
+        singleLine: true,
+      },
+    };
+
+    const defaultConsoleTransport = {
+      target: 'pino/file',
+      options: {
+        destination: 1, // stdout
+      },
+    };
+
+    let transport;
+    switch (logTarget) {
+      case LogTarget.PinoPretty:
+        transport = consoleTransport;
+        break;
+      case LogTarget.PinoFile:
+        transport = fileTransport;
+        break;
+      case LogTarget.PinoPrettyAndFile:
+        transport = {
+          targets: [fileTransport, consoleTransport],
+        };
+        break;
+      case LogTarget.PinoDefaultAndFile:
+        transport = {
+          targets: [fileTransport, defaultConsoleTransport],
+        };
+        break;
+      default:
+        transport = defaultConsoleTransport; // Default to standard console logging if not specified
     }
 
     return {
@@ -41,9 +67,9 @@ const loggerConfig: LoggerModuleAsyncParams = {
         customProps: () => ({
           context: 'HTTP',
         }),
-        transport: transportOptions,
+        transport,
         level: logLevel,
-        redact: ['req.headers.authorization'], // Redact sensitive information
+        redact: ['req.headers.authorization'],
       },
     };
   },
