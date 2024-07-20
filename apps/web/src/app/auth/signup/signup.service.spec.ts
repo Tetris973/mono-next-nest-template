@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { signupAction } from './signup.service';
-import { BACKEND_URL } from '@web/app/constants/api';
+import { getConfig } from '@web/config/configuration';
 import { HttpStatus } from '@web/app/common/http-status.enum';
 import { CreateUserDto } from '@dto/user/dto/create-user.dto';
 import { safeFetch } from '@web/app/utils/safe-fetch.utils';
@@ -30,7 +30,7 @@ describe('signup.service', () => {
 
       // CHECK RESULTS
       expect(result).toEqual({ result: createUserDto });
-      expect(safeFetch).toHaveBeenCalledWith(`${BACKEND_URL}/auth/signup`, {
+      expect(safeFetch).toHaveBeenCalledWith(`${getConfig().BACKEND_URL}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

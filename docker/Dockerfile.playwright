@@ -1,3 +1,6 @@
+# Use folloiwng command to compile
+# docker buildx build --platform linux/amd64,linux/arm64 -t your-image:latest --push
+
 # Extend our custom node image
 FROM registry.gitlab.com/tetris973/mono-next-nest-template/custom-node-image:latest
 

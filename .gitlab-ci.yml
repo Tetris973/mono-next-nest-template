@@ -67,6 +67,8 @@ build-backend-frontend:
     - echo "Error during build:dto are Ok with it is about types not found and if front build pass"
     # Build frontend
     - cd ../web
+    # Copy the env file needed for Next build
+    - cp $NEXT_ENV_FILE ./.env.production.local
     - export NODE_ENV=production # production is needed for Next build otherwise error
     - pnpm run build
   artifacts:
@@ -117,5 +119,6 @@ e2e-test-frontend:
     - pnpm db-generate # needs the prisma client to seed the database
     - pnpm db-migrate:prod # Create and seed the prod_db database, because starting nest in prod mode
     - cd ../web
+    - cp $NEXT_ENV_FILE ./.env.production.local
     - pnpm exec playwright install # Install the playwright browser needed for tests
     - pnpm run test:e2e # This command will seed the prod_db database and run the playwright test that runs both server in production mode

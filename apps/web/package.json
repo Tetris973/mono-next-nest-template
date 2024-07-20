@@ -1,15 +1,20 @@
 {
   "name": "web",
   "version": "0.1.0",
+  "files": [
+    ".next/standalone/apps/web/"
+  ],
   "private": true,
   "scripts": {
+    "env:dev": "export NODE_ENV=development && dotenv -e .env.development.local",
+    "env:prod": "export NODE_ENV=production && dotenv -e .env.production.local",
     "preinstall": "npx only-allow pnpm",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "test": "vitest",
-    "test:e2e": "cd ../server && pnpm db-seed:prod && cd ../web && playwright test",
-    "test:e2e:ui": "playwright test --ui",
+    "test:e2e": "cd ../server && pnpm db-seed:prod && cd ../web && pnpm env:prod -- playwright test",
+    "test:e2e:ui": "pnpm env:prod -- playwright test --ui",
     "lint": "next lint --fix",
     "ts-check": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { getProfileAction } from './profile.service';
-import { BACKEND_URL } from '@web/app/constants/api';
+import { getConfig } from '@web/config/configuration';
 import { safeFetch } from '@web/app/utils/safe-fetch.utils';
 import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
 import { UserDto } from '@dto/user/dto/user.dto';
@@ -34,7 +34,7 @@ describe('profile.service', () => {
 
       // CHECK RESULTS
       expect(result).toEqual({ result: mockProfile });
-      expect(safeFetch).toHaveBeenCalledWith(`${BACKEND_URL}/auth/profile`, {
+      expect(safeFetch).toHaveBeenCalledWith(`${getConfig().BACKEND_URL}/auth/profile`, {
         headers: {
           Cookie: `Authentication=${mockToken}`,
         },

@@ -1,7 +1,7 @@
-import { createTestUser } from '../test/utils/create-user.utils';
-import { deleteTestUser } from '../test/utils/delete-user.utils';
+import { createTestUser } from '@testWeb/utils/create-user.utils';
+import { deleteTestUser } from '@testWeb/utils/delete-user.utils';
 import { UserDto } from '@dto/user/dto/user.dto';
-import { BACKEND_URL } from '@web/app/constants/api';
+import { getConfig } from '@web/config/configuration';
 import { test as baseTest, request } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
@@ -36,7 +36,7 @@ export const test = baseTest.extend<{ account: UserDto }, { workerStorageState: 
       account = await createTestUser(testName + id);
 
       // Login the account direclty from the backend
-      await context.post(`${BACKEND_URL}/auth/login`, {
+      await context.post(`${getConfig().BACKEND_URL}/auth/login`, {
         form: {
           username: account.username,
           password: account.password,

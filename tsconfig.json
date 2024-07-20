@@ -125,6 +125,9 @@
     //"strictPropertyInitialization": true, // Ensures class properties are correctly initialized.
     //"strictNullChecks": true, // Enforces strict null and undefined checks.
     "paths": {
+      "@webRoot/*": [
+        "./apps/web/*"
+      ],
       "@web/*": [
         "./apps/web/src/*"
       ],

@@ -1,22 +1,27 @@
-import { PrismaService } from '../prisma.service';
-
-import { seedUsers } from './user.seed';
-import { seedResources } from './resource.seed';
+import { PrismaService } from '@server/prisma/prisma.service';
+// import { seedResources } from './resource.seed';
 // import { seedPermissions } from './permission.seed';
-import { seedRoles } from './role.seed';
+import { seedUsers } from './user.seed';
 import { seedUserRoleRelations } from './user-role.seed';
-const prisma = new PrismaService();
 // import { seedRolePermission } from './role-permission.seed';
+import { seedProduction } from './production/all.seed';
+
+const prisma = new PrismaService();
 
 async function main() {
-  console.log('--- Seeding Resources... ---');
-  await seedResources(prisma, true);
+  /**
+   * Seed all production static data
+   */
+  await seedProduction(prisma);
+
+  /**
+   * Until permission, role-premission casl ability from database data or not used, then resources seeding is not needed
+   */
+  // console.log('--- Seeding Resources... ---');
+  // await seedResources(prisma, true);
 
   // console.log('--- Seeding Permissions... ---');
   // await seedPermissions(prisma, true);
-
-  console.log('--- Seeding Roles... ---');
-  await seedRoles(prisma, true);
 
   console.log('--- Seeding Users... ---');
   await seedUsers(prisma, true);

@@ -1,29 +1,22 @@
-# Platform is necessary otherwise when building the image on mac, the platform is ARM
-# We use node:20.13.1-bookworm-slim because:
+# To compile for Debian server Ci, production server and local develoment on the mac use the following command
+# docker buildx create --use
+# docker buildx build --platform linux/amd64,linux/arm64 -t your-image:latest --push
+
+# We use node:20-bookworm-slim because:
 # 1. It's based on Debian Bookworm (stable, long support)
 # 2. Uses Node.js LTS version for stability
 # 3. Slim variant reduces image size and potential vulnerabilities
 # 4. Maintains glibc compatibility for better runtime support
-FROM --platform=linux/amd64 node:20.13.1-bookworm-slim
+FROM node:20-bookworm-slim
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 # Install OpenSSL needed for Prisma
 RUN apt-get update -y && \
     apt-get install -y openssl libssl-dev ca-certificates && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
-# Install pnpm
-ARG PNPM_VERSION=9.x
-RUN npm install -g pnpm@${PNPM_VERSION}
-
-# Set shell for pnpm
-SHELL ["/bin/bash", "-c"]
-
-# Set up pnpm
-ENV SHELL="/bin/bash"
-RUN pnpm setup
-ENV PNPM_HOME="/root/.pnpm"
-ENV PATH="${PNPM_HOME}:${PATH}"
 
 # Install dotenv-cli
 RUN pnpm add -g dotenv-cli

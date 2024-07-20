@@ -9,7 +9,7 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   test: {
-    setupFiles: ['./vitest.setup.mts'],
+    setupFiles: ['./test/vitest.setup.mts'],
     environment: 'jsdom',
   },
 });

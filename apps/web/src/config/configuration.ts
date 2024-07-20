@@ -1,13 +1,28 @@
 import { envSchema, Env, BrowserEnv, browserEnvSchema } from './env';
 import { z } from 'zod';
 
-class ConfigError extends Error {
+export class ConfigError extends Error {
   constructor(
     message: string,
-    public issues?: z.ZodIssue[],
+    public error?: z.ZodError,
   ) {
     super(message);
     this.name = 'ConfigError';
+  }
+
+  public getIssues(): Array<{ key: string; cause: string }> {
+    return (
+      this.error?.issues.map((issue) => ({
+        key: issue.path.join('.'),
+        cause: issue.message,
+      })) || []
+    );
+  }
+
+  public getIssuesString(): string {
+    return this.getIssues()
+      .map((issue) => `- ${issue.key}: ${issue.cause}`)
+      .join('\n');
   }
 }
 
@@ -20,10 +35,11 @@ export function getConfig(): Env {
     NODE_ENV: process.env.NODE_ENV,
     LOG_LEVEL: process.env.LOG_LEVEL,
     LOG_TARGET: process.env.LOG_TARGET,
+    BACKEND_URL: process.env.BACKEND_URL,
   });
 
   if (!result.success) {
-    throw new ConfigError('Environment variable validation failed', result.error.issues);
+    throw new ConfigError('Environment variable validation failed', result.error);
   }
 
   config = result.data;
@@ -40,7 +56,7 @@ export function getBrowserConfig(): BrowserEnv {
   });
 
   if (!result.success) {
-    throw new ConfigError('Browser environment variable validation failed', result.error.issues);
+    throw new ConfigError('Browser environment variable validation failed', result.error);
   }
 
   browserConfig = result.data;

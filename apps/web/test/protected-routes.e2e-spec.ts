@@ -13,6 +13,7 @@ test.describe('Protected Routes', () => {
 
       // Go to profile page
       await page.goto(PROFILE_URL);
+      await page.waitForURL(LOGIN_URL);
       await expect(page).toHaveURL(LOGIN_URL);
     });
 
@@ -35,6 +36,7 @@ test.describe('Protected Routes', () => {
 
       // Go to dashboard page with increased timeout and error handling
       await page.goto(USER_DASHBOARD_URL);
+      await page.waitForURL(LOGIN_URL);
       await expect(page).toHaveURL(LOGIN_URL);
     });
 

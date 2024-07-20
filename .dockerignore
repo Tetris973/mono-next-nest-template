@@ -1,0 +1,66 @@
+#!!! LIST OF IGNORED FILES REQUIRED OTHERWISE FAILS THE BUILD !!!#
+
+# Node modules
+# Should be installed fresh in the Docker image to ensure compatibility with the target environment.
+# If not provided in this project, swc nest project will fail, swc seems to be very dependent on environment target.
+**/node_modules
+
+# Build outputs
+# These are typically generated during the Docker build process and should not be copied from the host.
+**/dist
+**/.next
+# shared folder contains dto built in the backend, should be compiled in the docker image
+**/shared
+
+
+# LIST OF IGNORED FILES REQUIRED OTHERWISE FAILS THE BUILD ENDS HERE #
+
+#! List of files that are not needed in the Docker image but are useful to keep !#
+
+# Version control
+# Not needed in the Docker image and can potentially expose sensitive information.
+.git
+.gitignore
+.gitlab-ci.yml
+
+# Development and test files
+# Not needed in production images.
+**/test
+**/playwright
+**/playwright.config.ts
+**/.storybook
+**/vitest.config*.mts
+
+# Editor configurations
+# Editor-specific configurations are not needed in the Docker image.
+.vscode
+**/.prettierrc.js
+**/.eslintrc.js
+.prettierignore
+
+# Logs
+# Log files from the host system are not relevant to the Docker image.
+**/logs
+npm-debug.log
+
+# Docker-specific files
+# These files are used to build the image but should not be included in the image itself.
+Dockerfile*
+.dockerignore
+
+# Miscellaneous
+# These files are not needed for running the application.
+.DS_Store
+**/*.md
+**/tsconfig.tsbuildinfo
+
+# Configuration files that might contain sensitive information
+# Environment files often contain sensitive information and should be managed separately.
+**/.env*
+# Env file needed for next build
+!./docker/production/.env*
+
+# Linter configurations
+# Linter configurations are used during development and are not needed in the production image.
+eslint-rules.js
+prettier-config.js

@@ -1,18 +1,86 @@
+diff --git a/dist/server/lib/http-logger.js b/dist/server/lib/http-logger.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..e870a4262ae735112ad1a3d722b891374f9f7b4a
+--- /dev/null
++++ b/dist/server/lib/http-logger.js
+@@ -0,0 +1,55 @@
++const pino = require('pino');
++const pinoHttp = require('pino-http');
++const { join } = require('path');
++
++/**
++ * THIS IS A CUSTOM HTTP LOGGER FOR THE next/dist/lib/start-server.js PACKAGE
++ * THIS FILE IS NOT ORIGINAL FROM THE NEXT PACKAGE
++ * IT WAS ADDED AS A PNPM PATCH
++ */
++
++function createPinoHttpLogger() {
++    // To be able to use process.env at this point, we need to do like in nestjs and use dotenv to load the env file before
++    // starting the command like this "dotenv -e .env.development.local -- next dev"
++
++  const env = process.env.NODE_ENV;
++  const isProduction = env === 'production';
++
++  let transport;
++  if (isProduction) {
++    transport = {
++      target: 'pino/file', // can't use process.env.LOG_TARGET because it's not available at the time of the import
++      options: {
++        destination: join(process.cwd(), 'logs', `${env}.http.log`),
++        mkdir: true,
++      },
++    };
++  } else {
++    transport = {
++      target: 'pino-pretty',
++      options: {
++        colorize: true,
++        singleLine: true,
++      },
++    };
++  }
++
++  const logger = pino({
++    level: 'info', // process.env.LOG_LEVEL not available at the time of the import
++    transport,
++  });
++
++  const pinoHttpMiddleware = pinoHttp({
++    logger,
++    // Customize the logging to map the status code to the correct log level
++    customLogLevel: (req, res, err) => {
++      if (res.statusCode >= 400 && res.statusCode < 500) return 'warn'
++      if (res.statusCode >= 500 || err) return 'error'
++      return 'info'
++    },
++  });
++
++  return pinoHttpMiddleware;
++}
++
++module.exports = createPinoHttpLogger;
+\ No newline at end of file
 diff --git a/dist/server/lib/start-server.js b/dist/server/lib/start-server.js
-index 43b044d7519175ec4de684d3eb042d6b0506295b..2a378758f106653c5b5817f0c8a30d04866b70e0 100644
+index 43b044d7519175ec4de684d3eb042d6b0506295b..8c16ac2a44d99f99633be0273fe0455a3c4bbe1a 100644
 --- a/dist/server/lib/start-server.js
 +++ b/dist/server/lib/start-server.js
-@@ -39,6 +39,9 @@ const _appinfolog = require("./app-info-log");
+@@ -39,11 +39,15 @@ const _appinfolog = require("./app-info-log");
  const _turbopackwarning = require("../../lib/turbopack-warning");
  const _trace = require("../../trace");
  const _ispostpone = require("./router-utils/is-postpone");
 +// Custom patch of Nextjs to be able to log the request and response with pino-http
-+const createPinoHttpLogger = require(_path.default.resolve(process.cwd(), 'src/lib/http-logger'));
++const createPinoHttpLogger = require("./http-logger");
 +const _logger = createPinoHttpLogger();
  function _interop_require_default(obj) {
      return obj && obj.__esModule ? obj : {
          default: obj
-@@ -133,6 +136,9 @@ async function startServer(serverOptions) {
+     };
+ }
++
+ function _getRequireWildcardCache(nodeInterop) {
+     if (typeof WeakMap !== "function") return null;
+     var cacheBabelInterop = new WeakMap();
+@@ -133,6 +137,9 @@ async function startServer(serverOptions) {
          throw new Error("Using a self signed certificate is only supported with `next dev`.");
      }
      async function requestListener(req, res) {

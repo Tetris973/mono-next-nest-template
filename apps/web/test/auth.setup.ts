@@ -1,5 +1,5 @@
 import { test as setup, request } from '@playwright/test';
-import { BACKEND_URL } from '@web/app/constants/api';
+import { getConfig } from '@web/config/configuration';
 import { userAccount, adminAccount, USER_CONTEXT_PATH, ADMIN_CONTEXT_PATH } from './config/accounts';
 
 /**
@@ -9,7 +9,7 @@ async function apiLogin(username: string, password: string, authFilePath: string
   const context = await request.newContext({ storageState: undefined });
 
   try {
-    const response = await context.post(`${BACKEND_URL}/auth/login`, {
+    const response = await context.post(`${getConfig().BACKEND_URL}/auth/login`, {
       form: {
         username,
         password,

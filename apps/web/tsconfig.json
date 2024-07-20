@@ -24,7 +24,7 @@
     ".next/types/**/*.ts",
     "next.config.mjs",
     // So that ts knows the jest-dom functions from expect
-    "vitest.setup.mts"
+    "test/vitest.setup.mts"
   ],
   "exclude": [
     "node_modules",
