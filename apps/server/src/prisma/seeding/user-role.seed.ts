@@ -1,4 +1,4 @@
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '@server/prisma/prisma.service';
 import { Users } from './user.seed';
 import { BaseRoles } from '@server/authz/baseRoles.enum';
 

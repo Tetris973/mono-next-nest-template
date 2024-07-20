@@ -48,6 +48,17 @@ module.exports = {
   // Can be helpful to activcate some time to imrove code
   //"class-methods-use-this": ["warn", { "enforceForClassFields": true }],
   "no-duplicate-imports": ["error", { "includeExports": true }],
+  "no-restricted-imports": [
+    "error",
+    {
+      "patterns": [
+        {
+          "group": ["../"],
+          "message": "Only import ./ , or typescript alias, or absolute path allowed"
+        }
+      ]
+    }
+  ],
   "no-iterator": "error",
   "generator-star-spacing": ["error", {
     "before": false,

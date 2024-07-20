@@ -1,7 +1,7 @@
 import { describe, beforeEach, it, expect, vi } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { UserService } from '../user/user.service';
+import { UserService } from '@server/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { CreateUserDto } from '@server/user/dto/create-user.dto';

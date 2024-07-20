@@ -22,6 +22,18 @@ const nextConfig = {
     // Needed for the logger to work in the server components
     serverComponentsExternalPackages: ['pino', 'pino-pretty'],
   },
+
+  // To produce a minimal standalone output, make it easier to deploy the app on non-vercel host
+  output: 'standalone',
+
+  webpack: (config) => {
+    // Ignored files in tsconfig.build was not working, This rule works to prevent compilation of development files (test, stories, and e2e files)
+    config.module.rules.push({
+      test: /(\.(spec|stories)\.[jt]sx?$)|(^test\/.*\.[jt]sx?$)/,
+      loader: 'ignore-loader',
+    });
+    return config;
+  },
 };
 
 export default nextConfig;

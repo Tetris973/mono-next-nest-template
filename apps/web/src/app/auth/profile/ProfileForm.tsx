@@ -1,7 +1,7 @@
 import { Button, Stack, Spinner, useColorModeValue, chakra, Box } from '@chakra-ui/react';
 import { useProfileForm as defaultUseProfileForm } from './profile.use';
-import { ProfileField } from '../../components/ProfileField';
-import { ProfileAvatar } from '../../components/ProfileAvatar';
+import { ProfileField } from '@web/app/components/ProfileField';
+import { ProfileAvatar } from '@web/app/components/ProfileAvatar';
 import { useCustomToast } from '@web/app/utils/toast-utils.use';
 
 export interface ProfileFormProps {

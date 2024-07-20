@@ -1,0 +1,72 @@
+services:
+  postgres:
+    image: postgres
+    restart: always
+    env_file:
+      - .env.postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nest:
+    restart: always
+    build:
+      context: ../..
+      dockerfile: docker/production/Dockerfile.prod
+      target: nest
+    volumes:
+      - nest_logs:/app/logs
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env.nest
+    networks:
+      - app_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  next:
+    restart: always
+    build:
+      context: ../..
+      dockerfile: docker/production/Dockerfile.prod
+      target: next
+    volumes:
+      - next_logs:/app/logs
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.next
+    networks:
+      - app_network
+    depends_on:
+      - nest
+
+  prisma-migrate:
+    build:
+      context: ../..
+      dockerfile: docker/production/Dockerfile.prod
+      target: prisma-migrate
+    env_file:
+      - .env.prisma-migrate
+    networks:
+      - app_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  nest_logs:
+  next_logs:
+
+networks:
+  app_network:
+    driver: bridge

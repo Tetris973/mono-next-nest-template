@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
-import { HttpStatus } from '../common/http-status.enum';
-import { ActionResponse } from '../common/action-response.type';
+import { HttpStatus } from '@web/app/common/http-status.enum';
+import { ActionResponse } from '@web/app/common/action-response.type';
 
 /**
  * Checks if the user is logged in by verifying the presence of an authentication token.

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { LogLevel, LogTarget } from '@server/config/log.config';
 
-enum NodeEnv {
+export enum NodeEnv {
   Development = 'development',
   Production = 'production',
   Test = 'test',
@@ -14,6 +14,7 @@ export const envSchema = z.object({
   NODE_ENV: z.nativeEnum(NodeEnv).optional().default(NodeEnv.Development),
   LOG_TARGET: z.nativeEnum(LogTarget).optional().default(LogTarget.PinoPretty),
   LOG_LEVEL: z.nativeEnum(LogLevel).optional().default(LogLevel.INFO),
+  BACKEND_URL: z.string(),
 });
 
 /**

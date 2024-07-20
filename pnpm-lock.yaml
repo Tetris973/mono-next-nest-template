@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   next@14.2.4:
-    hash: 4gdnfahq2q2ny53hmqypvsdxgi
+    hash: brpdbxywewlzekp5hvuclgjsfy
     path: patches/next@14.2.4.patch
 
 importers:
@@ -26,7 +26,7 @@ importers:
         specifier: ^6.7.1
         version: 6.7.1
       '@casl/prisma':
-        specifier: ^1.4.1
+        specifier: 1.4.1
         version: 1.4.1(@casl/ability@6.7.1)(@prisma/client@5.16.1)
       '@nestjs/common':
         specifier: ^10.0.0
@@ -92,7 +92,7 @@ importers:
         specifier: ^10.2.0
         version: 10.2.0
       prisma-extension-kysely:
-        specifier: ^2.1.0
+        specifier: 2.1.0
         version: 2.1.0(@prisma/client@5.16.1)
       reflect-metadata:
         specifier: ^0.2.0
@@ -168,7 +168,7 @@ importers:
         specifier: ^3.0.0
         version: 3.3.2
       prisma:
-        specifier: ^5.12.1
+        specifier: 5.16.1
         version: 5.16.1
       prisma-kysely:
         specifier: ^1.8.0
@@ -232,7 +232,7 @@ importers:
         version: 4.0.0
       next:
         specifier: 14.2.4
-        version: 14.2.4(patch_hash=4gdnfahq2q2ny53hmqypvsdxgi)(@babel/core@7.24.7)(@playwright/test@1.45.1)(react-dom@18.3.1)(react@18.3.1)
+        version: 14.2.4(patch_hash=brpdbxywewlzekp5hvuclgjsfy)(@babel/core@7.24.7)(@playwright/test@1.45.1)(react-dom@18.3.1)(react@18.3.1)
       nookies:
         specifier: ^2.5.2
         version: 2.5.2
@@ -2213,7 +2213,7 @@ packages:
       '@chakra-ui/react': 2.8.2(@emotion/react@11.11.4)(@emotion/styled@11.11.5)(@types/react@18.3.3)(framer-motion@11.2.13)(react-dom@18.3.1)(react@18.3.1)
       '@emotion/cache': 11.11.0
       '@emotion/react': 11.11.4(@types/react@18.3.3)(react@18.3.1)
-      next: 14.2.4(patch_hash=4gdnfahq2q2ny53hmqypvsdxgi)(@babel/core@7.24.7)(@playwright/test@1.45.1)(react-dom@18.3.1)(react@18.3.1)
+      next: 14.2.4(patch_hash=brpdbxywewlzekp5hvuclgjsfy)(@babel/core@7.24.7)(@playwright/test@1.45.1)(react-dom@18.3.1)(react@18.3.1)
       react: 18.3.1
     dev: false
 
@@ -5566,7 +5566,7 @@ packages:
       fs-extra: 11.2.0
       image-size: 1.1.1
       loader-utils: 3.3.1
-      next: 14.2.4(patch_hash=4gdnfahq2q2ny53hmqypvsdxgi)(@babel/core@7.24.7)(@playwright/test@1.45.1)(react-dom@18.3.1)(react@18.3.1)
+      next: 14.2.4(patch_hash=brpdbxywewlzekp5hvuclgjsfy)(@babel/core@7.24.7)(@playwright/test@1.45.1)(react-dom@18.3.1)(react@18.3.1)
       node-polyfill-webpack-plugin: 2.0.1(webpack@5.92.1)
       pnp-webpack-plugin: 1.7.0(typescript@5.5.3)
       postcss: 8.4.39
@@ -12122,7 +12122,7 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /next@14.2.4(patch_hash=4gdnfahq2q2ny53hmqypvsdxgi)(@babel/core@7.24.7)(@playwright/test@1.45.1)(react-dom@18.3.1)(react@18.3.1):
+  /next@14.2.4(patch_hash=brpdbxywewlzekp5hvuclgjsfy)(@babel/core@7.24.7)(@playwright/test@1.45.1)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-R8/V7vugY+822rsQGQCjoLhMuC9oFj9SOi4Cl4b2wjDrseD0LRZ10W7R6Czo4w9ZznVSshKjuIomsRjvm9EKJQ==}
     engines: {node: '>=18.17.0'}
     hasBin: true

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PureAbility, AbilityBuilder, ForcedSubject } from '@casl/ability';
 import { createPrismaAbility, PrismaQuery, Subjects } from '@casl/prisma';
-import { AuthzService } from '../authz.service';
+import { AuthzService } from '@server/authz/authz.service';
 import { User, Action } from '@prisma/client';
-import { BaseResources } from '../baseResources.enum';
-import { BaseRoles } from '../baseRoles.enum';
+import { BaseResources } from '@server/authz/baseResources.enum';
+import { BaseRoles } from '@server/authz/baseRoles.enum';
 
 // ResourceType and AppSubject should be in sync, similar type defined in both
 // Auto define as Type of the resources available for casl authorization checking

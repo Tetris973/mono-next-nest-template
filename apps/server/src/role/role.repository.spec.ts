@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { TestingModule, Test } from '@nestjs/testing';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '@server/prisma/prisma.service';
 import { ConfigModule } from '@server/config/config.module';
-import { seedRoles } from '@server/prisma/seeding/role.seed';
+import { seedRoles } from '@server/prisma/seeding/production/role.seed';
 import { BaseRoles } from '@server/authz/baseRoles.enum';
 import { RoleRepository } from './role.repository';
 import { TestPrismaService } from '@testServer/utils/testPrisma.service';

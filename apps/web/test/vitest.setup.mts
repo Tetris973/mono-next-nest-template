@@ -7,8 +7,12 @@ import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
 import { mockToast } from '@testWeb/utils/unit-test/mock-toast.utils';
 import { mockRouter } from '@testWeb/utils/unit-test/mock-router.utils';
 import { getLogger, clearLogs, getLogs } from '@testWeb/utils/unit-test/test-logger.utils';
+import { mockGetConfig } from '@testWeb/utils/unit-test/mock-config.utils';
+import { getConfig } from '@web/config/configuration';
 
-
+vi.mock('@web/config/configuration', () => ({
+    getConfig: mockGetConfig,
+}));
 
 vi.mock('next/navigation', () => ({
     useRouter: () => mockRouter,

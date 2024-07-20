@@ -2,9 +2,9 @@ import React, { createContext, useState, useContext, useEffect, useCallback } fr
 import { getProfileAction as defaultGetProfileAction } from '@web/app/auth/profile/profile.service';
 import { useAuth as defaultUseAuth } from './AuthContext';
 import { UserDto } from '@dto/user/dto/user.dto';
-import { useCustomToast } from '../utils/toast-utils.use';
+import { useCustomToast } from '@web/app/utils/toast-utils.use';
 import { ActionErrorResponse } from '@web/app/common/action-response.type';
-import { useServerAction } from '../utils/server-action.use';
+import { useServerAction } from '@web/app/utils/server-action.use';
 
 export interface ProfileContextInterface {
   profile: UserDto | null;

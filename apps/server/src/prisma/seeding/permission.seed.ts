@@ -1,4 +1,4 @@
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '@server/prisma/prisma.service';
 import { Action } from '@prisma/client';
 import { BaseResources } from '@server/authz/baseResources.enum';
 

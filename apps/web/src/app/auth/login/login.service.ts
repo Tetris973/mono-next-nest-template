@@ -3,7 +3,7 @@
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
 import { ActionErrorResponse, ActionResponse } from '@web/app/common/action-response.type';
-import { BACKEND_URL } from '@web/app/constants/api';
+import { getConfig } from '@web/config/configuration';
 import { HttpStatus } from '@web/app/common/http-status.enum';
 import { Role } from '@web/app/auth/role.enum';
 import { JwtPayload } from '@web/app/auth/jwt-payload.interface';
@@ -61,7 +61,7 @@ const formatLoginError = (
 };
 
 export const loginAction = async (loginData: LoginUserDto): Promise<ActionResponse<null, LoginUserDto>> => {
-  const { result: res, error } = await safeFetch(`${BACKEND_URL}/auth/login`, {
+  const { result: res, error } = await safeFetch(`${getConfig().BACKEND_URL}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(loginData),

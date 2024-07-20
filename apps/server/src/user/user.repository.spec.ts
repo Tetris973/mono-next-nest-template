@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { UserRepository } from './user.repository';
 import { TestingModule, Test } from '@nestjs/testing';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '@server/prisma/prisma.service';
 import { ConfigModule } from '@server/config/config.module';
 import { Users, seedUsers } from '@server/prisma/seeding/user.seed';
 import { seedUserRoleRelations } from '@server/prisma/seeding/user-role.seed';
-import { seedRoles } from '@server/prisma/seeding/role.seed';
+import { seedRoles } from '@server/prisma/seeding/production/role.seed';
 import { seedResources } from '@server/prisma/seeding/resource.seed';
 import { seedPermissions, Permissions } from '@server/prisma/seeding/permission.seed';
 import { seedRolePermission } from '@server/prisma/seeding/role-permission.seed';

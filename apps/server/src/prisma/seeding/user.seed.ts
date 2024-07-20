@@ -1,4 +1,4 @@
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '@server/prisma/prisma.service';
 
 enum Users {
   tetris = 1,

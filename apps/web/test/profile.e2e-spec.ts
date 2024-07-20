@@ -1,4 +1,4 @@
-import { test, expect } from '../playwright/fixtures';
+import { test, expect } from '@webRoot/playwright/fixtures';
 import { PROFILE_URL, BASE_URL } from './config/urls';
 
 test.describe('Profile Page Flow', () => {
