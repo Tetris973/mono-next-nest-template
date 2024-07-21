@@ -11,6 +11,7 @@
     "build:base": "docker buildx build --platform linux/amd64,linux/arm64 -t registry.gitlab.com/tetris973/mono-next-nest-template/custom-node-image:latest . --push -f ./docker/Dockerfile.base",
     "build:playwright": "docker buildx build --platform linux/amd64,linux/arm64 -t registry.gitlab.com/tetris973/mono-next-nest-template/custom-playwright-image:latest . --push -f ./docker/Dockerfile.playwright",
     "build:prod": "docker compose -f docker/production/docker-compose.yml build",
+    "build-and-push:prod": "./docker/production/build_and_push.sh",
     "compose:dev": "docker compose -f docker/development/docker-compose.yml up",
     "compose:prod": "docker compose -f docker/production/docker-compose.yml up"
   },

@@ -6,28 +6,27 @@
 
 FROM registry.gitlab.com/tetris973/mono-next-nest-template/custom-node-image:latest AS base
 
+
 # Install dependencies
 FROM base AS deps
 WORKDIR /usr/src/app
+# Copy only package files first to leverage Docker cache
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY patches/ ./patches/
+COPY patches ./patches
 COPY apps/server/package.json ./apps/server/
 COPY apps/web/package.json ./apps/web/
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
 
-# Build stage
-FROM deps AS build
+# Nest build stage
+FROM deps AS nest-build
 WORKDIR /usr/src/app
 # Get the node_modules from the deps stage as they are normaly excluded with .dockerignore
 # This enable to install correctly deps that are sometimes dependant on the os, and in this context, to the docker image architecture.
 COPY --from=deps /usr/src/app/node_modules ./node_modules
-# Copy the rest of the code, what was installed will not be overriden
-COPY . .
-
-# ##############
-#  NEST BUILD  #
-# ##############
+# Copy project files needed for installtion
+COPY apps/server ./apps/server
+COPY tsconfig.json ./
 # Generate prisma client, needed for build.
 RUN pnpm --filter server db-generate
 RUN pnpm --filter server build
@@ -40,21 +39,28 @@ RUN cp -r ./node_modules/.pnpm/@prisma+client* /prod/server/node_modules/.pnpm/
 RUN cp ./apps/server/src/prisma/schema.prisma /prod/server/dist/prisma/schema.prisma
 RUN cp -r ./apps/server/src/prisma/migrations /prod/server/dist/prisma/migrations
 
-# ##############
-#  NEXT BUILD  #
-# ##############
-# Build the dto for the backend server, normal if type error because prisma type not found so we ignore it
+# Build the dto for the frotend server, normal if type error because prisma type not found so we ignore it
 RUN pnpm --filter server build:dto; EXIT_CODE=$?; \
     if [ $EXIT_CODE -ne 0 ]; then \
         echo "Warning: DTO build failed with exit code $EXIT_CODE"; \
     fi
+
+
+# Next build stage
+FROM deps AS next-build
+WORKDIR /usr/src/app
+COPY --from=deps /usr/src/app/node_modules ./node_modules
+# Copy the whole server folder, some files like generated dto and some struct definitions are needed.
+COPY --from=nest-build /usr/src/app/apps/server/ ./apps/server/
+# Copy the rest of the code
+COPY apps/web ./apps/web
+COPY tsconfig.json ./
 # Nextjs runs validation of env variables at build time, so we need env file
 # We use the .env file from docker folder, this is the one that is used in the docker-compose.yml file when running the application
-RUN cp ./docker/production/.env.next /usr/src/app/apps/web/.env.production.local
+COPY docker/production/.env.next ./apps/web/.env.production.local
 # Disable next telemetry during build
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN pnpm --filter web build
-
 # Next standalone output with pnpm mono repo produces a nested folder with the whole architecture of the mono repo
 # With the following comands we create a flat folder with minimal files needed to run the nextjs application
 # pnpm deploy create a unique node_modules with all requireed prod dependcy, without it, Next standalone output produce multiple node_modules with simlinks.
@@ -72,18 +78,19 @@ RUN cp -r /usr/src/app/apps/web/.next/static/ /prod/web/.next/static/
 # If you have a public folder, uncomment the following line
 # RUN cp -r /usr/src/app/apps/web/public /prod/web/public
 
+
 # ###########################
 #  DOCKER PRODUCTION IMAGES #
 # ###########################
 
-# Intermediate stage for setting ownership of the whole app folder to the non-root user
+# Intermediate stage for setting ownership of the whole app folder to the non-root user for next
 FROM base AS nest-permissions
 WORKDIR /app
-COPY --from=build /prod/server /app
+COPY --from=nest-build /prod/server /app
 # Create logs directory and set permissions otherwise error because user is not root
 RUN mkdir -p /app/logs && chown -R 1000:1000 /app && chmod -R 755 /app/logs
 
-# Nest stage
+# Nest production image stage
 FROM gcr.io/distroless/nodejs20-debian12 AS nest
 ENV NODE_ENV=production
 WORKDIR /app
@@ -92,7 +99,7 @@ USER 1000
 EXPOSE 4000
 CMD ["dist/main.js"]
 
-# Prisma migrate stage
+# Prisma migrate production image stage
 FROM base AS prisma-migrate
 WORKDIR /app
 COPY --from=nest-permissions /app /app
@@ -110,10 +117,10 @@ ENTRYPOINT ["/prisma-migrate.entrypoint.sh"]
 # Intermediate stage for setting Next.js permissions
 FROM base AS next-permissions
 WORKDIR /app
-COPY --from=build /prod/web /app
+COPY --from=next-build /prod/web /app
 RUN mkdir -p /app/logs && chown -R 1000:1000 /app && chmod -R 755 /app/logs
 
-# Next stage
+# Next production image stage
 FROM gcr.io/distroless/nodejs20-debian12 AS next
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED 1

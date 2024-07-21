@@ -7,9 +7,18 @@ export interface UsernameFieldProps {
   name: string;
   error: string[] | undefined;
   loading: boolean;
+  autoComplete?: string;
 }
 
-export const UsernameField: React.FC<UsernameFieldProps> = ({ id, label, type, name, error, loading }) => {
+export const UsernameField: React.FC<UsernameFieldProps> = ({
+  id,
+  label,
+  type,
+  name,
+  error,
+  loading,
+  autoComplete = 'username',
+}) => {
   const renderSkeleton = () => (
     <Skeleton
       height="40px"
@@ -21,8 +30,10 @@ export const UsernameField: React.FC<UsernameFieldProps> = ({ id, label, type, n
     <Input
       type={type}
       name={name}
+      autoComplete={autoComplete}
     />
   );
+
   return (
     <FormControl
       id={id}
