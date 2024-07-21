@@ -19,6 +19,7 @@ export interface PasswordFieldProps {
   loading: boolean;
   showPassword: boolean;
   setShowPassword: (show: boolean) => void;
+  autoComplete?: string;
 }
 
 export const PasswordField: React.FC<PasswordFieldProps> = ({
@@ -29,6 +30,7 @@ export const PasswordField: React.FC<PasswordFieldProps> = ({
   loading,
   showPassword,
   setShowPassword,
+  autoComplete = 'current-password',
 }) => {
   const renderSkeleton = () => (
     <Skeleton
@@ -42,6 +44,7 @@ export const PasswordField: React.FC<PasswordFieldProps> = ({
       <Input
         type={showPassword ? 'text' : 'password'}
         name={name}
+        autoComplete={autoComplete}
       />
       <InputRightElement h={'full'}>
         <Button
