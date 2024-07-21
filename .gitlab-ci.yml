@@ -7,6 +7,7 @@ stages:
   - lint
   - build
   - test
+#  - docker
 
 # variables: Sets environment variables that can be used throughout the pipeline.
 variables:
@@ -122,3 +123,44 @@ e2e-test-frontend:
     - cp $NEXT_ENV_FILE ./.env.production.local
     - pnpm exec playwright install # Install the playwright browser needed for tests
     - pnpm run test:e2e # This command will seed the prod_db database and run the playwright test that runs both server in production mode
+
+# docker-build:
+#   stage: docker
+#   image: docker:20.10.16
+#   services:
+#     - name: docker:20.10.16-dind
+#       alias: docker
+#   variables:
+#     DOCKER_HOST: tcp://docker:2376
+#     DOCKER_TLS_CERTDIR: "/certs"
+#     DOCKER_TLS_VERIFY: 1
+#     DOCKER_CERT_PATH: "/certs/client"
+#   before_script:
+#     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+#     after_script:
+#     - docker logout $CI_REGISTRY
+#   script:
+#     # Put the .env file needed for building images, 
+#     - cp $DOCKER_NEST_ENV_FILE ./docker/production/.env.nest
+#     - cp $DOCKER_NEXT_ENV_FILE ./docker/production/.env.next
+#     - cp $DOCKER_PRISMA_MIGRATE_ENV_FILE ./docker/production/.env.prisma-migrate
+#     - cp $DOCKER_POSTGRES_ENV_FILE ./docker/production/.env.postgres
+
+#     # Build images
+#     - docker compose -f docker/production/docker-compose.yml build
+
+#     # Push lasted image
+#     - docker push registry.gitlab.com/tetris973/mono-next-nest-template/nest:latest
+#     - docker push registry.gitlab.com/tetris973/mono-next-nest-template/next:latest
+#     - docker push registry.gitlab.com/tetris973/mono-next-nest-template/prisma-migrate:latest
+
+#     # Tag and push with commit SHA to be able to track the version of the image and rollback if needed
+#     - docker tag registry.gitlab.com/tetris973/mono-next-nest-template/nest:latest registry.gitlab.com/tetris973/mono-next-nest-template/nest:$CI_COMMIT_SHA
+#     - docker tag registry.gitlab.com/tetris973/mono-next-nest-template/next:latest registry.gitlab.com/tetris973/mono-next-nest-template/next:$CI_COMMIT_SHA
+#     - docker tag registry.gitlab.com/tetris973/mono-next-nest-template/prisma-migrate:latest registry.gitlab.com/tetris973/mono-next-nest-template/prisma-migrate:$CI_COMMIT_SHA
+#     - docker push registry.gitlab.com/tetris973/mono-next-nest-template/nest:$CI_COMMIT_SHA
+#     - docker push registry.gitlab.com/tetris973/mono-next-nest-template/next:$CI_COMMIT_SHA
+#     - docker push registry.gitlab.com/tetris973/mono-next-nest-template/prisma-migrate:$CI_COMMIT_SHA
+#   # disabled For testing
+#   # only:
+#   #   - main

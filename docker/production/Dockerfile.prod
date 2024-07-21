@@ -96,6 +96,9 @@ CMD ["dist/main.js"]
 FROM base AS prisma-migrate
 WORKDIR /app
 COPY --from=nest-permissions /app /app
+# Install Prisma CLI with the version from package.json as it not present because it is a dev dependency
+RUN PRISMA_VERSION=$(node -p "require('./package.json').devDependencies.prisma") && \
+    pnpm add -D prisma@$PRISMA_VERSION
 # Delete all non prod seeding to prevent seeding development data in production server
 RUN rm -rf /app/dist/prisma/seeding/*.seed.js*
 COPY --chown=1000:1000 docker/production/prisma-migrate.entrypoint.sh /prisma-migrate.entrypoint.sh

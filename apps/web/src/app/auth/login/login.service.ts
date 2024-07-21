@@ -36,6 +36,7 @@ const setAuthCookie = (response: Response) => {
     value: token,
     // Warning: safari does not allow secure cookie to be set over http
     secure: true,
+    sameSite: 'strict',
     httpOnly: true,
     expires: new Date(decodedToken.exp * SECONDS_TO_MILLISECONDS),
   });

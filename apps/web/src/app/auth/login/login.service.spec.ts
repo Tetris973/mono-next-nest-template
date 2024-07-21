@@ -53,6 +53,7 @@ describe('login.service', () => {
         name: 'Authentication',
         value: 'token',
         secure: true, // Cookie must be secure, otherwise breach of security
+        sameSite: 'strict',
         httpOnly: true, // Cookie must be httpOnly, otherwise breach of security
         expires: new Date(exp1H * SECONDS_TO_MILLISECONDS),
       });
