@@ -6,4 +6,20 @@
      */
     "typescript.tsdk": "./apps/web/node_modules/typescript/lib",
     "typescript.preferences.importModuleSpecifier": "non-relative",
+    "workbench.iconTheme": "material-icon-theme",
+    "material-icon-theme.activeIconPack": "nest",
+    "material-icon-theme.files.associations": {
+        "vitest.config.e2e.mts": "vitest",
+        "vitest.config.unit.mts": "vitest"
+    },
+    // These set the default formatter for TypeScript, TypeScript React, and JavaScript files to ESLint
+    "[typescript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[typescriptreact]":{
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[javascript]":{
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
 }
