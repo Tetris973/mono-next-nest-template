@@ -55,6 +55,10 @@ class EnvironmentVariables {
   @IsOptional()
   @IsEnum(LogLevel)
   readonly LOG_LEVEL?: LogLevel;
+
+  @Expose()
+  @IsString()
+  readonly DATABASE_URL!: string;
 }
 
 /**
@@ -81,6 +85,8 @@ export function validate(config: Record<string, unknown>) {
   const logger = new Logger(validate.name);
   const validatedConfig = plainToInstance(EnvironmentVariables, config, {
     enableImplicitConversion: true,
+    // We remove all variables that are not defined in the EnvironmentVariables class, this is used to display in the logs the validated variables only
+    // If this option causes problems with removed variables from process.env, then it can be removed, and the logs shall be updated
     excludeExtraneousValues: true,
   });
   // Validate all before returning error

@@ -22,7 +22,6 @@ describe('user.service', () => {
         username: 'testUser',
         createdAt: new Date(),
         updatedAt: new Date(),
-        password: '',
       };
       (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
       const mockResponse = {
@@ -80,7 +79,6 @@ describe('user.service', () => {
         username: 'updatedUser',
         createdAt: new Date(),
         updatedAt: new Date(),
-        password: '',
       };
       (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
       const mockResponse = {
@@ -160,8 +158,8 @@ describe('user.service', () => {
       // INIT
       const mockToken = 'mockToken';
       const mockUsers: UserDto[] = [
-        { id: 1, username: 'user1', createdAt: new Date(), updatedAt: new Date(), password: '' },
-        { id: 2, username: 'user2', createdAt: new Date(), updatedAt: new Date(), password: '' },
+        { id: 1, username: 'user1', createdAt: new Date(), updatedAt: new Date() },
+        { id: 2, username: 'user2', createdAt: new Date(), updatedAt: new Date() },
       ];
       (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
       const mockResponse = {
