@@ -10,7 +10,6 @@ describe('ProfileForm', () => {
     username: 'testuser',
     createdAt: new Date(),
     updatedAt: new Date(1), // different date is needed for test
-    password: 'password',
   };
 
   const mockUseProfileProps = {

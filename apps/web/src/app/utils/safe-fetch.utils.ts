@@ -1,6 +1,7 @@
 import { HttpStatus } from '@web/app/common/http-status.enum';
 import { ActionResponse } from '@web/app/common/action-response.type';
 import { getLogger } from '@web/lib/logger';
+import { logoutAction } from '@web/app/auth/logout/logout.service';
 
 const logger = getLogger('safeFetch');
 
@@ -13,10 +14,22 @@ const logger = getLogger('safeFetch');
 export const safeFetch = async (url: RequestInfo, options?: RequestInit): Promise<ActionResponse<Response>> => {
   try {
     const response = await fetch(url, options);
+    if (response.status === HttpStatus.UNAUTHORIZED) {
+      const responseBody = await response.json();
+      // This can happen when user has a valid jwt but the user was deleted in database.
+      if (responseBody.message === 'User not found during JWT validation') {
+        await logoutAction();
+        return {
+          error: {
+            status: HttpStatus.UNAUTHORIZED,
+            message: 'User session expired. Please log in again.',
+          },
+        };
+      }
+    }
     return { result: response };
   } catch (error: any) {
     // Determine the type of error
-    // TODO: determine if the message are okay
     let message = 'An unknown error occurred!';
     if (error instanceof TypeError) {
       message = 'Network error or invalid URL.';

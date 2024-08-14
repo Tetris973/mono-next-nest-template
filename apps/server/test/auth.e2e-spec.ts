@@ -9,6 +9,9 @@ import { PrismaService } from '@server/prisma/prisma.service';
 import { TestPrismaService } from './utils/testPrisma.service';
 import { LoginUserDto } from '@server/user/dto/log-in-user.dto';
 import { ConfigService } from '@nestjs/config';
+import { loginAsTetris, loginAsTestUser } from './utils/login-as.utils';
+import { Users, seedUsers } from '@server/prisma/seeding/user.seed';
+import { seedUserRoleRelations } from '@server/prisma/seeding/user-role.seed';
 import ms from 'ms';
 
 describe('AuthController (e2e)', () => {
@@ -90,13 +93,39 @@ describe('AuthController (e2e)', () => {
       const cookieExpirationDate = new Date(expiresMatch![1]).getTime();
       expect(cookie.match(/Expires=([^;]+)/)).not.toBeNull();
 
-      const jwtExpiration = app.get(ConfigService).getOrThrow<string>('jwtExpiration');
+      const jwtExpiration = app.get(ConfigService).getOrThrow<string>('JWT_EXPIRATION');
       const jwtExpirationTime = ms(jwtExpiration);
       const expirationTimeFromNow = new Date(Date.now() + jwtExpirationTime).getTime();
       expect(cookieExpirationDate).toBeLessThanOrEqual(expirationTimeFromNow);
 
       // RUN & CHECK RESULT
       await request(app.getHttpServer()).get('/auth/profile').set('Cookie', cookie).expect(HttpStatus.OK);
+    });
+  });
+
+  describe('Manage valid token with deleted user', () => {
+    it('should return Unauthorized if the user has been deleted, and appropriate message', async () => {
+      // INIT
+      await seedUsers(prisma);
+      await seedUserRoleRelations(prisma);
+
+      const adminAuthCookie = await loginAsTetris(app);
+      const userAuthCookie = await loginAsTestUser(app);
+
+      // Delete the user
+      await request(app.getHttpServer())
+        .delete(`/users/${Users.testUser}`)
+        .set('Cookie', adminAuthCookie)
+        .expect(HttpStatus.NO_CONTENT);
+
+      // RUN & CHECK RESULT
+      const result = await request(app.getHttpServer())
+        .get('/auth/profile')
+        .set('Cookie', userAuthCookie)
+        .expect(HttpStatus.UNAUTHORIZED);
+
+      // CHECK RESULT
+      expect(result.body.message).toBe('User not found during JWT validation');
     });
   });
 });

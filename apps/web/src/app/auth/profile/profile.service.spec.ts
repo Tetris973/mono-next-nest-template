@@ -20,7 +20,6 @@ describe('profile.service', () => {
         username: 'testUser',
         createdAt: new Date(),
         updatedAt: new Date(),
-        password: '',
       };
       (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
       const mockResponse = {

@@ -9,7 +9,6 @@ describe('UserCard', () => {
     username: 'testuser',
     createdAt: new Date(),
     updatedAt: new Date(),
-    password: 'no-password',
   };
 
   const defaultProps = {

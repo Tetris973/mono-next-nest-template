@@ -1,4 +1,6 @@
 import { Module, ClassSerializerInterceptor, MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -20,6 +22,14 @@ import { LoggerErrorInterceptor } from 'nestjs-pino';
     // !!! This import must be before any other !!!
     ConfigModule, // Custom config module
     PrismaModule,
+    JwtModule.registerAsync({
+      global: true,
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.getOrThrow<string>('JWT_SECRET'),
+        signOptions: { expiresIn: configService.getOrThrow<string>('JWT_EXPIRATION') },
+      }),
+    }),
     AuthModule,
     UserModule,
     AuthzModule,
@@ -56,7 +66,6 @@ import { LoggerErrorInterceptor } from 'nestjs-pino';
       useClass: AllExceptionsFilter,
     },
     {
-      // TODO: Maybe move this to the app module ?
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     } /* Bind the JwtAuth Guard globaly so all endpoint are protected by default */,

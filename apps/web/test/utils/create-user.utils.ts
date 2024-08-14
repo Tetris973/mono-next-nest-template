@@ -1,5 +1,6 @@
 import { request, APIRequestContext, APIResponse } from '@playwright/test';
 import { getConfig } from '@web/config/configuration';
+import { FullUserDto } from '@dto/user/dto/full-user.dto';
 import { UserDto } from '@dto/user/dto/user.dto';
 
 /**
@@ -9,7 +10,7 @@ import { UserDto } from '@dto/user/dto/user.dto';
  * @returns The created user.
  * @throws Will throw an error if user creation fails.
  */
-export async function createTestUser(testName: string): Promise<UserDto> {
+export async function createTestUser(testName: string): Promise<FullUserDto> {
   const username = `PW-${testName}`;
   const password = 'TestPassword123!';
 

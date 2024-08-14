@@ -1,17 +1,30 @@
 import { createTestUser } from '@testWeb/utils/create-user.utils';
 import { deleteTestUser } from '@testWeb/utils/delete-user.utils';
-import { UserDto } from '@dto/user/dto/user.dto';
+import { FullUserDto } from '@dto/user/dto/full-user.dto';
 import { getConfig } from '@web/config/configuration';
 import { test as baseTest, request } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 
 export * from '@playwright/test';
-export const test = baseTest.extend<{ account: UserDto }, { workerStorageState: string }>({
-  // Use the same storage state for all tests in this worker.
+
+/**
+ * Extended test fixture with custom account and storage state handling
+ * @property account - FullUserDto object representing the test user
+ * @property workerStorageState - String path to the worker's storage state file
+ */
+export const test = baseTest.extend<{ account: FullUserDto }, { workerStorageState: string }>({
+  /**
+   * Uses the same storage state for all tests in this worker
+   * @param workerStorageState - Path to the worker's storage state file
+   * @param use - Function to use the storage state
+   */
   storageState: ({ workerStorageState }, use) => use(workerStorageState),
 
-  // Authenticate once per worker with a worker-scoped fixture.
+  /**
+   * Authenticates once per worker and manages the storage state
+   * @param use - Function to use the storage state
+   */
   workerStorageState: [
     async ({}, use) => {
       // Use parallelIndex as a unique identifier for each worker.
@@ -19,7 +32,7 @@ export const test = baseTest.extend<{ account: UserDto }, { workerStorageState: 
       const authFileName = path.resolve(test.info().project.outputDir, `.auth/${id}.json`);
       const accountFileName = path.resolve(test.info().project.outputDir, `.auth/${id}.account.json`);
 
-      let account: UserDto;
+      let account: FullUserDto;
       if (fs.existsSync(authFileName) && fs.existsSync(accountFileName)) {
         // Reuse existing authentication state if any.
         account = JSON.parse(fs.readFileSync(accountFileName, 'utf-8'));
@@ -51,8 +64,11 @@ export const test = baseTest.extend<{ account: UserDto }, { workerStorageState: 
     },
     { scope: 'worker' },
   ],
+  /**
+   * Provides the test account information to each test
+   * @param use - Function to use the account information
+   */
   account: [
-    // Load the account from the file system and provide to the test
     async ({}, use) => {
       const id = test.info().parallelIndex;
       const accountFileName = path.resolve(test.info().project.outputDir, `.auth/${id}.account.json`);
@@ -76,7 +92,7 @@ test.afterAll(async () => {
 
   try {
     if (fs.existsSync(accountFileName)) {
-      const userData: UserDto = JSON.parse(fs.readFileSync(accountFileName, 'utf-8'));
+      const userData: FullUserDto = JSON.parse(fs.readFileSync(accountFileName, 'utf-8'));
       if (userData.id) {
         await deleteTestUser(userData);
         console.log(`Deleted test user with ID: ${userData.id}`);

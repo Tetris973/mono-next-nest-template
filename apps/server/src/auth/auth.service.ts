@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { UserService } from '@server/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -7,6 +7,8 @@ import { IJwtPayload } from './passport/jwt-payload.interface';
 import { CreateUserDto } from '@server/user/dto/create-user.dto';
 import { FieldAlreadyInUseException } from '@server/common/field-already-In-use.exception';
 import { AuthzService } from '@server/authz/authz.service';
+import { UserNotFoundException } from '@server/common/user-not-found.exception';
+import { InvalidCredentialsException } from '@server/common/invalid-credentials.exception';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +17,8 @@ export class AuthService {
     private jwtService: JwtService,
     private authzService: AuthzService,
   ) {}
+
+  private readonly logger = new Logger(AuthService.name);
 
   async signup(createUserDto: CreateUserDto) {
     const { password, username } = createUserDto;
@@ -35,11 +39,12 @@ export class AuthService {
   async validateCredentials(username: string, pass: string) {
     const user = await this.userService.userCredentials({ username });
     if (!user) {
-      throw new NotFoundException('The username does not exist.');
+      throw new UserNotFoundException(username);
     }
     const isMatch = await bcrypt.compare(pass, user.password);
     if (!isMatch) {
-      throw new UnauthorizedException('The password is incorrect.');
+      this.logger.error('Incorrect password provided');
+      throw new InvalidCredentialsException();
     }
     return this.userService.findOne({ username });
   }

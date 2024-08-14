@@ -21,7 +21,6 @@ describe('Header', () => {
     username: 'testuser',
     createdAt: new Date(),
     updatedAt: new Date(),
-    password: 'password',
   };
 
   const mockProfileContext = {

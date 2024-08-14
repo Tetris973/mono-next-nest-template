@@ -142,15 +142,18 @@ describe('AuthService', () => {
       });
 
       // RUN
-      await expect(service.validateCredentials(username, 'wrongpass')).rejects.toThrow('The password is incorrect');
+      await expect(service.validateCredentials(username, 'wrongpass')).rejects.toThrow('Invalid credentials provided');
     });
 
     it('should throw an error if the user does not exist', async () => {
       // INIT
       mockedUserService.userCredentials.mockResolvedValue(null);
+      const username = 'nonexistent';
 
       // RUN
-      await expect(service.validateCredentials('nonexistent', 'pass')).rejects.toThrow('The username does not exist.');
+      await expect(service.validateCredentials(username, 'pass')).rejects.toThrow(
+        `User with username ${username} not found`,
+      );
     });
   });
 });
