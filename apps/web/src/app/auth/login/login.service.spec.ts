@@ -117,7 +117,6 @@ describe('login.service', () => {
       });
     });
 
-    // Add more tests for other error cases (UNAUTHORIZED, NOT_FOUND, etc.)
     it('should return unauthorized error if password is incorrect', async () => {
       // INIT
       const loginData: LoginUserDto = { username: 'testUser', password: 'Chocolat123!' };

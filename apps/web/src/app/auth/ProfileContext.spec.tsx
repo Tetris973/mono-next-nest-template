@@ -12,7 +12,6 @@ describe('ProfileContext', () => {
     username: 'testuser',
     createdAt: new Date(),
     updatedAt: new Date(),
-    password: 'no-pass',
   };
 
   const defaultDependencies: ProfileProviderDependencies = {

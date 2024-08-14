@@ -5,8 +5,8 @@ import { UserDto } from '@dto/user/dto/user.dto';
 
 describe('UserList', () => {
   const mockUsers: UserDto[] = [
-    { id: 742983, username: 'user1', createdAt: new Date(), updatedAt: new Date(), password: 'password1' },
-    { id: 2394829, username: 'user2', createdAt: new Date(), updatedAt: new Date(), password: 'password2' },
+    { id: 742983, username: 'user1', createdAt: new Date(), updatedAt: new Date() },
+    { id: 2394829, username: 'user2', createdAt: new Date(), updatedAt: new Date() },
   ];
 
   const defaultProps = {

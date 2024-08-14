@@ -13,9 +13,9 @@ const loggerConfig: LoggerModuleAsyncParams = {
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: async (configService: ConfigService): Promise<PinoParams> => {
-    const nodeEnv = configService.get<string>('NODE_ENV');
-    const logLevel = configService.get<LogLevel>('logLevel');
-    const logTarget = configService.get<LogTarget>('logTarget');
+    const nodeEnv = configService.getOrThrow<string>('NODE_ENV');
+    const logLevel = configService.getOrThrow<LogLevel>('LOG_LEVEL');
+    const logTarget = configService.getOrThrow<LogTarget>('LOG_TARGET');
 
     const fileTransport = {
       target: 'pino/file',

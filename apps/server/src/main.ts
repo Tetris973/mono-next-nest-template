@@ -49,9 +49,9 @@ async function bootstrap() {
   app.enableCors();
 
   const configService = app.get(ConfigService);
-  const port = configService.get<number>('port') || -1; // -1 to throw error if not set
+  const port = configService.getOrThrow<number>('PORT');
 
-  if (configService.get<boolean>('runSwagger')) {
+  if (configService.getOrThrow<boolean>('RUN_SWAGGER')) {
     setupSwagger(app);
   }
 

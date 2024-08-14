@@ -92,10 +92,10 @@ export class UserRepository {
   }
 
   /**
-   * @returns Updated user or null if the user was not found
+   * @returns Updated user
    * @throws Error if the user to update was not found or if the unique constraint was violated
    */
-  async update(params: { where: Prisma.UserWhereUniqueInput; data: Prisma.UserUpdateInput }): Promise<User | null> {
+  async update(params: { where: Prisma.UserWhereUniqueInput; data: Prisma.UserUpdateInput }): Promise<User> {
     const { where, data } = params;
 
     try {

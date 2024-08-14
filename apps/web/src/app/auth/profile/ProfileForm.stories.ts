@@ -28,7 +28,6 @@ const mockUser: UserDto = {
   username: 'testuser',
   createdAt: new Date('2023-01-01'),
   updatedAt: new Date('2023-06-15'),
-  password: '',
 };
 
 const mockUseProfileForm = () => ({

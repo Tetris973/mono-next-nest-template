@@ -8,6 +8,7 @@ import { PrismaService } from '@server/prisma/prisma.service';
 import { TestPrismaService } from './utils/testPrisma.service';
 import { Users, seedUsers } from '@server/prisma/seeding/user.seed';
 import { seedUserRoleRelations } from '@server/prisma/seeding/user-role.seed';
+import { loginAsTetris, loginAsTestUser } from './utils/login-as.utils';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
@@ -31,35 +32,10 @@ describe('UserController (e2e)', () => {
     await seedUserRoleRelations(prisma);
   });
 
-  /**
-   * Login as user tetris with role ADMIN
-   * @returns the JWT authCookie
-   */
-  async function loginAsTetris() {
-    const loginResponse = await request(app.getHttpServer()).post('/auth/login').send({
-      username: Users[Users.tetris],
-      password: 'Chocolat123!',
-    });
-    return loginResponse.headers['set-cookie'][0];
-  }
-
-  /**
-   * Login as user testUser with role USER
-   * @returns the JWT authCookie
-   */
-  async function loginAsTestUser() {
-    const loginResponse = await request(app.getHttpServer()).post('/auth/login').send({
-      username: Users[Users.testUser],
-      password: 'Chocolat123!',
-    });
-
-    return loginResponse.headers['set-cookie'][0];
-  }
-
   describe('/users (GET)', () => {
     it('should return OK for all logged user', async () => {
       // INIT
-      const authCookie = await loginAsTestUser();
+      const authCookie = await loginAsTestUser(app);
 
       // RUN & CHECK RESULT
       await request(app.getHttpServer()).get('/users').set('Cookie', authCookie).expect(HttpStatus.OK);
@@ -74,7 +50,7 @@ describe('UserController (e2e)', () => {
   describe('/users/:id (GET)', () => {
     it('should return OK for all logged user', async () => {
       // INIT
-      const authCookie = await loginAsTestUser();
+      const authCookie = await loginAsTestUser(app);
 
       // RUN & CHECK RESULT
       await request(app.getHttpServer()).get('/users/1').set('Cookie', authCookie).expect(HttpStatus.OK);
@@ -89,7 +65,7 @@ describe('UserController (e2e)', () => {
   describe('/users/:id (PATCH)', () => {
     it('should return OK when the user patch itself', async () => {
       // INIT
-      const authCookie = await loginAsTestUser();
+      const authCookie = await loginAsTestUser(app);
 
       // RUN & CHECK RESULT
       await request(app.getHttpServer())
@@ -101,7 +77,7 @@ describe('UserController (e2e)', () => {
 
     it('should return OK when the user is an admin and patch another user', async () => {
       // INIT
-      const authCookie = await loginAsTetris();
+      const authCookie = await loginAsTetris(app);
 
       // RUN & CHECK RESULT
       await request(app.getHttpServer())
@@ -113,7 +89,7 @@ describe('UserController (e2e)', () => {
 
     it('should return Forbidden when the user patch another user', async () => {
       // INIT
-      const authCookie = await loginAsTestUser();
+      const authCookie = await loginAsTestUser(app);
 
       // RUN & CHECK RESULT
       await request(app.getHttpServer())
@@ -125,7 +101,7 @@ describe('UserController (e2e)', () => {
 
     it('should return Conflict when the username already exists', async () => {
       // INIT
-      const authCookie = await loginAsTestUser();
+      const authCookie = await loginAsTestUser(app);
 
       // RUN & CHECK RESULT
       await request(app.getHttpServer())
@@ -147,7 +123,7 @@ describe('UserController (e2e)', () => {
   describe('/users/:id (DELETE)', () => {
     it('should return No_Content when the user is an admin and delete another user', async () => {
       // INIT
-      const authCookie = await loginAsTetris();
+      const authCookie = await loginAsTetris(app);
 
       // RUN & CHECK RESULT
       await request(app.getHttpServer())
@@ -158,7 +134,7 @@ describe('UserController (e2e)', () => {
 
     it('should return No_Content when the admin delete itself', async () => {
       // INIT
-      const authCookie = await loginAsTetris();
+      const authCookie = await loginAsTetris(app);
 
       // RUN & CHECK RESULT
       await request(app.getHttpServer())
@@ -169,7 +145,7 @@ describe('UserController (e2e)', () => {
 
     it('should return Forbidden when the user delete itself', async () => {
       // INIT
-      const authCookie = await loginAsTestUser();
+      const authCookie = await loginAsTestUser(app);
 
       // RUN & CHECK RESULT
       await request(app.getHttpServer())
@@ -180,7 +156,7 @@ describe('UserController (e2e)', () => {
 
     it('should return Forbidden when the user delete another user', async () => {
       // INIT
-      const authCookie = await loginAsTestUser();
+      const authCookie = await loginAsTestUser(app);
 
       // RUN & CHECK RESULT
       await request(app.getHttpServer())
@@ -196,7 +172,7 @@ describe('UserController (e2e)', () => {
 
     it('should return Bad Request when param is not a number', async () => {
       // INIT
-      const authCookie = await loginAsTetris();
+      const authCookie = await loginAsTetris(app);
 
       // RUN & CHECK RESULT
       await request(app.getHttpServer())

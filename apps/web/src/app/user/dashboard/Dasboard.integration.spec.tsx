@@ -26,14 +26,12 @@ describe('Dashboard Integration', () => {
       username: 'user1',
       createdAt: new Date('1990-01-02'),
       updatedAt: new Date('2000-11-22'),
-      password: 'passpass',
     },
     {
       id: 2,
       username: 'user2',
       createdAt: new Date('1995-05-15'),
       updatedAt: new Date('2005-12-25'),
-      password: 'no-password',
     },
   ];
 

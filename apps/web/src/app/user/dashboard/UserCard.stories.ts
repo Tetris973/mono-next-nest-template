@@ -19,7 +19,6 @@ const mockUser: UserDto = {
   username: 'johndoe',
   createdAt: new Date('2023-01-01'),
   updatedAt: new Date('2023-06-15'),
-  password: 'password',
 };
 
 export const Default: Story = {

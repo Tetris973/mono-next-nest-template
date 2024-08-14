@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { LOGIN_URL, BASE_URL, SIGNUP_URL } from './config/urls';
 import { deleteTestUser } from './utils/delete-user.utils';
 import { UserDto } from '@dto/user/dto/user.dto';
+import { test as customTest } from '@webRoot/playwright/fixtures';
 
 test.describe('Authentication Flow', () => {
   const username = 'PW-auth';
@@ -47,6 +48,24 @@ test.describe('Authentication Flow', () => {
     await expect(usernameMessage).toBeVisible();
 
     // Cleanup,
-    await deleteTestUser({ username, password } as UserDto);
+    await deleteTestUser({ username } as UserDto);
   });
+});
+
+customTest('should redirect to login page when user is deleted from database', async ({ page, account }) => {
+  // Delete the user from the database
+  await deleteTestUser(account);
+
+  // Try to access the home page
+  await page.goto(BASE_URL);
+
+  // Check for the toast message
+  const toastMessage = await page.getByText('User session expired. Please log in again.');
+  await expect(toastMessage).toBeVisible();
+
+  // Verify that the header does not display the username button
+  await expect(page.getByRole('button', { name: account.username })).not.toBeVisible();
+
+  // Cleanup (user is already deleted, but we'll call this just in case)
+  await deleteTestUser(account);
 });

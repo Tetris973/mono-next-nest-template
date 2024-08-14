@@ -1,93 +1,331 @@
-# mono-react-nest-template
+# Mono Next Nest Template
 
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
+<div align="center">
+  <a href="https://gitlab.com/tetris973/mono-next-nest-template">
+    <img src="images/logo.png" alt="Logo" width="160" height="80">
+  </a>
 
-## Getting started
+<h3 align="center">Mono Next Nest Template</h3>
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+  <p align="center">
+    A monorepo with NestJS backend and Next.js frontend deployed with Docker.
+    <br />
+    <a href="https://gitlab.com/tetris973/mono-next-nest-template"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <!-- <a href="https://gitlab.com/tetris973/mono-next-nest-template">View Demo</a> -->
+    ·
+    <a href="https://gitlab.com/tetris973/mono-next-nest-template/-/issues/new">Report Bug</a>
+    ·
+    <a href="https://gitlab.com/tetris973/mono-next-nest-template/-/issues/new">Request Feature</a>
+  </p>
+</div>
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Table of Contents
+- [About The Project](#about-the-project)
+- [Built With](#built-with)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Development Setup](#development-setup)
+  - [Backend Setup](#backend-setup)
+  - [Frontend Setup](#frontend-setup)
+  - [Docker Compose Development](#docker-compose-development)
+  - [Accessing the Application](#accessing-the-application)
+- [Testing](#testing)
+  - [Quick Start](#quick-start)
+  - [Continuous Integration](#continuous-integration)
+- [Production Setup](#production-setup)
+  - [Quick Start](#quick-start-1)
+- [Deployment](#deployment)
+- [Usage](#usage)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+- [Acknowledgments](#acknowledgments)
 
-## Add your files
+## About The Project
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+This is a monorepo template with a NestJS backend (using Prisma) and a Next.js frontend, configured for Docker deployment. It includes:
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/tetris973/mono-react-nest-template.git
-git branch -M main
-git push -uf origin main
-```
+- Unit and E2E testing
+- Continuous Integration (CI)
+- Logging
+- Authentication
+- React component library
+- And more
 
-## Integrate with your tools
+The goal is to provide a working example of how various tools and concepts can be integrated into a full-stack project. This setup aims to be correct and functional, but it's not claiming to be the best or only way to do things. Your specific needs may require different approaches.
 
-- [ ] [Set up project integrations](https://gitlab.com/tetris973/mono-react-nest-template/-/settings/integrations)
+This project is regularly updated. Your feedback and contributions are valuable for its improvement.
 
-## Collaborate with your team
+## Built With
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+* [![Next][Next.js]][Next-url]
+* [![React][React.js]][React-url]
+* [![NestJS][NestJS]][NestJS-url]
+* [![TypeScript][TypeScript]][TypeScript-url]
+* [![Prisma][Prisma]][Prisma-url]
+* [![Docker][Docker]][Docker-url]
+* [![pnpm][pnpm]][pnpm-url]
+* [![Vitest][Vitest]][Vitest-url]
+* [![Playwright][Playwright]][Playwright-url]
+* [![Chakra UI][Chakra-UI]][Chakra-UI-url]
 
-## Test and Deploy
+## Getting Started
 
-Use the built-in continuous integration in GitLab.
+To get a local copy up and running, follow these steps.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### Prerequisites
 
-***
+Before you begin, ensure you have the following tools and software installed on your system:
 
-# Editing this README
+- **Git**: Version control system
+- **Node.js**: JavaScript runtime (version 20.x recommended)
+- **pnpm**: Package manager
+- **Docker**: Containerization platform
+- **Visual Studio Code** (recommended): IDE
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+For detailed installation instructions and recommended configurations, please refer to our [Detailed Setup Guide](docs/SETUP.md).
 
-## Suggestions for a good README
+### Installation
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+1. Clone the repository
+   ```sh
+   git clone https://gitlab.com/tetris973/mono-next-nest-template.git
+   ```
+2. Navigate to the project directory
+   ```sh
+   cd mono-next-nest-template
+   ```
+3. Install dependencies
+   ```sh
+   pnpm install
+   ```
 
-## Name
-Choose a self-explaining name for your project.
+## Development Setup
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+This section guides you through setting up the development environment for both the backend and frontend of the project.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+### Backend Setup
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+1. Navigate to the server directory:
+   ```sh
+   cd apps/server
+   ```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+2. Set up environment variables:
+   - Copy the example environment file:
+     ```sh
+     cp .env.example .env.development.local
+     ```
+   - Open `.env.development.local` and adjust the values as needed for your local development environment.
+
+3. Install dependencies:
+   ```sh
+   pnpm install
+   ```
+
+4. Set up the database:
+   - Ensure your database server is running. See the [Docker Compose Development](#docker-compose-development) section for details on setting up the database using Docker.
+   - Run migrations to generate Prisma types and apply the schema to the database:
+     ```sh
+     pnpm db-migrate
+     ```
+   - Seed the dev database:
+     ```sh
+     pnpm db-seed
+     ```
+
+   You can check the seeded data using Prisma Studio:
+   ```sh
+   pnpm db-studio
+   ```
+
+5. Start the development server:
+   ```sh
+   pnpm run dev
+   ```
+
+6. The backend server should now be running. You can access the API documentation at `http://localhost:4000/api` (adjust the port if you've changed it in your environment variables).
+
+For instructions on how to test the server, login, and API using Swagger, please refer to our [API Testing Guide](docs/API_TESTING.md).
+
+### Frontend Setup
+
+1. Navigate to the web directory:
+   ```sh
+   cd apps/web
+   ```
+
+2. Set up environment variables:
+   - Copy the example environment file:
+     ```sh
+     cp .env.example .env.development.local
+     ```
+   - Open `.env.development.local` and adjust the values as needed for your local development environment.
+
+3. Install dependencies:
+   ```sh
+   pnpm install
+   ```
+
+4. Generate DTOs from the backend:
+   ```sh
+   cd ../server
+   pnpm run build:dto
+   ```
+   Note: The `build:dto` command may display type errors from Prisma. This is normal as long as all the `.d.ts` type files are generated for each DTO of the backend in the `shared` folder.
+
+5. Return to the web directory and start the development server:
+   ```sh
+   cd ../web
+   pnpm run dev
+   ```
+
+6. The frontend development server should now be running. You can access it at `http://localhost:3000` (adjust the port if you've changed it in your environment variables).
+
+### Docker Compose Development
+
+To set up the development environment using Docker Compose:
+
+1. From the root of the project directory, start the Docker Compose services:
+   ```sh
+   pnpm compose:dev
+   ```
+
+This command starts a PostgreSQL database and pgAdmin, a web-based database management tool.
+
+For detailed instructions on using pgAdmin and other Docker-related configurations, please refer to our [Docker Development Guide](docs/DOCKER_DEV_GUIDE.md).
+
+### Accessing the Application
+
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:4000`
+- API Documentation (Swagger): `http://localhost:4000/api`
+
+Remember to replace the ports if you've configured different ones in your environment variables.
+
+## Testing
+
+This project includes a variety of tests for both the backend and frontend to ensure everything works as expected.
+
+For detailed instructions on setting up the testing environment, running tests, and understanding our approach to testing, check out our [Testing Guide](docs/TESTING.md).
+
+### Quick Start
+
+To run tests:
+
+1. Backend Tests:
+   ```sh
+   cd apps/server
+   pnpm run test        # Unit tests
+   pnpm run test:e2e    # End-to-end tests
+   ```
+
+2. Frontend Tests:
+   ```sh
+   cd apps/web
+   pnpm run test        # Unit tests
+   pnpm run test:e2e    # End-to-end tests
+   ```
+
+Note: End-to-end tests require additional setup. See the [Testing Guide](docs/TESTING.md) for details.
+
+### Continuous Integration
+
+This project uses GitLab CI/CD for continuous integration. For detailed information about our CI pipeline, including stages, environment setup, and notes on Docker builds, please refer to our [CI documentation](./docs/CI.md).
+
+## Production Setup
+
+This section provides a quick overview of setting up the project for production.
+
+### Quick Start
+
+To prepare the project for production:
+
+1. Backend Setup:
+   ```sh
+   cd apps/server
+   cp .env.example .env.production.local   # Set up production environment variables
+   pnpm run build                          # Build the backend
+   pnpm run build:dto                      # Generate DTOs for the frontend
+   pnpm run db-migrate:prod                # Apply production database migrations
+   pnpm run db-seed:prod                   # Seed prod database
+   pnpm run start:prod
+   ```
+
+2. Frontend Setup:
+   ```sh
+   cd apps/web
+   cp .env.example .env.production.local   # Set up production environment variables
+   pnpm run build                          # Build the frontend
+   pnpm run start
+   ```
+
+Note: Ensure you edit the `.env.production.local` files in both `apps/server` and `apps/web` directories with the appropriate production values before building.
+
+Note: `.env.production.local` is needed for building Next.js, as it runs some files that perform environment validation. If this file is not present, the build will fail.
+
+## Deployment
+
+For detailed deployment instructions, including local Docker deployment and server deployment guidelines, please refer to our [Deployment Guide](./docs/DEPLOYMENT.md).
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+[This section needs to be completed with specific usage examples, screenshots, or demos of the project in action. Consider adding code snippets, API usage examples, or links to more comprehensive documentation.]
 
 ## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+
+- [ ] Feature 1
+- [ ] Feature 2
+- [ ] Feature 3
+    - [ ] Nested Feature
+
+See the [open issues](https://gitlab.com/tetris973/mono-next-nest-template/-/issues) for a full list of proposed features (and known issues).
 
 ## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+[This section needs to be completed with guidelines for contributing to the project. Consider including information about the coding style, pull request process, and any other relevant details.]
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+## Contact
+
+Project Link: [https://gitlab.com/tetris973/mono-next-nest-template/](https://gitlab.com/tetris973/mono-next-nest-template/)
+
+## Acknowledgments
+
+[This section needs to be completed with acknowledgments to resources, libraries, or individuals that have been helpful in the development of this project.]
+
+<!-- MARKDOWN LINKS & IMAGES -->
+[license-shield]: https://img.shields.io/gitlab/license/tetris973/mono-next-nest-template?style=for-the-badge
+[license-url]: https://gitlab.com/tetris973/mono-next-nest-template/-/blob/main/LICENSE.txt
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/cedric-olender/
+[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[NestJS]: https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white
+[NestJS-url]: https://nestjs.com/
+[TypeScript]: https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white
+[TypeScript-url]: https://www.typescriptlang.org/
+[Prisma]: https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white
+[Prisma-url]: https://www.prisma.io/
+[Docker]: https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white
+[Docker-url]: https://www.docker.com/
+[pnpm]: https://img.shields.io/badge/pnpm-%234a4a4a.svg?style=for-the-badge&logo=pnpm&logoColor=f69220
+[pnpm-url]: https://pnpm.io/
+[Vitest]: https://img.shields.io/badge/vitest-%234a4a4a.svg?style=for-the-badge&logo=vitest&logoColor=white
+[Vitest-url]: https://vitest.dev/
+[Playwright]: https://img.shields.io/badge/playwright-%232EAD33.svg?style=for-the-badge&logo=playwright&logoColor=white
+[Playwright-url]: https://playwright.dev/
+[Chakra-UI]: https://img.shields.io/badge/chakra-%234ED1C5.svg?style=for-the-badge&logo=chakraui&logoColor=white
+[Chakra-UI-url]: https://chakra-ui.com/

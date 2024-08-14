@@ -35,7 +35,14 @@ export class AuthController {
   @Post('login')
   async login(@CurrentUser() user: User, @Res({ passthrough: true }) response: Response) {
     const expires = new Date();
-    expires.setMilliseconds(expires.getMilliseconds() + ms(this.configService.getOrThrow<string>('jwtExpiration')));
+    /**
+     * TODO: Implement token refresh mechanism:
+     * - Set different expiration for cookie (longer) and JWT (shorter)
+     * - Check if JWT is expired but cookie is valid
+     * - Issue new JWT and update cookie if needed
+     * - JWT: 15 minutes, HTTP-only cookie: 7 days for example
+     */
+    expires.setMilliseconds(expires.getMilliseconds() + ms(this.configService.getOrThrow<string>('JWT_EXPIRATION')));
 
     const loginPayload = await this.authService.login(user);
     response.cookie('Authentication', loginPayload.accessToken, {
