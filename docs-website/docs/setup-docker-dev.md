@@ -1,6 +1,5 @@
 ---
 description: This guide provides detailed instructions for using Docker in your development environment.
-sidebar_position: 2
 ---
 
 # Setup Docker for Development

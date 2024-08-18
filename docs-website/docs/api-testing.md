@@ -1,6 +1,5 @@
 ---
 description: This guide will walk you through testing the API endpoints using Swagger UI, which is available in development mode.
-sidebar_position: 3
 ---
 
 # Test the API

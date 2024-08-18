@@ -8,6 +8,7 @@ stages:
   - build
   - test
 #  - docker
+  - deploy
 
 # variables: Sets environment variables that can be used throughout the pipeline.
 variables:
@@ -26,6 +27,8 @@ cache: &default_cache
     - apps/server/node_modules/
     - apps/web/node_modules/
     - apps/web/.next/cache/
+    - docs-website/node_modules/
+    - docs-website/.docusaurus/
   policy: pull # policy for all job, only enable to pull
 
 before_script:
@@ -78,6 +81,16 @@ build-backend-frontend:
       - apps/server/shared/dto
       - apps/web/.next
 
+build-docs:
+  stage: build
+  script:
+    - cd docs-website
+    - pnpm install
+    - pnpm run build
+  artifacts:
+    paths:
+      - docs-website/build
+
 
 unit-test-backend:
   stage: test
@@ -123,6 +136,17 @@ e2e-test-frontend:
     - cp $NEXT_ENV_FILE ./.env.production.local
     - pnpm exec playwright install # Install the playwright browser needed for tests
     - pnpm run test:e2e # This command will seed the prod_db database and run the playwright test that runs both server in production mode
+
+
+pages:
+  stage: deploy
+  script:
+    - mv docs-website/build public
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 # docker-build:
 #   stage: docker
