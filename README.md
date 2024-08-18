@@ -13,10 +13,10 @@
   <p align="center">
     A monorepo with NestJS backend and Next.js frontend deployed with Docker.
     <br />
-    <a href="https://gitlab.com/tetris973/mono-next-nest-template"><strong>Explore the docs »</strong></a>
+    <a href="https://tetris973.gitlab.io/mono-next-nest-template/docs"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="./docs-website/docs/README.mdx">Getting Started, TODO link to the doc herberged in gitlab pages</a>
+    <a href="https://tetris973.gitlab.io/mono-next-nest-template/docs">Getting Started</a>
     |
     <a href="https://gitlab.com/tetris973/mono-next-nest-template/-/issues/new">Report Bug</a>
     |
@@ -41,6 +41,7 @@
 - Authentication system with local and JWT strategies using [Passport](http://www.passportjs.org/)
 - Authorization with [CASL](https://casl.js.org/v6/en/) for Role-Based Access Control (RBAC) or Attribute-Based Access Control (ABAC)
 - [Prisma](https://www.prisma.io/) ORM for database management and migrations
+- [Postgres](https://www.postgresql.org/) database deployed as docker image for local and production environments
 - [Kysely](https://kysely.dev/) extension for Prisma, providing type-safe query building
 - [Swagger](https://swagger.io/) integration for API documentation and testing
 - [Vitest](https://vitest.dev/) for unit testing and end-to-end (E2E) testing
@@ -61,10 +62,34 @@
 - Custom Docker images for development and CI environments
 - Documentation as close as possible to the code using [Docusaurus](https://docusaurus.io/) and [JSDoc](https://jsdoc.app/)
 
+## Usage
+
+[This section needs to be completed with specific usage examples, screenshots, or demos of the project in action. Consider adding code snippets, API usage examples, or links to more comprehensive documentation.]
+
+## Roadmap
+
+- [ ] Feature 1
+- [ ] Feature 2
+- [ ] Feature 3
+    - [ ] Nested Feature
+
+See the [open issues](https://gitlab.com/tetris973/mono-next-nest-template/-/issues) for a full list of proposed features (and known issues).
+
+## Contributing
+
+[This section needs to be completed with guidelines for contributing to the project. Consider including information about the coding style, pull request process, and any other relevant details.]
 
 ## License
 
 Mono Next Nest Template is [MIT licensed](LICENSE).
+
+## Contact
+
+Project Link: [https://gitlab.com/tetris973/mono-next-nest-template/](https://gitlab.com/tetris973/mono-next-nest-template/)
+
+## Acknowledgments
+
+[This section needs to be completed with acknowledgments to resources, libraries, or individuals that have been helpful in the development of this project.]
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [license-shield]: https://img.shields.io/badge/license-MIT-green?style=for-the-badge

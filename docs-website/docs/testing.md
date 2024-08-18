@@ -1,9 +1,8 @@
 ---
-description: This guide provides detailed information about how to run tests for the project.
-sidebar_position: 4
+description: Guide for running tests and setting up the testing environment
 ---
 
-# Run Tests
+# Testing
 
 This document provides detailed information about how to run tests for the project.
 
@@ -57,7 +56,7 @@ We use Playwright for end-to-end testing, aiming to simulate a production-like e
    Ensure that `.env.production.local` files exist in both the `apps/server` and `apps/web` directories. 
 
    :::info
-   Proper production setup is required before running frontend E2E tests. If these files are missing or you're unsure about their contents, please refer to the [Production Setup Guide](./README.mdx#production-setup) and complete the setup process before proceeding.
+   Proper production setup is required before running frontend E2E tests. If these files are missing or you're unsure about their contents, please refer to the [Production Setup Guide](./production-setup.md) and complete the setup process before proceeding.
    :::
 
 2. Build the backend and frontend:
@@ -85,11 +84,7 @@ E2E tests use the production build of both frontend and backend, and connect to 
 
 ## Continuous Integration
 
-:::warning
-TODO: verify this section and complete it.
-:::
-
-Our CI pipeline runs all tests for every push and pull request. See the [CI section](README.mdx#continuous-integration) in the main README for more details.
+This project uses GitLab CI/CD for continuous integration. For detailed information about our CI pipeline, including stages, environment setup, and notes on Docker builds, please refer to our [CI documentation](./continuous-integration.md).
 
 ## Troubleshooting
 

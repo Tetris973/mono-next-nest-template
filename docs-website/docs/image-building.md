@@ -1,6 +1,5 @@
 ---
 description: This guide explains how to build and push Docker images for the project.
-sidebar_position: 6
 ---
 
 # Build Docker Images

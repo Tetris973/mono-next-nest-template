@@ -1,6 +1,5 @@
 ---
 description: This guide provides an overview of the CI/CD pipeline used in the project.
-sidebar_position: 5
 ---
 
 # Continuous Integration (CI)
@@ -13,9 +12,10 @@ Our CI pipeline consists of the following stages:
 
 1. **Install**: Installs dependencies
 2. **Lint**: Runs linters for both backend and frontend
-3. **Build**: Builds both backend and frontend (frontend requires backend DTOs)
+3. **Build**: Builds both backend and frontend (frontend requires backend DTOs), and builds the Docusaurus website
 4. **Test**: Executes unit and E2E tests for both backend and frontend
 5. **Docker** (currently commented out): Builds production Docker images, tags them as 'latest' and with the current commit SHA, and pushes them to the registry. This stage only runs when merging to the main branch.
+6. **Deploy**: Publishes the Docusaurus website to GitLab Pages.
 
 ## Key Features
 

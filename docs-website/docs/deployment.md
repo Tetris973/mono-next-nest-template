@@ -1,6 +1,5 @@
 ---
 description: This guide provides detailed information about how to deploy the application.
-sidebar_position: 7
 ---
 
 # Deploy the Application

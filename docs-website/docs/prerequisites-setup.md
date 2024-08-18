@@ -1,6 +1,5 @@
 ---
 description: This guide provides examples of how to set up a development environment for this project.
-sidebar_position: 1
 ---
 
 # Prerequisites Setup
