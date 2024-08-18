@@ -4,4 +4,5 @@
 packages:
 # Each subdirectory inside 'apps' is treated as a
 # separate package, each with its own dependencies and scripts.
-  - 'apps/*'  
+  - 'apps/*'
+  - 'docs-website'
