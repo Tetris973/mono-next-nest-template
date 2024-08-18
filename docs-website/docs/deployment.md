@@ -1,31 +1,46 @@
-# Deployment Guide
+---
+description: This guide provides detailed information about how to deploy the application.
+sidebar_position: 7
+---
+
+# Deploy the Application
+
+This document provides detailed information about deploying the application both locally and on a production server.
 
 ## Local Deployment
 
 ### Building Docker Images Locally
 
 1. Build the base image for your local architecture:
-   ```sh
-   pnpm build:base
-   ```
-   This command builds the image with the same tag as the remote image, but only for your local architecture.
+
+```bash
+pnpm build:base
+```
+
+:::info
+This command builds the image with the same tag as the remote image, but only for your local architecture.
+:::
 
 2. Configure environment files:
-   In the `docker/production` directory, create the following `.env` files based on the `.env.example`:
-   - `.env.postgres`
-   - `.env.nest`
-   - `.env.next`
-   - `.env.prisma-migrate`
+
+In the `docker/production` directory, create the following `.env` files based on the `.env.example`:
+
+- `.env.postgres`
+- `.env.nest`
+- `.env.next`
+- `.env.prisma-migrate`
 
 3. Build the application images:
-   ```sh
-   pnpm build:prod
-   ```
+
+```bash
+pnpm build:prod
+```
 
 ### Starting Local Deployment
 
 From the root directory, start all the apps:
-```sh
+
+```bash
 pnpm compose:prod
 ```
 
@@ -35,7 +50,7 @@ This will start a production-like environment on your local machine.
 
 ### Building Images for Server Deployment
 
-For building images for server deployment, refer to the [Image Building Guide](IMAGE_BUILDING.md).
+For building images for server deployment, refer to the [Image Building Guide](image-building.md).
 
 ### Server Setup
 
@@ -49,18 +64,23 @@ For building images for server deployment, refer to the [Image Building Guide](I
    - `.env.next`
    - `.env.prisma-migrate`
 
-   Note: For better security, avoid hardcoding values in these files. Use environment variables and pass them securely when running Docker Compose.
+:::caution
+For better security, avoid hardcoding values in these files. Use environment variables and pass them securely when running Docker Compose.
+:::
 
 3. Verify that all required images are available in your GitLab registry.
 
 4. Log in to your GitLab registry on the server:
-   ```sh
-   docker login registry.gitlab.com
+
+```bash
+docker login registry.gitlab.com
+```
 
 ### Starting the Application on the Server
 
 In the folder containing the `docker-compose.yml` and `.env` files, run:
-```sh
+
+```bash
 docker compose up -d
 ```
 
@@ -68,6 +88,11 @@ This will pull the necessary images and start your application in detached mode.
 
 ## Additional Notes
 
+:::warning
 - Ensure all required environment variables are properly set before starting the application.
 - For production deployments, consider using a secure method to manage and inject environment variables. (TODO: find and document one)
-- Remember to configure your server's firewall, set up any necessary reverse proxies, and implement proper logging and monitoring solutions. (TODO: Documentation to be done in another project for server setup, with reverse proxy nginx, gitlab runners, certificate, ...)
+:::
+
+:::info
+Remember to configure your server's firewall, set up any necessary reverse proxies, and implement proper logging and monitoring solutions. (TODO: Documentation to be done in another project for server setup, with reverse proxy nginx, gitlab runners, certificate, ...)
+:::
