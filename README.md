@@ -41,7 +41,7 @@
 - Authentication system with local and JWT strategies using [Passport](http://www.passportjs.org/)
 - Authorization with [CASL](https://casl.js.org/v6/en/) for Role-Based Access Control (RBAC) or Attribute-Based Access Control (ABAC)
 - [Prisma](https://www.prisma.io/) ORM for database management and migrations
-- [Postgres](https://www.postgresql.org/) database deployed as docker image for local and production environments
+- [Postgres](https://www.postgresql.org/) database deployed as docker container for local and production environments
 - [Kysely](https://kysely.dev/) extension for Prisma, providing type-safe query building
 - [Swagger](https://swagger.io/) integration for API documentation and testing
 - [Vitest](https://vitest.dev/) for unit testing and end-to-end (E2E) testing

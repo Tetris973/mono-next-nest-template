@@ -1,7 +1,7 @@
 {
-  "name": "mono-react-nest-template",
+  "name": "mono-next-nest-template",
   "version": "1.0.0",
-  "description": "A template for a monorepo with a React frontend and a NestJS backend",
+  "description": "A template for a monorepo with a Next.js frontend and a NestJS backend",
   "main": "index.js",
   "scripts": {
     "preinstall": "npx only-allow pnpm",

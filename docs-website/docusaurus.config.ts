@@ -38,8 +38,13 @@ const config: Config = {
           routeBasePath: '/docs',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://gitlab.com/tetris973/mono-next-nest-template/',
+          editUrl: 'https://gitlab.com/tetris973/mono-next-nest-template/-/tree/main/docs-website',
+          /**
+           * LastUpdateTime and LastUpdateAuthor are important to trace back changes to the documentation.
+           * It is also helpful to know if the documentation is still relevant.
+           */
+          showLastUpdateTime: true,
+          showLastUpdateAuthor: true,
         },
         blog: false,
         theme: {
