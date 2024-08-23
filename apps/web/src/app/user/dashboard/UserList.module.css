@@ -1,0 +1,22 @@
+.userItem {
+    cursor: pointer;
+    background: transparent;
+  }
+  
+  .userItem:hover {
+    transition: background-color 0.2s ease;
+    background-color: var(--mantine-color-gray-1);
+  }
+  
+  .userItem[data-selected] {
+    background-color: var(--mantine-color-gray-2);
+  }
+  
+  .userItem[data-selected]:hover {
+    background-color: var(--mantine-color-gray-3);
+  }
+
+  .scrollableContainer {
+    max-height: 300px;
+    overflow-y: auto;
+  }

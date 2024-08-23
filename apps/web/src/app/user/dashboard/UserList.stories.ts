@@ -53,7 +53,6 @@ export const Default: Story = {
     loading: false,
     error: null,
     onUserSelect: (id) => console.log('Selected user:', id),
-    containerStyle: { height: '400px', width: '300px' },
   },
 };
 

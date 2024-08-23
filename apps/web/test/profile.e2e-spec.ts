@@ -5,7 +5,7 @@ test.describe('Profile Page Flow', () => {
   test('should navigate to profile and be able to edit username', async ({ page, account }) => {
     // Navigate to profile page
     await page.goto(BASE_URL);
-    await page.getByRole('button', { name: account.username }).click();
+    await page.getByRole('button', { name: 'User menu' }).click();
     await page.getByRole('menuitem', { name: 'Profile' }).click();
     await expect(page).toHaveURL(PROFILE_URL);
 

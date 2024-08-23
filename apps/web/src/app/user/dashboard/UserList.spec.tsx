@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testWeb/utils/unit-test/index';
 import { UserList } from './UserList';
 import { UserDto } from '@dto/user/dto/user.dto';
 
@@ -79,7 +79,7 @@ describe('UserList', () => {
   it('calls onUserSelect function and updates selected user when a user item is clicked', () => {
     render(<UserList {...defaultProps} />);
     const userItemText = screen.getByText(mockUsers[0].username);
-    const userItem = userItemText.closest('li');
+    const userItem = userItemText.closest('p');
 
     fireEvent.click(userItem!);
     expect(defaultProps.onUserSelect).toHaveBeenCalledWith(mockUsers[0].id);

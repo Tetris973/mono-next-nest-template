@@ -37,6 +37,7 @@ export const Header: React.FC<HeaderProps> = ({ useAuth = defaultUseAuth, usePro
     <Flex align="center">
       <Menu>
         <MenuButton
+          aria-label="User menu"
           as={Button}
           bg="transparent"
           p={0}

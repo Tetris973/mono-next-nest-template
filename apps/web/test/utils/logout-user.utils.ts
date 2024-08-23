@@ -6,9 +6,9 @@ import { Page } from '@playwright/test';
  * @param page - The playwright page object
  * @param username - The username of the test user
  */
-export const logoutTestUser = async (page: Page, username: string) => {
+export const logoutTestUser = async (page: Page) => {
   await page.goto(BASE_URL);
-  await page.getByRole('button', { name: username }).click();
+  await page.getByRole('button', { name: 'User menu' }).click();
   await page.getByRole('menuitem', { name: 'Logout' }).click();
   await page.waitForURL(BASE_URL);
 };

@@ -9,7 +9,7 @@ test.describe('Protected Routes', () => {
   test.describe('Profile page', () => {
     test('should redirect to login page when user is not logged in', async ({ page }) => {
       // Logout user, because logged by default with setup file
-      await logoutTestUser(page, 'testUser');
+      await logoutTestUser(page);
 
       // Go to profile page
       await page.goto(PROFILE_URL);
@@ -23,7 +23,7 @@ test.describe('Protected Routes', () => {
       await page.waitForURL(PROFILE_URL);
 
       // Logout
-      await page.getByRole('button', { name: 'testUser' }).click();
+      await page.getByRole('button', { name: 'User menu' }).click();
       await page.getByRole('menuitem', { name: 'Logout' }).click();
       await expect(page).toHaveURL(LOGIN_URL);
     });
@@ -32,7 +32,7 @@ test.describe('Protected Routes', () => {
   test.describe('Dashboard page', () => {
     test('should redirect to login page when user is not logged in', async ({ page }) => {
       // Logout user, because logged by default with setup file
-      await logoutTestUser(page, 'testUser');
+      await logoutTestUser(page);
 
       // Go to dashboard page with increased timeout and error handling
       await page.goto(USER_DASHBOARD_URL);
@@ -46,7 +46,7 @@ test.describe('Protected Routes', () => {
       await page.waitForURL(USER_DASHBOARD_URL);
 
       // Logout
-      await page.getByRole('button', { name: 'testUser' }).click();
+      await page.getByRole('button', { name: 'User menu' }).click();
       await page.getByRole('menuitem', { name: 'Logout' }).click();
       await expect(page).toHaveURL(LOGIN_URL);
     });
