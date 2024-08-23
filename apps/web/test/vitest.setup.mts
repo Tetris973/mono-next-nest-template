@@ -10,6 +10,39 @@ import { getLogger, clearLogs, getLogs } from '@testWeb/utils/unit-test/test-log
 import { mockGetConfig } from '@testWeb/utils/unit-test/mock-config.utils';
 import { getConfig } from '@web/config/configuration';
 
+/**
+ * Configuration provided by mantine documentation https://mantine.dev/guides/vitest/#configuration
+ * According to doc:
+ * The code above mocks window.matchMedia and ResizeObserver APIs that are not available in jsdom environment but are required by some Mantine components.
+ */
+const { getComputedStyle } = window;
+window.getComputedStyle = (elt) => getComputedStyle(elt);
+window.HTMLElement.prototype.scrollIntoView = () => {};
+
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: vi.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+});
+
+class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+window.ResizeObserver = ResizeObserver;
+
+// END OF MANTINE CONFIGURATION
+
 vi.mock('@web/config/configuration', () => ({
     getConfig: mockGetConfig,
 }));

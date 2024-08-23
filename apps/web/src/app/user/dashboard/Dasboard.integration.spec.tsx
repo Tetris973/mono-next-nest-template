@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testWeb/utils/unit-test/index';
 import { Dashboard } from './Dashboard';
 import { UserDto } from '@dto/user/dto/user.dto';
 import { AuthContextInterface } from '@web/app/auth/AuthContext';

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testWeb/utils/unit-test/index';
 import { UserCard } from './UserCard';
 import { UserDto } from '@dto/user/dto/user.dto';
 
@@ -70,19 +70,23 @@ describe('UserCard', () => {
         showAdmin={true}
       />,
     );
-    expect(screen.getByLabelText('Delete user')).toBeInTheDocument();
-    expect(screen.getByLabelText('Edit user')).toBeInTheDocument();
+    const deleteButton = screen.getByLabelText('Delete user');
+    const editButton = screen.getByLabelText('Edit user');
+    expect(deleteButton).toBeVisible();
+    expect(editButton).toBeVisible();
   });
 
-  it('does not display admin buttons when showAdmin prop is false', () => {
+  it('hides admin buttons when showAdmin prop is false', () => {
     render(
       <UserCard
         {...defaultProps}
         showAdmin={false}
       />,
     );
-    expect(screen.queryByLabelText('Delete user')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('Edit user')).not.toBeInTheDocument();
+    const deleteButton = screen.getByLabelText('Delete user');
+    const editButton = screen.getByLabelText('Edit user');
+    expect(deleteButton).not.toBeVisible();
+    expect(editButton).not.toBeVisible();
   });
 
   it('calls onDelete function when delete button is clicked', () => {

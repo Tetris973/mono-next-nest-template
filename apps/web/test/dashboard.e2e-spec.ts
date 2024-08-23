@@ -19,7 +19,6 @@ customTest.describe('regular user dashboard', () => {
 
     // Verify user data
     const userCard = page.getByLabel('User card');
-    console.log(account.createdAt, account.createdAt.toLocaleString());
 
     await expect(userCard).toContainText(account.username);
     await expect(userCard).toContainText(`ID: ${account.id}`);
