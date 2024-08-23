@@ -15,7 +15,7 @@ module.exports = {
     node: true,
     browser: true,
   },
-  ignorePatterns: ['.eslintrc.js', 'prisma/generated/types.ts', 'next-env.d.ts', 'vitest.*', 'src/lib/http-logger.js'],
+  ignorePatterns: ['.eslintrc.js', 'prisma/generated/types.ts', 'next-env.d.ts', 'vitest.*', 'postcss.config.cjs'],
   rules: {
     ...sharedRules,
     // To remove a warning from eslint, this rule target the old version of next.js with pages routing
@@ -24,3 +24,4 @@ module.exports = {
     'prettier/prettier': 'error',
   },
 };
+

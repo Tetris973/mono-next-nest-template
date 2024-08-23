@@ -1,4 +1,4 @@
-import { Stack, Text, Box, Avatar, useColorModeValue, IconButton, Spinner } from '@chakra-ui/react';
+import { Card, Avatar, Text, Group, Stack, Loader, ActionIcon } from '@mantine/core';
 import { UserDto } from '@dto/user/dto/user.dto';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faEdit } from '@fortawesome/free-solid-svg-icons';
@@ -12,89 +12,109 @@ export interface UserCardProps {
 }
 
 const renderLoading = () => (
-  <Spinner
+  <Loader
     size="sm"
-    position="absolute"
-    top={4}
-    left={4}
+    style={{
+      position: 'absolute',
+      top: '0.5rem',
+      left: '0.5rem',
+    }}
     data-testid="user-card-loading"
   />
 );
 
-const renderAdminButtons = (onDelete: () => void, onEdit: () => void) => (
-  <>
-    <IconButton
-      aria-label="Delete user"
-      icon={<FontAwesomeIcon icon={faTimes} />}
-      size="sm"
-      colorScheme="red"
-      position="absolute"
-      top={2}
-      right={2}
-      onClick={onDelete}
-    />
-    <IconButton
+const renderAdminButtons = (onDelete: () => void, onEdit: () => void, visible: boolean) => (
+  <Group
+    justify="center"
+    gap="xs"
+    style={{
+      position: 'absolute',
+      top: '0.5rem',
+      right: '0.5rem',
+      opacity: visible ? 1 : 0,
+      pointerEvents: visible ? 'auto' : 'none',
+    }}>
+    <ActionIcon
       aria-label="Edit user"
-      icon={<FontAwesomeIcon icon={faEdit} />}
-      size="sm"
-      colorScheme="blue"
-      position="absolute"
-      top={2}
-      right={12}
-      onClick={onEdit}
-    />
-  </>
+      color="blue"
+      size="lg"
+      onClick={onEdit}>
+      <FontAwesomeIcon icon={faEdit} />
+    </ActionIcon>
+    <ActionIcon
+      aria-label="Delete user"
+      color="red"
+      size="lg"
+      onClick={onDelete}>
+      <FontAwesomeIcon icon={faTimes} />
+    </ActionIcon>
+  </Group>
 );
 
-const renderUserInfo = (user: UserDto | null) => (
-  <Stack
-    direction="column"
-    alignItems="center"
-    spacing={4}>
-    <Avatar
-      name={user?.username}
-      size="xl"
-      data-testid="user-card-avatar"
-    />
-    <Text
-      fontSize="lg"
-      fontWeight="bold">
-      {user?.username}
-    </Text>
-    <Text
-      fontSize="sm"
-      color="gray.500">
-      ID: {user?.id}
-    </Text>
-    <Text
-      fontSize="sm"
-      color="gray.500">
-      Created At: {user && new Date(user.createdAt).toLocaleString()}
-    </Text>
-    <Text
-      fontSize="sm"
-      color="gray.500">
-      Updated At: {user && new Date(user.updatedAt).toLocaleString()}
-    </Text>
-  </Stack>
-);
+const getColorFromName = (name: string): string => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const hue = hash % 360;
+  return `hsl(${hue}, 40%, 70%)`;
+};
 
-export const UserCard: React.FC<UserCardProps> = ({ user, loading, onDelete, showAdmin, onEdit }) => {
-  const bg = useColorModeValue('white', 'gray.700');
+const renderUserInfo = (user: UserDto | null) => {
+  const backgroundColor = user?.username ? getColorFromName(user.username) : undefined;
 
   return (
-    <Box
+    <Stack
+      align="center"
+      gap="sm">
+      <Avatar
+        src={null}
+        size="xl"
+        styles={(theme) => ({
+          placeholder: {
+            backgroundColor,
+            color: theme.colors.gray[8],
+          },
+        })}>
+        {user?.username?.charAt(0).toUpperCase()}
+      </Avatar>
+      <Text
+        size="lg"
+        fw={700}>
+        {user?.username}
+      </Text>
+      <Text
+        size="sm"
+        c="dimmed">
+        ID: {user?.id}
+      </Text>
+      <Text
+        size="sm"
+        c="dimmed">
+        Created At: {user && new Date(user.createdAt).toLocaleString()}
+      </Text>
+      <Text
+        size="sm"
+        c="dimmed">
+        Updated At: {user && new Date(user.updatedAt).toLocaleString()}
+      </Text>
+    </Stack>
+  );
+};
+
+export const UserCard: React.FC<UserCardProps> = ({ user, loading, onDelete, showAdmin, onEdit }) => {
+  return (
+    <Card
       aria-label="User card"
-      position="relative"
-      rounded={'xl'}
-      bg={bg}
-      boxShadow={'lg'}
-      p={6}
-      w={'full'}
-      maxW={'md'}>
+      shadow="sm"
+      pl="xl"
+      pr="xl"
+      radius="md"
+      withBorder
+      style={{ position: 'relative' }}>
       {loading && renderLoading()}
-      {user && showAdmin && renderAdminButtons(onDelete, onEdit)}
-      {renderUserInfo(user)}
-    </Box>
+      {renderAdminButtons(onDelete, onEdit, !!user && showAdmin)}
+      <Card.Section py="md">{renderUserInfo(user)}</Card.Section>
+    </Card>
   );
 };
