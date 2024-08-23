@@ -75,7 +75,6 @@ export function Dashboard({
             loading={getAllUsersPending}
             error={error}
             onUserSelect={loadUserById}
-            containerStyle={{ marginRight: '32px' }}
           />
           <Spacer />
           {editing && selectedUser ? (

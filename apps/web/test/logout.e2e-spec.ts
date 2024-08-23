@@ -12,7 +12,7 @@ test.describe('Logout Flow', () => {
     await expect(usernameMessage).toBeVisible();
 
     // Logout
-    await page.getByRole('button', { name: userAccount.username }).click();
+    await page.getByRole('button', { name: 'User menu' }).click();
     await page.getByRole('menuitem', { name: 'Logout' }).click();
 
     // Check if logout was successful

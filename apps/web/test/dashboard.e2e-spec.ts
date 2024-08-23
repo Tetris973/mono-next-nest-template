@@ -33,7 +33,7 @@ test.describe('admin dashboard', () => {
 
   test('admin can edit and delete other users', async ({ page }) => {
     // Create a new user to be edited/deleted
-    const user = await createTestUser('dashboard-admin');
+    const user = await createTestUser('dashB-adm');
 
     // Navigate to dashboard
     await page.goto(BASE_URL);
@@ -59,7 +59,7 @@ test.describe('admin dashboard', () => {
     // Verify changes
     const editMessage = await page.getByText(`Profile of ${newUsername} updated successfully`);
     await expect(editMessage).toBeVisible();
-    await expect(page.locator('li').filter({ hasText: newUsername })).toBeVisible();
+    await expect(page.getByRole('button').filter({ hasText: newUsername })).toBeVisible();
 
     // Delete user
     await page.getByLabel('Delete user').click();

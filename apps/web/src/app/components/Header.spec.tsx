@@ -73,7 +73,7 @@ describe('Header', () => {
         useProfile={() => mockProfileContext}
       />,
     );
-    expect(screen.getByRole('button', { name: mockProfile.username })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'User menu' })).toBeInTheDocument();
   });
 
   it('renders profile and logout options in user menu when authenticated', async () => {
@@ -84,7 +84,7 @@ describe('Header', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: mockProfile.username }));
+    fireEvent.click(screen.getByRole('button', { name: 'User menu' }));
 
     expect(await screen.findByText('Profile')).toBeInTheDocument();
     expect(screen.getByText('Logout')).toBeInTheDocument();
@@ -98,7 +98,7 @@ describe('Header', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: mockProfile.username }));
+    fireEvent.click(screen.getByRole('button', { name: 'User menu' }));
     fireEvent.click(await screen.findByText('Profile'));
 
     expect(mockRouter.push).toHaveBeenCalledWith('/auth/profile');
@@ -112,7 +112,7 @@ describe('Header', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: mockProfile.username }));
+    fireEvent.click(screen.getByRole('button', { name: 'User menu' }));
     fireEvent.click(await screen.findByText('Logout'));
 
     expect(mockLogout).toHaveBeenCalled();
