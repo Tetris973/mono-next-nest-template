@@ -1,29 +1,30 @@
 'use client';
-import { Flex, Stack, Heading, useColorModeValue } from '@chakra-ui/react';
+import React from 'react';
+import { Container, Stack, Title, Box, useMantineTheme } from '@mantine/core';
 import { SignupForm } from './SignupForm';
 import { Header } from '@web/app/components/Header';
 
 export default function Signup(): JSX.Element {
+  const theme = useMantineTheme();
+
   return (
     <>
       <Header />
-      <Flex
-        minH={'100vh'}
-        align={'center'}
-        justify={'center'}
-        bg={useColorModeValue('gray.50', 'gray.800')}>
-        <Stack
-          spacing={8}
-          mx={'auto'}
-          maxW={'lg'}
-          py={12}
-          px={6}>
-          <Stack align={'center'}>
-            <Heading fontSize={'4xl'}>Sign up new account</Heading>
+      <Box
+        component="main"
+        style={{
+          minHeight: '100vh',
+          backgroundColor: theme.colors.gray[0],
+          display: 'flex',
+          alignItems: 'center',
+        }}>
+        <Container size="sm">
+          <Stack gap="xl">
+            <Title order={1}>Sign up new account</Title>
+            <SignupForm />
           </Stack>
-          <SignupForm />
-        </Stack>
-      </Flex>
+        </Container>
+      </Box>
     </>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
-import { Box, Heading, Stack, useColorModeValue, Spinner, Button } from '@chakra-ui/react';
+import React from 'react';
+import { Box, Title, Stack, Loader, Button, Container, useMantineTheme } from '@mantine/core';
 import { Header } from './components/Header';
 import { useProfile } from './auth/ProfileContext';
 import { useRouter } from 'next/navigation';
@@ -8,32 +9,35 @@ import { useRouter } from 'next/navigation';
 export default function Home() {
   const { profile, loading } = useProfile();
   const router = useRouter();
+  const theme = useMantineTheme();
 
   return (
     <>
       <Header />
       <Box
-        minH="100vh"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        bg={useColorModeValue('gray.50', 'gray.800')}
-        py={12}
-        px={6}>
-        <Stack
-          spacing={8}
-          mx="auto"
-          maxW="lg"
-          align="center">
-          <Heading fontSize="4xl">Welcome to My Next.js App</Heading>
-          {loading && <Spinner />}
-          {!loading && profile && (
-            <>
-              <Heading fontSize="4xl">{profile?.username}</Heading>
-              <Button onClick={() => router.push('/user/dashboard')}>Go to dashboard</Button>
-            </>
-          )}
-        </Stack>
+        component="main"
+        style={{
+          minHeight: '100vh',
+          backgroundColor: theme.colors.gray[0],
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: `${theme.spacing.xl} ${theme.spacing.md}`,
+        }}>
+        <Container size="sm">
+          <Stack
+            gap="xl"
+            align="center">
+            <Title order={1}>Welcome to My Next.js App</Title>
+            {loading && <Loader />}
+            {!loading && profile && (
+              <>
+                <Title order={2}>{profile?.username}</Title>
+                <Button onClick={() => router.push('/user/dashboard')}>Go to dashboard</Button>
+              </>
+            )}
+          </Stack>
+        </Container>
       </Box>
     </>
   );
