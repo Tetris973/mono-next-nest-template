@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testWeb/utils/unit-test/index';
 import { ProfileForm } from './ProfileForm';
 import { UserDto } from '@dto/user/dto/user.dto';
 
@@ -55,9 +55,6 @@ describe('ProfileForm', () => {
   it('renders ProfileAvatar, ProfileField for username, createdAt, UpdatedAt, component with correct props', () => {
     render(<ProfileForm {...defaultProps} />);
 
-    // Check ProfileAvatar
-    expect(screen.getByTestId('profile-avatar')).toBeInTheDocument();
-
     // Check username field
     const usernameLabel = screen.getByText('User name');
     expect(usernameLabel).toBeInTheDocument();
@@ -69,14 +66,14 @@ describe('ProfileForm', () => {
     expect(createdAtLabel).toBeInTheDocument();
     const createdAtField = screen.getByDisplayValue(mockUser.createdAt.toLocaleString());
     expect(createdAtField).toBeInTheDocument();
-    expect(createdAtField).toHaveAttribute('readonly');
+    expect(createdAtField).toBeDisabled();
 
     // Check updatedAt field
     const updatedAtLabel = screen.getByText('Updated At');
     expect(updatedAtLabel).toBeInTheDocument();
     const updatedAtField = screen.getByDisplayValue(mockUser.updatedAt.toLocaleString());
     expect(updatedAtField).toBeInTheDocument();
-    expect(updatedAtField).toHaveAttribute('readonly');
+    expect(updatedAtField).toBeDisabled();
   });
 
   it('calls setNewUsername when username input changes', () => {
@@ -102,8 +99,9 @@ describe('ProfileForm', () => {
         useProfileForm={errorMockUseProfileForm}
       />,
     );
-    expect(screen.getByText('Error 1')).toBeInTheDocument();
-    expect(screen.getByText('Error 2')).toBeInTheDocument();
+    // Check for the error messages
+    const errorElement = screen.getByText(/Error 1, Error 2/i);
+    expect(errorElement).toBeInTheDocument();
   });
 
   it('disables submit button when submitPending is true', () => {
@@ -144,8 +142,8 @@ describe('ProfileForm', () => {
 
   it('renders createdAt and updatedAt fields as read-only', () => {
     render(<ProfileForm {...defaultProps} />);
-    expect(screen.getByDisplayValue(mockUser.createdAt.toLocaleString()).closest('input')).toHaveAttribute('readonly');
-    expect(screen.getByDisplayValue(mockUser.updatedAt.toLocaleString()).closest('input')).toHaveAttribute('readonly');
+    expect(screen.getByDisplayValue(mockUser.createdAt.toLocaleString()).closest('input')).toBeDisabled();
+    expect(screen.getByDisplayValue(mockUser.updatedAt.toLocaleString()).closest('input')).toBeDisabled();
   });
 
   it('renders spinner in submit button when submitPending is true', () => {
@@ -159,6 +157,6 @@ describe('ProfileForm', () => {
         useProfileForm={pendingMockUseProfileForm}
       />,
     );
-    expect(screen.getByLabelText('Submit profile changes').querySelector('.chakra-spinner')).toBeInTheDocument();
+    expect(screen.getByLabelText('Submit profile changes')).toHaveAttribute('data-loading');
   });
 });

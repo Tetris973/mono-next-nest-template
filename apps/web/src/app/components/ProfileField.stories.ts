@@ -15,28 +15,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    id: 'username',
     label: 'Username',
-    name: 'username',
     value: 'johndoe',
     error: undefined,
     loading: false,
-    isReadOnly: false,
     onChange: (e) => console.log('Value changed:', e.target.value),
-  },
-};
-
-export const ReadOnly: Story = {
-  args: {
-    ...Default.args,
-    isReadOnly: true,
-  },
-};
-
-export const WithError: Story = {
-  args: {
-    ...Default.args,
-    error: ['This field is required'],
   },
 };
 
