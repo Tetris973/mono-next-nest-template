@@ -1,7 +1,7 @@
 import { Box, Button, Stack, Text, Tooltip, useColorModeValue, Spinner, Checkbox, Link } from '@chakra-ui/react';
 import { UseLogin, useLogin as defaultUseLogin } from './login.use';
 import { UsernameField } from '@web/app/components/UsernameField';
-import { PasswordField } from '@web/app/components/PasswordField';
+import { PasswordInput } from '@mantine/core';
 import { showErrorNotification } from '@web/app/utils/notifications';
 
 export interface LoginFormProps {
@@ -9,7 +9,7 @@ export interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ useLogin = defaultUseLogin }) => {
-  const { error, showPassword, setShowPassword, handleSubmit, authLoading } = useLogin();
+  const { error, handleSubmit, authLoading } = useLogin();
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     const result = await handleSubmit(event);
@@ -38,14 +38,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ useLogin = defaultUseLogin
             error={error.username}
             loading={authLoading}
           />
-          <PasswordField
+          <PasswordInput
             id="password"
             label="Password"
             name="password"
-            error={error.password}
-            loading={authLoading}
-            showPassword={showPassword}
-            setShowPassword={setShowPassword}
+            autoComplete="current-password"
+            error={Array.isArray(error.password) ? error.password.join(', ') : error.password}
           />
           <Stack spacing={10}>
             <Stack

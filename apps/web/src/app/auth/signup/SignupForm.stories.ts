@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { SignupForm, SignupFormProps } from '@web/app/auth/signup/SignupForm';
+import { UseSignup } from '@web/app/auth/signup/signup.use';
 
 const meta = {
   title: 'Components/SignupForm',
@@ -22,10 +23,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const mockUseSignup = () => ({
+const mockUseSignup = (): UseSignup => ({
   error: {},
-  showPassword: false,
-  setShowPassword: () => {},
   handleSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     return { success: 'Signup successful' };
@@ -57,15 +56,6 @@ export const WithErrors: Story = {
         password: ['Password is too short'],
         confirmPassword: ['Passwords do not match'],
       },
-    }),
-  },
-};
-
-export const PasswordVisible: Story = {
-  args: {
-    useSignup: () => ({
-      ...mockUseSignup(),
-      showPassword: true,
     }),
   },
 };
