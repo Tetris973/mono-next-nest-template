@@ -74,7 +74,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
             id="username"
             name="username"
             label="User name"
-            value={newUsername}
+            placeholder={newUsername}
             error={Array.isArray(profileError.username) ? profileError.username.join(', ') : profileError.username}
             loading={profilePending}
             onChange={(e) => setNewUsername(e.target.value)}

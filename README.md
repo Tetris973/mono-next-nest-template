@@ -50,7 +50,7 @@
 
 - Next.js 14+ with app directory for opinionated frontend app architecture
 - [React 18](https://reactjs.org/) with server components and client components
-- [Chakra UI](https://chakra-ui.com/) for component library and styling
+- [Mantine](https://mantine.dev/) for component library and styling
 - [Playwright](https://playwright.dev/) for end-to-end (E2E) testing
 - [Vitest](https://vitest.dev/) for unit and component testing
 - [Storybook](https://storybook.js.org/) for component development and visualization

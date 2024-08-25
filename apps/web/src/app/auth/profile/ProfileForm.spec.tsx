@@ -58,7 +58,7 @@ describe('ProfileForm', () => {
     // Check username field
     const usernameLabel = screen.getByText('User name');
     expect(usernameLabel).toBeInTheDocument();
-    const usernameField = screen.getByDisplayValue(mockUser.username);
+    const usernameField = screen.getByPlaceholderText(mockUser.username);
     expect(usernameField).toBeInTheDocument();
 
     // Check createdAt field
@@ -83,7 +83,7 @@ describe('ProfileForm', () => {
         useProfileForm={mockUseProfileForm}
       />,
     );
-    const usernameInput = screen.getByDisplayValue(mockUser.username);
+    const usernameInput = screen.getByPlaceholderText(mockUser.username);
     fireEvent.change(usernameInput!, { target: { value: 'newusername' } });
     expect(mockUseProfileProps.setNewUsername).toHaveBeenCalledWith('newusername');
   });
