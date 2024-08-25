@@ -1,7 +1,6 @@
 import { Box, Button, Stack, useColorModeValue, Spinner, Text, Link } from '@chakra-ui/react';
 import { UseSignup, useSignup as defaultUseSignup } from './signup.use';
-import { UsernameField } from '@web/app/components/UsernameField';
-import { PasswordInput } from '@mantine/core';
+import { PasswordInput, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { showSuccessNotification, showErrorNotification } from '@web/app/utils/notifications';
 import { useRouter } from 'next/navigation';
@@ -40,13 +39,13 @@ export const SignupForm: React.FC<SignupFormProps> = ({ useSignup = defaultUseSi
         onSubmit={handleFormSubmit}
         aria-label="Sign up form">
         <Stack spacing={4}>
-          <UsernameField
+          <TextInput
             id="username"
             label="Username"
             type="text"
             name="username"
-            error={error.username}
-            loading={signupPending}
+            error={Array.isArray(error.username) ? error.username.join(', ') : error.username}
+            autoComplete="username"
           />
           <PasswordInput
             id="password"

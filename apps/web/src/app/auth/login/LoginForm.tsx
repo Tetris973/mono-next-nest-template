@@ -1,7 +1,6 @@
 import { Box, Button, Stack, Text, Tooltip, useColorModeValue, Spinner, Checkbox, Link } from '@chakra-ui/react';
 import { UseLogin, useLogin as defaultUseLogin } from './login.use';
-import { UsernameField } from '@web/app/components/UsernameField';
-import { PasswordInput } from '@mantine/core';
+import { PasswordInput, TextInput } from '@mantine/core';
 import { showErrorNotification } from '@web/app/utils/notifications';
 
 export interface LoginFormProps {
@@ -30,13 +29,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ useLogin = defaultUseLogin
         onSubmit={handleFormSubmit}
         aria-label="Login form">
         <Stack spacing={4}>
-          <UsernameField
+          <TextInput
             id="username"
             label="Username"
             type="text"
             name="username"
-            error={error.username}
-            loading={authLoading}
+            error={Array.isArray(error.username) ? error.username.join(', ') : error.username}
+            autoComplete="username"
           />
           <PasswordInput
             id="password"

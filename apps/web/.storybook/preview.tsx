@@ -1,9 +1,11 @@
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import React, { useEffect } from 'react';
 import type { Preview } from "@storybook/react";
 import { AppRouterInstance, AppRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { ChakraProvider } from '@chakra-ui/react';
 import { MantineProvider, useMantineColorScheme, AppShell } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import { addons } from '@storybook/preview-api';
 import { theme } from '../src/lib/mantine-theme';
 import { useChannel } from '@storybook/preview-api';
@@ -44,7 +46,7 @@ const preview: Preview = {
 
 export const decorators = [
   (renderStory: any) => <ColorSchemeWrapper>{renderStory()}</ColorSchemeWrapper>,
-  (renderStory: any) => <MantineProvider theme={theme}><AppShell header={{ height: 60 }}>{renderStory()}</AppShell></MantineProvider>,
+  (renderStory: any) => <MantineProvider theme={theme}><Notifications/><AppShell header={{ height: 60 }}>{renderStory()}</AppShell></MantineProvider>,
   (renderStory: any) => <ChakraProvider>{renderStory()}</ChakraProvider>,
   (renderStory: any) => <AppRouterContext.Provider value={mockRouter as AppRouterInstance}>{renderStory()}</AppRouterContext.Provider>,
 ];
