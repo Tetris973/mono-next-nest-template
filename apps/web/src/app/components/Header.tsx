@@ -39,13 +39,18 @@ export function Header({ useAuth = defaultUseAuth, useProfile = defaultUseProfil
       width={200}>
       <Menu.Target>
         <Avatar
-          aria-label="User menu"
           component="button"
-          src={null}
+          aria-label="User menu"
           alt={profile?.username}
           radius="xl"
           size="md"
           styles={(theme) => ({
+            root: {
+              cursor: 'pointer',
+              border: 'none',
+              background: 'none',
+              padding: 0,
+            },
             placeholder: {
               backgroundColor,
               color: theme.colors.gray[8],

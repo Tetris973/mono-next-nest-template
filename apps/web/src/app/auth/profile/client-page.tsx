@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Flex, useColorModeValue } from '@chakra-ui/react';
+import { Box, useMantineTheme } from '@mantine/core';
 import { ProfileForm } from './ProfileForm';
 import { useProfile } from '@web/app/auth/ProfileContext';
 import { useRouter } from 'next/navigation';
@@ -9,13 +9,17 @@ import { useRouter } from 'next/navigation';
 export function ProfilePageClient() {
   const { profile: user, loadProfile } = useProfile();
   const router = useRouter();
+  const theme = useMantineTheme();
 
   return (
-    <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}>
+    <Box
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: theme.colors.gray[0],
+      }}>
       {user && (
         <ProfileForm
           userId={user.id}
@@ -27,6 +31,6 @@ export function ProfilePageClient() {
           }}
         />
       )}
-    </Flex>
+    </Box>
   );
 }
