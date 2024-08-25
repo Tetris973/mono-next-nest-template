@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testWeb/utils/unit-test/index';
 import { SignupForm } from './SignupForm';
 import { mockRouter } from '@testWeb/utils/unit-test/mock-router.utils';
 
@@ -41,7 +41,6 @@ describe('SignupForm', () => {
     // CHECK RESULTS
     expect(screen.getByRole('button', { name: /Sign up/i })).toBeDisabled();
     expect(screen.getByRole('button', { name: /Sign up/i }).querySelector('.chakra-spinner')).toBeInTheDocument();
-    expect(screen.getAllByTestId('field-skeleton-loader')).toHaveLength(3);
   });
 
   it('calls handleSubmit when form is submitted', async () => {
@@ -73,24 +72,6 @@ describe('SignupForm', () => {
     await waitFor(() => {
       expect(mockRouter.push).toHaveBeenCalledWith('/auth/login');
     });
-  });
-
-  it('toggles password visibility when show/hide password button is clicked', () => {
-    // INIT
-    render(<SignupForm {...defaultProps} />);
-
-    // RUN
-    const passwordInputs = screen.getAllByLabelText('Password');
-    const toggleButtons = screen.getAllByLabelText('Toggle password visibility');
-
-    passwordInputs.forEach((input) => {
-      expect(input).toHaveAttribute('type', 'password');
-    });
-    toggleButtons.forEach((button) => {
-      fireEvent.click(button);
-    });
-    expect(mockUseSignupProps.setShowPassword).toHaveBeenCalledWith(true);
-    expect(mockUseSignupProps.setShowPassword).toHaveBeenCalledTimes(2);
   });
 
   it('displays multiple error messages when error object has values', () => {

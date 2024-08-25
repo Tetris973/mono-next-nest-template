@@ -10,9 +10,7 @@ import { DtoValidationError } from '@web/app/common/dto-validation-error.type';
 
 export interface UseLogin {
   error: DtoValidationError<LoginUserDto>;
-  showPassword: boolean;
   authLoading: boolean;
-  setShowPassword: (showPassword: boolean) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<FormSubmitResult>;
 }
 
@@ -23,7 +21,6 @@ export interface UseLoginDependencies {
 export const useLogin = ({ useAuth = defaultUseAuth }: UseLoginDependencies = {}): UseLogin => {
   const { login, loading: authLoading, isAuthenticated } = useAuth();
   const [error, setError] = useState<DtoValidationError<LoginUserDto>>({ username: [], password: [] });
-  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -66,8 +63,6 @@ export const useLogin = ({ useAuth = defaultUseAuth }: UseLoginDependencies = {}
 
   return {
     error,
-    showPassword,
-    setShowPassword,
     handleSubmit,
     authLoading,
   };

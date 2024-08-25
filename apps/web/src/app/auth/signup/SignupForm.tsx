@@ -1,7 +1,8 @@
 import { Box, Button, Stack, useColorModeValue, Spinner, Text, Link } from '@chakra-ui/react';
 import { UseSignup, useSignup as defaultUseSignup } from './signup.use';
 import { UsernameField } from '@web/app/components/UsernameField';
-import { PasswordField } from '@web/app/components/PasswordField';
+import { PasswordInput } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { showSuccessNotification, showErrorNotification } from '@web/app/utils/notifications';
 import { useRouter } from 'next/navigation';
 
@@ -10,8 +11,10 @@ export interface SignupFormProps {
 }
 
 export const SignupForm: React.FC<SignupFormProps> = ({ useSignup = defaultUseSignup }) => {
-  const { error, showPassword, setShowPassword, handleSubmit, signupPending } = useSignup();
+  const { error, handleSubmit, signupPending } = useSignup();
   const router = useRouter();
+
+  const [passwordVisible, { toggle: togglePassword }] = useDisclosure(false);
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     const result = await handleSubmit(event);
@@ -45,23 +48,21 @@ export const SignupForm: React.FC<SignupFormProps> = ({ useSignup = defaultUseSi
             error={error.username}
             loading={signupPending}
           />
-          <PasswordField
+          <PasswordInput
             id="password"
             label="Password"
             name="password"
-            error={error.password}
-            loading={signupPending}
-            showPassword={showPassword}
-            setShowPassword={setShowPassword}
+            error={Array.isArray(error.password) ? error.password.join(', ') : error.password}
+            visible={passwordVisible}
+            onVisibilityChange={togglePassword}
           />
-          <PasswordField
+          <PasswordInput
             id="confirmPassword"
             label="Confirm Password"
             name="confirmPassword"
-            error={error.confirmPassword}
-            loading={signupPending}
-            showPassword={showPassword}
-            setShowPassword={setShowPassword}
+            error={Array.isArray(error.confirmPassword) ? error.confirmPassword.join(', ') : error.confirmPassword}
+            visible={passwordVisible}
+            onVisibilityChange={togglePassword}
           />
           <Stack spacing={10}>
             <Button

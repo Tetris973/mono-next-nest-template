@@ -25,9 +25,7 @@ type Story = StoryObj<typeof meta>;
 
 const mockUseLogin = (): UseLogin => ({
   error: {},
-  showPassword: false,
   authLoading: false,
-  setShowPassword: () => {},
   handleSubmit: async (event) => {
     event.preventDefault();
     return { success: 'Login successful' };
@@ -57,15 +55,6 @@ export const WithErrors: Story = {
         username: ['Username is required'],
         password: ['Password must be at least 8 characters'],
       },
-    }),
-  },
-};
-
-export const PasswordVisible: Story = {
-  args: {
-    useLogin: () => ({
-      ...mockUseLogin(),
-      showPassword: true,
     }),
   },
 };

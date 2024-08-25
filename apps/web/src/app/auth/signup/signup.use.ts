@@ -12,8 +12,6 @@ import { DtoValidationError } from '@web/app/common/dto-validation-error.type';
 
 export interface UseSignup {
   error: DtoValidationError<CreateUserDto>;
-  showPassword: boolean;
-  setShowPassword: (showPassword: boolean) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<FormSubmitResult>;
   signupPending: boolean;
 }
@@ -32,7 +30,6 @@ export const useSignup = ({
     password: [],
     confirmPassword: [],
   });
-  const [showPassword, setShowPassword] = useState(false);
   const [signupPending, signupActionM] = useServerAction(signupAction);
   const router = useRouter();
   const { isAuthenticated } = useAuth();
@@ -76,8 +73,6 @@ export const useSignup = ({
 
   return {
     error,
-    showPassword,
-    setShowPassword,
     handleSubmit,
     signupPending,
   };
