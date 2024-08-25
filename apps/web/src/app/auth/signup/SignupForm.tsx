@@ -2,7 +2,7 @@ import { Box, Button, Stack, useColorModeValue, Spinner, Text, Link } from '@cha
 import { UseSignup, useSignup as defaultUseSignup } from './signup.use';
 import { UsernameField } from '@web/app/components/UsernameField';
 import { PasswordField } from '@web/app/components/PasswordField';
-import { useCustomToast } from '@web/app/utils/toast-utils.use';
+import { showSuccessNotification, showErrorNotification } from '@web/app/utils/notifications';
 import { useRouter } from 'next/navigation';
 
 export interface SignupFormProps {
@@ -10,16 +10,19 @@ export interface SignupFormProps {
 }
 
 export const SignupForm: React.FC<SignupFormProps> = ({ useSignup = defaultUseSignup }) => {
-  const { toastError, toastSuccess } = useCustomToast();
   const { error, showPassword, setShowPassword, handleSubmit, signupPending } = useSignup();
   const router = useRouter();
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     const result = await handleSubmit(event);
     if (result.error) {
-      toastError(result.error);
+      showErrorNotification({
+        message: result.error,
+      });
     } else if (result.success) {
-      toastSuccess(result.success);
+      showSuccessNotification({
+        message: result.success,
+      });
       router.push('/auth/login');
     }
   };

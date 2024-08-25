@@ -12,20 +12,34 @@ test.describe('Protected Routes', () => {
       await logoutTestUser(page);
 
       // Go to profile page
-      await page.goto(PROFILE_URL);
-      await page.waitForURL(LOGIN_URL);
-      await expect(page).toHaveURL(LOGIN_URL);
+      await page.goto(PROFILE_URL, {
+        waitUntil: 'networkidle',
+        timeout: 10000, // 10 seconds timeout for navigation
+      });
+
+      // Wait for the URL to change to the login page
+      await page.waitForURL(LOGIN_URL, { timeout: 5000 });
+
+      // Assert that we are on the login page
+      expect(page.url()).toBe(LOGIN_URL);
     });
 
     test('should redirect to login page when login out', async ({ page }) => {
       // Go to profile page as logged in user
-      await page.goto(PROFILE_URL);
-      await page.waitForURL(PROFILE_URL);
+      await page.goto(PROFILE_URL, {
+        waitUntil: 'networkidle',
+        timeout: 10000, // 10 seconds timeout for navigation
+      });
 
       // Logout
       await page.getByRole('button', { name: 'User menu' }).click();
       await page.getByRole('menuitem', { name: 'Logout' }).click();
-      await expect(page).toHaveURL(LOGIN_URL);
+
+      // Wait for the URL to change to the login page
+      await page.waitForURL(LOGIN_URL, { timeout: 5000 });
+
+      // Assert that we are on the login page
+      expect(page.url()).toBe(LOGIN_URL);
     });
   });
 
@@ -34,21 +48,35 @@ test.describe('Protected Routes', () => {
       // Logout user, because logged by default with setup file
       await logoutTestUser(page);
 
-      // Go to dashboard page with increased timeout and error handling
-      await page.goto(USER_DASHBOARD_URL);
-      await page.waitForURL(LOGIN_URL);
-      await expect(page).toHaveURL(LOGIN_URL);
+      // Navigate to the protected route
+      await page.goto(USER_DASHBOARD_URL, {
+        waitUntil: 'networkidle',
+        timeout: 10000, // 10 seconds timeout for navigation
+      });
+
+      // Wait for the URL to change to the login page
+      await page.waitForURL(LOGIN_URL, { timeout: 5000 });
+
+      // Assert that we are on the login page
+      expect(page.url()).toBe(LOGIN_URL);
     });
 
     test('should redirect to login page when logging out', async ({ page }) => {
-      // Go to dashboard page as logged in user
-      await page.goto(USER_DASHBOARD_URL);
-      await page.waitForURL(USER_DASHBOARD_URL);
+      // Navigate to the protected route
+      await page.goto(USER_DASHBOARD_URL, {
+        waitUntil: 'networkidle',
+        timeout: 10000, // 10 seconds timeout for navigation
+      });
 
       // Logout
       await page.getByRole('button', { name: 'User menu' }).click();
       await page.getByRole('menuitem', { name: 'Logout' }).click();
-      await expect(page).toHaveURL(LOGIN_URL);
+
+      // Wait for the URL to change to the login page
+      await page.waitForURL(LOGIN_URL, { timeout: 5000 });
+
+      // Assert that we are on the login page
+      expect(page.url()).toBe(LOGIN_URL);
     });
   });
 });

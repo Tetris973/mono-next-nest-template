@@ -1,14 +1,16 @@
 'use client';
 
 import React from 'react';
-import { Flex, Box, useColorModeValue, VStack, Spacer, useBoolean } from '@chakra-ui/react';
+import { AppShell, Flex, Box, Stack, useMantineTheme, Paper, Text } from '@mantine/core';
+import { modals } from '@mantine/modals';
+import { useDisclosure } from '@mantine/hooks';
+import { showSuccessNotification, showErrorNotification } from '@web/app/utils/notifications';
+
 import { useDashboard as defaultUseDashboard } from './dashboard.use';
 import { UserCard } from './UserCard';
 import { UserList } from './UserList';
 import { ProfileForm } from '@web/app/auth/profile/ProfileForm';
 import { useProfile as defaultUseProfile } from '@web/app/auth/ProfileContext';
-import { useCustomToast } from '@web/app/utils/toast-utils.use';
-import { DeleteConfirmationDialog } from '@web/app/components/DeleteConfirmationDialog';
 
 export interface DashboardProps {
   useDashboard?: typeof defaultUseDashboard;
@@ -30,85 +32,98 @@ export function Dashboard({
     deleteUser,
     loadUsers,
   } = useDashboard();
-  const { loadProfile, profile } = useProfile();
-  const { toastError, toastSuccess } = useCustomToast();
-  const bg = useColorModeValue('gray.50', 'gray.800');
 
-  const [alert, setAlert] = useBoolean();
-  const [editing, setEditing] = useBoolean();
+  const { loadProfile, profile } = useProfile();
+  const theme = useMantineTheme();
+
+  const [editing, { toggle: toggleEditing, close: closeEditing }] = useDisclosure(false);
 
   const confirmDelete = async () => {
-    setAlert.off();
     if (selectedUser) {
       const error = await deleteUser(selectedUser.id);
       if (error) {
-        toastError(error);
+        showErrorNotification({
+          message: `Error deleting user ${selectedUser.username}: ${error}`,
+        });
       } else {
-        toastSuccess(`User ${selectedUser.username} deleted successfully!`);
+        showSuccessNotification({
+          message: `User ${selectedUser.username} deleted successfully!`,
+        });
       }
     }
   };
+
+  const openDeleteModal = () =>
+    modals.openConfirmModal({
+      title: 'Delete User',
+      centered: true,
+      children: <Text>Are you sure you want to delete this user? This action cannot be undone.</Text>,
+      labels: { confirm: 'Delete', cancel: 'Cancel' },
+      confirmProps: { color: 'red' },
+      onCancel: () => console.log('Cancel'),
+      onConfirm: confirmDelete,
+    });
 
   const onSubmitSuccess = async () => {
     await loadUsers();
     if (selectedUser?.id === profile?.id) {
       loadProfile();
     }
-    setEditing.off();
+    closeEditing();
   };
 
   return (
-    <>
+    <AppShell padding="md">
       <Flex
-        minH={'100vh'}
-        align={'center'}
-        justify={'center'}
-        bg={bg}
-        p={6}>
-        <Box
-          display="flex"
-          w="full"
-          maxW="1200px">
-          <Spacer />
-          <UserList
-            users={users}
-            loading={getAllUsersPending}
-            error={error}
-            onUserSelect={loadUserById}
-          />
-          <Spacer />
-          {editing && selectedUser ? (
-            <ProfileForm
-              userId={selectedUser.id}
-              onCancel={setEditing.off}
-              onSubmitSuccess={onSubmitSuccess}
+        mih="100vh"
+        align="center"
+        justify="center"
+        bg={theme.colors.gray[0]}
+        p={theme.spacing.md}>
+        <Box style={{ display: 'flex', width: '100%', maxWidth: 1200 }}>
+          <Box style={{ flex: 1 }} />
+          <Paper
+            p="md"
+            bg="transparent"
+            style={{ flex: 2 }}>
+            <UserList
+              users={users}
+              loading={getAllUsersPending}
+              error={error}
+              onUserSelect={loadUserById}
             />
-          ) : (
-            <VStack
-              spacing={8}
-              align="center"
-              justify="center"
-              minW={'25%'}>
-              <Box w={'full'}>
-                <UserCard
-                  user={selectedUser}
-                  loading={getUserByIdPending}
-                  onDelete={() => setAlert.on()}
-                  showAdmin={showAdmin}
-                  onEdit={setEditing.on}
-                />
-              </Box>
-            </VStack>
-          )}
-          <Spacer />
+          </Paper>
+          <Box style={{ flex: 1 }} />
+          <Paper
+            p="md"
+            bg="transparent"
+            style={{ flex: 2 }}>
+            {editing && selectedUser ? (
+              <ProfileForm
+                userId={selectedUser.id}
+                onCancel={closeEditing}
+                onSubmitSuccess={onSubmitSuccess}
+              />
+            ) : (
+              <Stack
+                align="center"
+                justify="center"
+                miw="25%">
+                <Box w="100%">
+                  <UserCard
+                    user={selectedUser}
+                    loading={getUserByIdPending}
+                    onDelete={openDeleteModal}
+                    showAdmin={showAdmin}
+                    onEdit={toggleEditing}
+                  />
+                </Box>
+              </Stack>
+            )}
+          </Paper>
+          <Box style={{ flex: 1 }} />
         </Box>
       </Flex>
-
-      <DeleteConfirmationDialog
-        isOpen={alert}
-        onClose={setAlert.off}
-        onConfirm={confirmDelete}
-      />
-    </>
+    </AppShell>
   );
 }

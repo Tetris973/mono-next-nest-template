@@ -19,8 +19,13 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry 2 times on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Number of workers to run tests in parallel in CI */
-  workers: process.env.CI ? 1 : undefined,
+  /**
+   * Number of workers to run tests in parallel in CI
+   * Usually, for stability we run playwright test in CI with only 1 worker.
+   * But test should be developped to be parralel friendly. This helps have better architectured tests.
+   * So for the moment we run playwright test in CI in fully parallel mode.
+   */
+  workers: process.env.CI ? undefined : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -31,7 +36,15 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+
+    // Capture screenshot after each test, used for debugging
+    screenshot: 'on',
+
+    // Record video for each test, used for debugging
+    video: 'on-first-retry',
   },
+
+  outputDir: 'test-results',
 
   /* Configure projects for major browsers */
   projects: [

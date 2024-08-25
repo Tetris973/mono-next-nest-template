@@ -94,7 +94,8 @@ This project uses GitLab CI/CD for continuous integration. For detailed informat
 If you encounter a 409 Conflict error, it usually means a previous test failed to clean up properly. To resolve:
 
 1. Manually delete the conflicting user from the database, or
-2. Re-run the E2E tests in terminal mode: `pnpm test:e2e`
+2. Re-run the E2E pnpm script command: `pnpm test:e2e` or `pnpm test:e2e:ui` they should run a script in the backend that reset the databases;
+3. Or direclty run the command in the backend: `pnpm run db-seed:force:prod`
 </details>
 
 <details>
@@ -102,18 +103,9 @@ If you encounter a 409 Conflict error, it usually means a previous test failed t
 
 If tests fail due to "Error reading storage state" or inability to find a username locator:
 
-1. Run the setup test alone first
+1. Run the setup test alone first (this test is normaly automatically run in terminal mode)
 2. This logs in testUser and tetris, storing authentication cookies for all tests
 3. Then run the remaining tests
-</details>
-
-<details>
-<summary>Timeout Issues with Protected Route Tests</summary>
-
-Sometimes, tests (especially those involving protected routes) may time out unexpectedly. While the root cause is still under investigation, here's the current troubleshooting step:
-
-1. Rerun the test at least 3 times:
-   If a test fails due to a timeout, try running it multiple times. Often, the issue resolves itself after a few attempts.
 </details>
 
 :::info

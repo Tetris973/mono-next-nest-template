@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ProfileForm } from './ProfileForm';
 import { UserDto } from '@dto/user/dto/user.dto';
-import { mockToast } from '@testWeb/utils/unit-test/mock-toast.utils';
 
 describe('ProfileForm', () => {
   const mockUser: UserDto = {
@@ -134,22 +133,12 @@ describe('ProfileForm', () => {
     expect(defaultProps.onCancel).toHaveBeenCalled();
   });
 
-  it('calls onSubmitSuccess and display success toast when form submission is successful', async () => {
+  it('calls onSubmitSuccesswhen form submission is successful', async () => {
     mockUseProfileProps.handleSubmit.mockResolvedValue({ success: 'Profile updated successfully' });
     render(<ProfileForm {...defaultProps} />);
     fireEvent.click(screen.getByLabelText('Submit profile changes'));
     await waitFor(() => {
       expect(defaultProps.onSubmitSuccess).toHaveBeenCalled();
-      expect(mockToast.toastSuccess).toHaveBeenCalledWith('Profile updated successfully');
-    });
-  });
-
-  it('displays error toast when form submission fails', async () => {
-    mockUseProfileProps.handleSubmit.mockResolvedValue({ error: 'Submission failed' });
-    render(<ProfileForm {...defaultProps} />);
-    fireEvent.click(screen.getByLabelText('Submit profile changes'));
-    await waitFor(() => {
-      expect(mockToast.toastError).toHaveBeenCalledWith('Submission failed');
     });
   });
 

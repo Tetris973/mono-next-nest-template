@@ -82,7 +82,7 @@ export const test = baseTest.extend<{ account: FullUserDto }, { workerStorageSta
 /**
  * Clean up the authentication state and account for each worker after all tests are done
  */
-test.afterAll(async () => {
+test.afterEach(async () => {
   const id = test.info().parallelIndex;
   const authDir = path.join(test.info().project.outputDir, '.auth');
   const authFileName = path.join(authDir, `${id}.json`);

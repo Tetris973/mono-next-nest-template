@@ -136,6 +136,12 @@ e2e-test-frontend:
     - cp $NEXT_ENV_FILE ./.env.production.local
     - pnpm exec playwright install # Install the playwright browser needed for tests
     - pnpm run test:e2e # This command will seed the prod_db database and run the playwright test that runs both server in production mode
+  artifacts:
+    when: always
+    paths:
+      - apps/web/test-results/
+      - apps/web/playwright-report/
+    expire_in: 1 week
 
 
 pages:

@@ -2,20 +2,21 @@ import { Box, Button, Stack, Text, Tooltip, useColorModeValue, Spinner, Checkbox
 import { UseLogin, useLogin as defaultUseLogin } from './login.use';
 import { UsernameField } from '@web/app/components/UsernameField';
 import { PasswordField } from '@web/app/components/PasswordField';
-import { useCustomToast } from '@web/app/utils/toast-utils.use';
+import { showErrorNotification } from '@web/app/utils/notifications';
 
 export interface LoginFormProps {
   useLogin?: () => UseLogin;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ useLogin = defaultUseLogin }) => {
-  const { toastError } = useCustomToast();
   const { error, showPassword, setShowPassword, handleSubmit, authLoading } = useLogin();
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     const result = await handleSubmit(event);
     if (result.error) {
-      toastError(result.error);
+      showErrorNotification({
+        message: result.error,
+      });
     }
   };
 
