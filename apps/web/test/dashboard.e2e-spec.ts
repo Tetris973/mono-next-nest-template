@@ -52,9 +52,9 @@ test.describe('admin dashboard', () => {
       await page.getByLabel('Edit user').click();
 
       // Edit username
-      newUsername = 'dashB-edited-adm';
-      await page.getByPlaceholder('User name').click();
-      await page.getByPlaceholder('User name').fill(newUsername);
+      newUsername = `${user.username}-E`;
+      await page.getByLabel('User name').click();
+      await page.getByLabel('User name').fill(newUsername);
 
       // Submit changes
       await page.getByLabel('Submit profile changes').click();

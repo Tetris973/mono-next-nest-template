@@ -1,7 +1,7 @@
-import { Button, Stack, Spinner, useColorModeValue, chakra, Box } from '@chakra-ui/react';
+import React from 'react';
+import { Button, Stack, Paper, Avatar, type MantineTheme } from '@mantine/core';
 import { useProfileForm as defaultUseProfileForm } from './profile.use';
 import { ProfileField } from '@web/app/components/ProfileField';
-import { ProfileAvatar } from '@web/app/components/ProfileAvatar';
 import { showSuccessNotification, showErrorNotification } from '@web/app/utils/notifications';
 
 export interface ProfileFormProps {
@@ -10,6 +10,15 @@ export interface ProfileFormProps {
   onSubmitSuccess: () => void;
   useProfileForm?: typeof defaultUseProfileForm;
 }
+
+const getColorFromName = (name: string): string => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const hue = hash % 360;
+  return `hsl(${hue}, 40%, 70%)`;
+};
 
 export const ProfileForm: React.FC<ProfileFormProps> = ({
   userId,
@@ -35,27 +44,38 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
     }
   };
 
+  const avatarColor = newUsername ? getColorFromName(newUsername) : undefined;
+
   return (
-    <Box
-      rounded={'lg'}
-      bg={useColorModeValue('white', 'gray.700')}
-      boxShadow={'lg'}
-      p={8}
-      w={'md'}>
-      <chakra.form
+    <Paper
+      shadow="md"
+      p="lg"
+      radius="md"
+      withBorder
+      style={{ width: '30rem' }}>
+      <form
         onSubmit={handleFormSubmit}
         aria-label="Profile form">
-        <Stack spacing={4}>
-          <ProfileAvatar
-            username={newUsername}
-            loading={profilePending}
-          />
+        <Stack gap="md">
+          <Avatar
+            aria-label="User menu"
+            src={null}
+            alt={newUsername}
+            size="xl"
+            styles={(theme: MantineTheme) => ({
+              placeholder: {
+                backgroundColor: avatarColor,
+                color: theme.colors.gray[8],
+              },
+            })}>
+            {newUsername?.charAt(0).toUpperCase()}
+          </Avatar>
           <ProfileField
             id="username"
             name="username"
             label="User name"
             value={newUsername}
-            error={profileError.username}
+            error={Array.isArray(profileError.username) ? profileError.username.join(', ') : profileError.username}
             loading={profilePending}
             onChange={(e) => setNewUsername(e.target.value)}
           />
@@ -66,7 +86,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
             value={user ? new Date(user.createdAt).toLocaleString() : ''}
             error={undefined}
             loading={profilePending}
-            isReadOnly
+            disabled
           />
           <ProfileField
             id="updatedAt"
@@ -75,34 +95,30 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
             value={user ? new Date(user.updatedAt).toLocaleString() : ''}
             error={undefined}
             loading={profilePending}
-            isReadOnly
+            disabled
           />
           <Stack
-            spacing={6}
-            direction={['column', 'row']}>
+            gap="sm"
+            style={{ flexDirection: 'row' }}>
             <Button
               aria-label="Cancel editing profile"
               onClick={onCancel}
-              bg={'red.400'}
-              color={'white'}
-              w="full"
-              _hover={{ bg: 'red.500' }}>
+              color="red"
+              fullWidth>
               Cancel
             </Button>
             <Button
               aria-label="Submit profile changes"
               type="submit"
-              bg={'blue.400'}
-              color={'white'}
-              w="full"
-              _hover={{ bg: 'blue.500' }}
-              isLoading={submitPending}
-              spinner={<Spinner />}>
+              color="blue"
+              fullWidth
+              loading={submitPending}
+              loaderProps={{ type: 'dots' }}>
               Submit
             </Button>
           </Stack>
         </Stack>
-      </chakra.form>
-    </Box>
+      </form>
+    </Paper>
   );
 };

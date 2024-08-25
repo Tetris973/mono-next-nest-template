@@ -11,8 +11,8 @@ test.describe('Profile Page Flow', () => {
 
     // Edit username and submit
     const editedUsername = `${account.username}-E`;
-    console.log(`Editing username to: ${editedUsername}`);
-    await page.fill('input[name="username"]', editedUsername);
+    await page.getByLabel('User name').click();
+    await page.getByLabel('User name').fill(editedUsername);
     await page.getByLabel('Submit profile changes').click();
 
     // Check that username was edited
