@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testWeb/utils/unit-test/index';
 import { Header } from './Header';
 import { mockRouter } from '@testWeb/utils/unit-test/mock-router.utils';
 import { UserDto } from '@dto/user/dto/user.dto';
