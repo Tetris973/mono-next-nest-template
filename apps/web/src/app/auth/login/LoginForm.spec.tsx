@@ -33,7 +33,7 @@ describe('LoginForm', () => {
     });
     render(<LoginForm useLogin={loadingMockUseLogin} />);
     expect(screen.getByRole('button', { name: /Sign in/i })).toBeDisabled();
-    expect(screen.getByRole('button', { name: /Sign in/i }).querySelector('.chakra-spinner')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Sign in/i })).toHaveAttribute('data-loading', 'true');
   });
 
   it('calls handleSubmit when form is submitted', async () => {
