@@ -40,7 +40,7 @@ describe('SignupForm', () => {
 
     // CHECK RESULTS
     expect(screen.getByRole('button', { name: /Sign up/i })).toBeDisabled();
-    expect(screen.getByRole('button', { name: /Sign up/i }).querySelector('.chakra-spinner')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Sign up/i })).toHaveAttribute('data-loading', 'true');
   });
 
   it('calls handleSubmit when form is submitted', async () => {

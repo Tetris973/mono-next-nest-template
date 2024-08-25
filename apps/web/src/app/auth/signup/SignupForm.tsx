@@ -1,6 +1,6 @@
-import { Box, Button, Stack, useColorModeValue, Spinner, Text, Link } from '@chakra-ui/react';
+import React from 'react';
+import { Paper, Stack, Button, Text, Anchor, TextInput, PasswordInput } from '@mantine/core';
 import { UseSignup, useSignup as defaultUseSignup } from './signup.use';
-import { PasswordInput, TextInput } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { showSuccessNotification, showErrorNotification } from '@web/app/utils/notifications';
 import { useRouter } from 'next/navigation';
@@ -16,6 +16,7 @@ export const SignupForm: React.FC<SignupFormProps> = ({ useSignup = defaultUseSi
   const [passwordVisible, { toggle: togglePassword }] = useDisclosure(false);
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const result = await handleSubmit(event);
     if (result.error) {
       showErrorNotification({
@@ -30,19 +31,18 @@ export const SignupForm: React.FC<SignupFormProps> = ({ useSignup = defaultUseSi
   };
 
   return (
-    <Box
-      rounded={'lg'}
-      bg={useColorModeValue('white', 'gray.700')}
-      boxShadow={'lg'}
-      p={8}>
+    <Paper
+      shadow="md"
+      p="lg"
+      radius="md"
+      withBorder>
       <form
         onSubmit={handleFormSubmit}
         aria-label="Sign up form">
-        <Stack spacing={4}>
+        <Stack gap="x">
           <TextInput
             id="username"
             label="Username"
-            type="text"
             name="username"
             error={Array.isArray(error.username) ? error.username.join(', ') : error.username}
             autoComplete="username"
@@ -63,31 +63,25 @@ export const SignupForm: React.FC<SignupFormProps> = ({ useSignup = defaultUseSi
             visible={passwordVisible}
             onVisibilityChange={togglePassword}
           />
-          <Stack spacing={10}>
-            <Button
-              type="submit"
-              bg={'blue.400'}
-              color={'white'}
-              _hover={{ bg: 'blue.500' }}
-              isLoading={signupPending}
-              isDisabled={signupPending}
-              spinner={<Spinner />}
-              aria-label="Sign up">
-              Sign up
-            </Button>
-          </Stack>
-          <Stack pt={6}>
-            <Text align={'center'}>
-              Already a user?{' '}
-              <Link
-                href="/auth/login"
-                color={'blue.400'}>
-                Login
-              </Link>
-            </Text>
-          </Stack>
+          <Button
+            type="submit"
+            fullWidth
+            loading={signupPending}
+            loaderProps={{ type: 'dots' }}>
+            Sign up
+          </Button>
+          <Text
+            ta="center"
+            size="sm">
+            Already a user?{' '}
+            <Anchor
+              href="/auth/login"
+              size="sm">
+              Login
+            </Anchor>
+          </Text>
         </Stack>
       </form>
-    </Box>
+    </Paper>
   );
 };
