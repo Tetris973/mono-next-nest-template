@@ -1,4 +1,4 @@
-import { ColorSchemeScript } from '@mantine/core';
+import { ColorSchemeScript, AppShell } from '@mantine/core';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Providers } from './providers';
@@ -26,7 +26,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          {/* When adding Mantine components, such as the AppShell, remember to put them in the render.utils.tsx file */}
+          <AppShell header={{ height: 60 }}>{children}</AppShell>
+        </Providers>
       </body>
     </html>
   );

@@ -1,18 +1,7 @@
 'use client';
 
 import React from 'react';
-import {
-  Box,
-  Flex,
-  Button,
-  Avatar,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
-  Spinner,
-} from '@chakra-ui/react';
+import { AppShell, Group, Button, Avatar, Menu, Text, Loader, rem } from '@mantine/core';
 import { useProfile as defaultUseProfile } from '@web/app/auth/ProfileContext';
 import { useAuth as defaultUseAuth } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -24,7 +13,16 @@ export interface HeaderProps {
   useProfile?: typeof defaultUseProfile;
 }
 
-export const Header: React.FC<HeaderProps> = ({ useAuth = defaultUseAuth, useProfile = defaultUseProfile }) => {
+const getColorFromName = (name: string): string => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const hue = hash % 360;
+  return `hsl(${hue}, 40%, 70%)`;
+};
+
+export function Header({ useAuth = defaultUseAuth, useProfile = defaultUseProfile }: HeaderProps) {
   const { logout, isAuthenticated } = useAuth();
   const { profile, loading } = useProfile();
   const router = useRouter();
@@ -33,87 +31,112 @@ export const Header: React.FC<HeaderProps> = ({ useAuth = defaultUseAuth, usePro
   const handleProfileClick = () => router.push('/auth/profile');
   const handleSignupClick = () => router.push('/auth/signup');
 
-  const renderAuthenticatedMenu = () => (
-    <Flex align="center">
-      <Menu>
-        <MenuButton
+  const backgroundColor = profile?.username ? getColorFromName(profile.username) : undefined;
+
+  const AuthenticatedMenu = () => (
+    <Menu
+      shadow="md"
+      width={200}>
+      <Menu.Target>
+        <Avatar
           aria-label="User menu"
-          as={Button}
-          bg="transparent"
-          p={0}
-          cursor="pointer">
-          <Avatar
-            name={profile?.username}
-            size="sm"
-          />
-        </MenuButton>
-        <MenuList>
-          <MenuItem onClick={handleProfileClick}>
+          component="button"
+          src={null}
+          alt={profile?.username}
+          radius="xl"
+          size="md"
+          styles={(theme) => ({
+            placeholder: {
+              backgroundColor,
+              color: theme.colors.gray[8],
+            },
+          })}>
+          {profile?.username?.charAt(0).toUpperCase()}
+        </Avatar>
+      </Menu.Target>
+
+      <Menu.Dropdown>
+        <Menu.Item
+          leftSection={
             <FontAwesomeIcon
               icon={faUser}
-              style={{ marginRight: '10px' }}
+              style={{ width: rem(14), height: rem(14) }}
             />
-            Profile
-          </MenuItem>
-          <MenuDivider />
-          <MenuItem onClick={logout}>
+          }
+          onClick={handleProfileClick}>
+          Profile
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item
+          leftSection={
             <FontAwesomeIcon
               icon={faSignOutAlt}
-              style={{ marginRight: '10px' }}
+              style={{ width: rem(14), height: rem(14) }}
             />
-            Logout
-          </MenuItem>
-        </MenuList>
-      </Menu>
-    </Flex>
+          }
+          onClick={logout}
+          color="red">
+          Logout
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
   );
 
-  const renderUnauthenticatedMenu = () => (
+  const UnauthenticatedMenu = () => (
     <Button
       onClick={handleSignupClick}
-      leftIcon={<FontAwesomeIcon icon={faSignInAlt} />}
-      colorScheme="teal">
+      leftSection={
+        <FontAwesomeIcon
+          icon={faSignInAlt}
+          size="sm"
+        />
+      }
+      variant="filled">
       Signup
     </Button>
   );
 
-  const renderMenuContent = () => {
+  const MenuContent = () => {
     if (loading || isAuthenticated === undefined) {
-      return <Spinner data-testid="header-loading-spinner" />;
+      return (
+        <Loader
+          size="sm"
+          data-testid="header-loading-spinner"
+        />
+      );
     }
-    if (profile) {
-      return renderAuthenticatedMenu();
-    }
-    return renderUnauthenticatedMenu();
+    return profile ? <AuthenticatedMenu /> : <UnauthenticatedMenu />;
   };
 
   return (
-    <Box
-      bg="gray.100"
-      py={4}>
-      <Flex
-        maxW="container.lg"
-        mx="auto"
-        align="center"
-        justify="space-between">
-        <Flex alignItems="center">
+    <AppShell.Header>
+      <Group
+        bg="gray.1"
+        justify="space-between"
+        h="100%"
+        px="md">
+        <Group>
           <Button
-            onClick={handleHomeClick}
-            leftIcon={
+            variant="subtle"
+            color="gray.9"
+            leftSection={
               <FontAwesomeIcon
                 icon={faHome}
                 size="2x"
-                color="gray.600"
+                style={{ color: 'var(--mantine-color-gray-9)' }}
               />
             }
-            fontWeight="bold"
-            fontSize="xl"
-            variant="ghost">
-            My App
+            onClick={handleHomeClick}>
+            <Text
+              size="xl"
+              fw={700}
+              c="gray.9">
+              My App
+            </Text>
           </Button>
-        </Flex>
-        {renderMenuContent()}
-      </Flex>
-    </Box>
+        </Group>
+        <MenuContent />
+      </Group>
+    </AppShell.Header>
   );
-};
+}

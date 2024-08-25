@@ -1,5 +1,5 @@
 import { render as testingLibraryRender, RenderResult } from '@testing-library/react';
-import { MantineProvider } from '@mantine/core';
+import { MantineProvider, AppShell } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { theme } from '@web/lib/mantine-theme';
@@ -14,7 +14,9 @@ export function render(ui: React.ReactNode): RenderResult {
     wrapper: ({ children }: { children: React.ReactNode }) => (
       <MantineProvider theme={theme}>
         <Notifications />
-        <ModalsProvider>{children}</ModalsProvider>
+        <ModalsProvider>
+          <AppShell header={{ height: 60 }}>{children}</AppShell>
+        </ModalsProvider>
       </MantineProvider>
     ),
   });
