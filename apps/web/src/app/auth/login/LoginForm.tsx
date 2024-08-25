@@ -1,6 +1,6 @@
-import { Box, Button, Stack, Text, Tooltip, useColorModeValue, Spinner, Checkbox, Link } from '@chakra-ui/react';
+import React from 'react';
+import { Paper, Stack, Button, Text, Tooltip, Checkbox, Anchor, Group, TextInput, PasswordInput } from '@mantine/core';
 import { UseLogin, useLogin as defaultUseLogin } from './login.use';
-import { PasswordInput, TextInput } from '@mantine/core';
 import { showErrorNotification } from '@web/app/utils/notifications';
 
 export interface LoginFormProps {
@@ -11,6 +11,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ useLogin = defaultUseLogin
   const { error, handleSubmit, authLoading } = useLogin();
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const result = await handleSubmit(event);
     if (result.error) {
       showErrorNotification({
@@ -20,15 +21,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({ useLogin = defaultUseLogin
   };
 
   return (
-    <Box
-      rounded={'lg'}
-      bg={useColorModeValue('white', 'gray.700')}
-      boxShadow={'lg'}
-      p={8}>
+    <Paper
+      shadow="md"
+      p="lg"
+      radius="md"
+      withBorder>
       <form
         onSubmit={handleFormSubmit}
         aria-label="Login form">
-        <Stack spacing={4}>
+        <Stack gap="md">
           <TextInput
             id="username"
             label="Username"
@@ -44,57 +45,49 @@ export const LoginForm: React.FC<LoginFormProps> = ({ useLogin = defaultUseLogin
             autoComplete="current-password"
             error={Array.isArray(error.password) ? error.password.join(', ') : error.password}
           />
-          <Stack spacing={10}>
-            <Stack
-              direction={{ base: 'column', sm: 'row' }}
-              align={'start'}
-              justify={'space-between'}>
-              <Tooltip
-                label="Not available yet"
-                shouldWrapChildren
-                mt="3">
-                <Text
-                  as="span"
-                  color="gray.500">
-                  <Checkbox isDisabled>Remember me</Checkbox>
-                </Text>
-              </Tooltip>
-              <Tooltip
-                label="Not available yet"
-                shouldWrapChildren
-                mt="3">
-                <Text
-                  as="span"
-                  color="gray.500"
-                  cursor="not-allowed">
-                  Forgot password?
-                </Text>
-              </Tooltip>
-            </Stack>
-            <Button
-              aria-label="Sign in"
-              type="submit"
-              bg={'blue.400'}
-              color={'white'}
-              _hover={{ bg: 'blue.500' }}
-              isLoading={authLoading}
-              isDisabled={authLoading}
-              spinner={<Spinner />}>
-              Sign in
-            </Button>
-          </Stack>
-          <Stack pt={6}>
-            <Text align={'center'}>
-              Not a user yet?{' '}
-              <Link
-                href="/auth/signup"
-                color={'blue.400'}>
-                Sign up
-              </Link>
-            </Text>
-          </Stack>
+          <Group
+            justify="space-between"
+            mt="xs">
+            <Tooltip
+              label="Not available yet"
+              withArrow>
+              <Checkbox
+                label="Remember me"
+                disabled
+              />
+            </Tooltip>
+            <Tooltip
+              label="Not available yet"
+              withArrow>
+              <Anchor
+                component="button"
+                size="sm"
+                c="dimmed"
+                style={{ cursor: 'not-allowed' }}>
+                Forgot password?
+              </Anchor>
+            </Tooltip>
+          </Group>
+          <Button
+            aria-label="Sign in"
+            type="submit"
+            fullWidth
+            loading={authLoading}
+            loaderProps={{ type: 'dots' }}>
+            Sign in
+          </Button>
+          <Text
+            ta="center"
+            size="sm">
+            Not a user yet?{' '}
+            <Anchor
+              href="/auth/signup"
+              size="sm">
+              Sign up
+            </Anchor>
+          </Text>
         </Stack>
       </form>
-    </Box>
+    </Paper>
   );
 };
