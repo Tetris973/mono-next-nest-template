@@ -4,7 +4,6 @@ import { afterEach, vi, beforeEach } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import { safeFetch } from '@web/app/utils/safe-fetch.utils';
 import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
-import { mockToast } from '@testWeb/utils/unit-test/mock-toast.utils';
 import { mockRouter } from '@testWeb/utils/unit-test/mock-router.utils';
 import { getLogger, clearLogs, getLogs } from '@testWeb/utils/unit-test/test-logger.utils';
 import { mockGetConfig } from '@testWeb/utils/unit-test/mock-config.utils';
@@ -49,10 +48,6 @@ vi.mock('@web/config/configuration', () => ({
 
 vi.mock('next/navigation', () => ({
     useRouter: () => mockRouter,
-}));
-
-vi.mock('@web/app/utils/toast-utils.use', () => ({
-    useCustomToast: () => mockToast,
 }));
 
 vi.mock('@web/lib/logger', () => ({

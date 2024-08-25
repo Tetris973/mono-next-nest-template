@@ -73,6 +73,7 @@ export const useProfileForm = (
     }
     setUser(result);
     setNewUsername(result.username);
+    setProfileError({ username: [] });
     return { success: `Profile of ${newUsername} updated successfully` };
   };
 

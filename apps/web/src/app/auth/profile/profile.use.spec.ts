@@ -53,7 +53,7 @@ describe('useProfileForm', () => {
 
     // RUN & CHECK RESULTS
     // Input new user data
-    act(() => {
+    await act(() => {
       result.current.setNewUsername(newUsername);
     });
 
@@ -70,7 +70,7 @@ describe('useProfileForm', () => {
     expect(result.current.profileError).toEqual({ username: [] });
   });
 
-  it('should handle validation errors', async () => {
+  it('should handle validation errors and remove them after successful submission', async () => {
     // INIT
     mockGetUserByIdAction.mockResolvedValue({ result: user });
     const { result } = renderHook(() => useProfileForm(userId, dependencies));
@@ -91,6 +91,25 @@ describe('useProfileForm', () => {
       expect(submitResult).toEqual({});
     });
     expect(result.current.profileError).toEqual({ username: ['You must provide a username.'] });
+
+    // INIT - valid username
+    const newUserData = { ...user, username: 'validusername' };
+    mockUpdateUserAction.mockResolvedValue({ result: newUserData });
+    const validUsername = 'validusername';
+    await act(() => {
+      result.current.setNewUsername(validUsername);
+    });
+
+    // RUN & CHECK RESULTS
+    await act(async () => {
+      const submitResult = await result.current.handleSubmit({
+        preventDefault: () => {},
+      } as React.FormEvent<HTMLFormElement>);
+      expect(submitResult).toEqual({ success: `Profile of ${validUsername} updated successfully` });
+    });
+
+    // Check that form errors are removed after successful submission
+    expect(result.current.profileError).toEqual({ username: [] });
   });
 
   it('should handle server errors, Conflict', async () => {

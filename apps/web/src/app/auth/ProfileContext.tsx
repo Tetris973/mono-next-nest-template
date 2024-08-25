@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect, useCallback } fr
 import { getProfileAction as defaultGetProfileAction } from '@web/app/auth/profile/profile.service';
 import { useAuth as defaultUseAuth } from './AuthContext';
 import { UserDto } from '@dto/user/dto/user.dto';
-import { useCustomToast } from '@web/app/utils/toast-utils.use';
+import { showErrorNotification } from '@web/app/utils/notifications';
 import { ActionErrorResponse } from '@web/app/common/action-response.type';
 import { useServerAction } from '@web/app/utils/server-action.use';
 
@@ -24,7 +24,6 @@ export const ProfileProvider: React.FC<React.PropsWithChildren<ProfileProviderDe
   getProfileAction = defaultGetProfileAction,
   useAuth = defaultUseAuth,
 }) => {
-  const { toastError } = useCustomToast();
   const [profile, setProfile] = useState<UserDto | null>(null);
   const { isAuthenticated } = useAuth();
   const [getProfilePending, getProfileActionM] = useServerAction(getProfileAction);
@@ -43,13 +42,15 @@ export const ProfileProvider: React.FC<React.PropsWithChildren<ProfileProviderDe
     if (isAuthenticated) {
       loadProfile().then((error) => {
         if (error) {
-          toastError(error.message);
+          showErrorNotification({
+            message: error.message,
+          });
         }
       });
     } else {
       setProfile(null);
     }
-  }, [isAuthenticated, toastError, loadProfile]);
+  }, [isAuthenticated, loadProfile]);
 
   return (
     <ProfileContext.Provider value={{ profile, loading: getProfilePending, loadProfile }}>

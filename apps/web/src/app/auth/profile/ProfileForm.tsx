@@ -2,7 +2,7 @@ import { Button, Stack, Spinner, useColorModeValue, chakra, Box } from '@chakra-
 import { useProfileForm as defaultUseProfileForm } from './profile.use';
 import { ProfileField } from '@web/app/components/ProfileField';
 import { ProfileAvatar } from '@web/app/components/ProfileAvatar';
-import { useCustomToast } from '@web/app/utils/toast-utils.use';
+import { showSuccessNotification, showErrorNotification } from '@web/app/utils/notifications';
 
 export interface ProfileFormProps {
   userId: number;
@@ -19,15 +19,18 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
 }) => {
   const { user, profileError, newUsername, profilePending, submitPending, setNewUsername, handleSubmit } =
     useProfileForm(userId);
-  const { toastError, toastSuccess } = useCustomToast();
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { success, error } = await handleSubmit(event);
     if (error) {
-      toastError(error);
+      showErrorNotification({
+        message: error,
+      });
     } else if (success) {
-      toastSuccess(success);
+      showSuccessNotification({
+        message: success,
+      });
       onSubmitSuccess();
     }
   };

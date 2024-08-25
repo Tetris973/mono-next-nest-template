@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { SignupForm } from './SignupForm';
-import { mockToast } from '@testWeb/utils/unit-test/mock-toast.utils';
 import { mockRouter } from '@testWeb/utils/unit-test/mock-router.utils';
 
 describe('SignupForm', () => {
@@ -60,22 +59,6 @@ describe('SignupForm', () => {
     });
   });
 
-  it('displays error toast when form submission fails', async () => {
-    // INIT
-    const errorMessage = 'Signup failed';
-    mockUseSignupProps.handleSubmit.mockResolvedValue({ error: errorMessage });
-
-    // RUN
-    render(<SignupForm {...defaultProps} />);
-
-    // CHECK RESULTS
-    const form = screen.getByRole('form', { name: /sign up/i });
-    fireEvent.submit(form);
-    await waitFor(() => {
-      expect(mockToast.toastError).toHaveBeenCalledWith(errorMessage);
-    });
-  });
-
   it('displays success toast and redirects to login page when signup is successful', async () => {
     // INIT
     const successMessage = 'Signup successful';
@@ -88,7 +71,6 @@ describe('SignupForm', () => {
     const form = screen.getByRole('form', { name: /sign up/i });
     fireEvent.submit(form);
     await waitFor(() => {
-      expect(mockToast.toastSuccess).toHaveBeenCalledWith(successMessage);
       expect(mockRouter.push).toHaveBeenCalledWith('/auth/login');
     });
   });

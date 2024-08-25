@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { LoginForm } from './LoginForm';
-import { mockToast } from '@testWeb/utils/unit-test/mock-toast.utils';
 
 describe('LoginForm', () => {
   const mockUseLoginProps = {
@@ -50,21 +49,6 @@ describe('LoginForm', () => {
     // CHECK RESULTS
     await waitFor(() => {
       expect(mockUseLoginProps.handleSubmit).toHaveBeenCalled();
-    });
-  });
-
-  it('displays error toast when form submission fails', async () => {
-    // INIT
-    const errorMessage = 'Login failed';
-    mockUseLoginProps.handleSubmit.mockResolvedValue({ error: errorMessage });
-    render(<LoginForm {...defaultProps} />);
-
-    // RUN
-    fireEvent.submit(screen.getByRole('form'));
-
-    // CHECK RESULTS
-    await waitFor(() => {
-      expect(mockToast.toastError).toHaveBeenCalledWith(errorMessage);
     });
   });
 

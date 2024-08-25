@@ -115,11 +115,11 @@ describe('Dashboard Integration', () => {
     // Click delete button
     fireEvent.click(screen.getByLabelText('Delete user'));
     await waitFor(() => {
-      expect(screen.getByText('Delete', { selector: 'button' })).toBeInTheDocument();
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
     // Confirm deletion
-    fireEvent.click(screen.getByText('Delete', { selector: 'button' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
     // Wait for the deletion to be processed
     await waitFor(() => {

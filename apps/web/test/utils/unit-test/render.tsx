@@ -1,5 +1,7 @@
 import { render as testingLibraryRender, RenderResult } from '@testing-library/react';
 import { MantineProvider } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
+import { Notifications } from '@mantine/notifications';
 import { theme } from '@web/lib/mantine-theme';
 
 /**
@@ -10,7 +12,10 @@ import { theme } from '@web/lib/mantine-theme';
 export function render(ui: React.ReactNode): RenderResult {
   return testingLibraryRender(<>{ui}</>, {
     wrapper: ({ children }: { children: React.ReactNode }) => (
-      <MantineProvider theme={theme}>{children}</MantineProvider>
+      <MantineProvider theme={theme}>
+        <Notifications />
+        <ModalsProvider>{children}</ModalsProvider>
+      </MantineProvider>
     ),
   });
 }
