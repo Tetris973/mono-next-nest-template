@@ -1,13 +1,13 @@
 import { describe, beforeEach, it, expect, vi } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { UserService } from '@server/user/user.service';
+import { UserService } from '@server/modules/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
-import { CreateUserDto } from '@server/user/dto/create-user.dto';
+import { CreateUserDto } from '@server/modules/user/dto/create-user.dto';
 import { AuthzService } from '@server/authz/authz.service';
 import bcrypt from 'bcrypt';
-import { BaseRoles } from '@server/authz/baseRoles.enum';
+import { StaticRoles } from '@server/authz/static-roles.enum';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -55,10 +55,10 @@ describe('AuthService', () => {
       // INIT
       const user = { id: 1 } as User;
       mockedAuthzService.findAllRolesOfUser.mockResolvedValue([
-        { id: BaseRoles.ADMIN, name: BaseRoles[BaseRoles.ADMIN] },
-        { id: BaseRoles.USER, name: BaseRoles[BaseRoles.USER] },
+        { id: StaticRoles.ADMIN, name: StaticRoles[StaticRoles.ADMIN] },
+        { id: StaticRoles.USER, name: StaticRoles[StaticRoles.USER] },
       ]);
-      const expectedRoles = [BaseRoles[BaseRoles.ADMIN], BaseRoles[BaseRoles.USER]];
+      const expectedRoles = [StaticRoles[StaticRoles.ADMIN], StaticRoles[StaticRoles.USER]];
 
       // RUN
       const token = await service.login(user);

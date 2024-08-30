@@ -3,12 +3,12 @@ import { PureAbility, AbilityBuilder, ForcedSubject } from '@casl/ability';
 import { createPrismaAbility, PrismaQuery, Subjects } from '@casl/prisma';
 import { AuthzService } from '@server/authz/authz.service';
 import { User, Action } from '@prisma/client';
-import { BaseResources } from '@server/authz/baseResources.enum';
-import { BaseRoles } from '@server/authz/baseRoles.enum';
+import { StaticResources } from '@server/authz/static-resources.enum';
+import { StaticRoles } from '@server/authz/static-roles.enum';
 
 // ResourceType and AppSubject should be in sync, similar type defined in both
 // Auto define as Type of the resources available for casl authorization checking
-export type ResourceType = keyof typeof BaseResources;
+export type ResourceType = keyof typeof StaticResources;
 // Here define the subjects availabe for casl authorization checking
 type AppSubjects = Subjects<{
   User: User;
@@ -80,6 +80,8 @@ function parseCondition(
 export class CaslAbilityFactory {
   constructor(private authzService: AuthzService) {}
 
+  // TODO: disable database call if not used, as this slows down the app for feature not needed
+  // TODO: add caching for the permissions if using permissions from database
   async createForUser(user: User): Promise<AppAbility> {
     const dbPermissions = await this.authzService.findAllPermissionsOfUser(user);
     const caslPermissions: CaslPermission[] = dbPermissions.map((p) => ({
@@ -108,11 +110,11 @@ export class CaslAbilityFactory {
     // Here is where the hardCoded permissions are defined
     // Iterate over each role of the user and assign permissions based on the role
     roles.forEach((role) => {
-      switch (BaseRoles[role.name as keyof typeof BaseRoles]) {
-        case BaseRoles.ADMIN:
+      switch (StaticRoles[role.name as keyof typeof StaticRoles]) {
+        case StaticRoles.ADMIN:
           can(Action.manage, 'all');
           break;
-        case BaseRoles.USER:
+        case StaticRoles.USER:
           can(Action.READ, 'all');
           can(Action.UPDATE, 'User', { id: user.id });
           break;

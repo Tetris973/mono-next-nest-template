@@ -1,5 +1,5 @@
 'use server';
-import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
+import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
 import { redirect } from 'next/navigation';
 
 export async function ProtectedRoute() {

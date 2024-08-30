@@ -1,14 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { UserService } from '@server/user/user.service';
+import { UserService } from '@server/modules/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
-import { IJwtPayload } from './passport/jwt-payload.interface';
-import { CreateUserDto } from '@server/user/dto/create-user.dto';
-import { FieldAlreadyInUseException } from '@server/common/field-already-In-use.exception';
+import { IJwtPayload } from './interfaces/jwt-payload.interface';
+import { CreateUserDto } from '@server/modules/user/dto/create-user.dto';
+import { FieldAlreadyInUseException } from '@server/common/exceptions/field-already-in-use.exception';
 import { AuthzService } from '@server/authz/authz.service';
-import { UserNotFoundException } from '@server/common/user-not-found.exception';
-import { InvalidCredentialsException } from '@server/common/invalid-credentials.exception';
+import { UserNotFoundException } from '@server/common/exceptions/user-not-found.exception';
+import { InvalidCredentialsException } from '@server/common/exceptions/invalid-credentials.exception';
 
 @Injectable()
 export class AuthService {

@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { getProfileAction } from './profile.service';
 import { getConfig } from '@web/config/configuration';
-import { safeFetch } from '@web/app/utils/safe-fetch.utils';
-import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
-import { UserDto } from '@dto/user/dto/user.dto';
-import { HttpStatus } from '@web/app/common/http-status.enum';
+import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
+import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { HttpStatus } from '@web/common/enums/http-status.enum';
 
 describe('profile.service', () => {
   beforeEach(() => {

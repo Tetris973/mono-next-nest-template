@@ -1,6 +1,6 @@
 import { PrismaService } from '@server/prisma/prisma.service';
 import { Action } from '@prisma/client';
-import { BaseResources } from '@server/authz/baseResources.enum';
+import { StaticResources } from '@server/authz/static-resources.enum';
 
 enum Permissions {
   USER_MANAGE = 1, // To set the start of the enum to 1
@@ -16,33 +16,33 @@ async function seedPermissions(prisma: PrismaService, doLog: boolean = false) {
     {
       id: Permissions.USER_MANAGE,
       action: Action.manage,
-      resourceId: BaseResources.User,
+      resourceId: StaticResources.User,
     },
     {
       id: Permissions.USER_CREATE,
       action: Action.CREATE,
-      resourceId: BaseResources.User,
+      resourceId: StaticResources.User,
     },
     {
       id: Permissions.USER_READ,
       action: Action.READ,
-      resourceId: BaseResources.User,
+      resourceId: StaticResources.User,
     },
     {
       id: Permissions.USER_UPDATE,
       action: Action.UPDATE,
-      resourceId: BaseResources.User,
+      resourceId: StaticResources.User,
     },
     {
       id: Permissions.USER_UPDATE_OWN,
       action: Action.UPDATE,
-      resourceId: BaseResources.User,
+      resourceId: StaticResources.User,
       condition: { id: '${userId}' },
     },
     {
       id: Permissions.USER_DELETE,
       action: Action.DELETE,
-      resourceId: BaseResources.User,
+      resourceId: StaticResources.User,
     },
   ];
 
@@ -57,7 +57,7 @@ async function seedPermissions(prisma: PrismaService, doLog: boolean = false) {
     const conditionKey = perm.condition ? 'condition' : '';
     if (doLog)
       console.log(
-        `Permission Action '${perm.action}' on '${BaseResources[perm.resourceId]} `,
+        `Permission Action '${perm.action}' on '${StaticResources[perm.resourceId]} `,
         conditionKey,
         conditionText,
       );

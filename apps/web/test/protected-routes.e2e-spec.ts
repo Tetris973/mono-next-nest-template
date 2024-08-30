@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { PROFILE_URL, USER_DASHBOARD_URL, LOGIN_URL } from './config/urls';
-import { logoutTestUser } from './utils/logout-user.utils';
+import { logoutTestUser } from './common/helpers/logout-user.helpers';
 import { USER_CONTEXT_PATH } from './config/accounts';
 
 test.use({ storageState: USER_CONTEXT_PATH });

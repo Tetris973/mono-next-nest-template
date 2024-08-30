@@ -1,15 +1,15 @@
 import { PrismaService } from '@server/prisma/prisma.service';
-import { BaseRoles } from '@server/authz/baseRoles.enum';
+import { StaticRoles } from '@server/authz/static-roles.enum';
 import { Permissions } from './permission.seed';
 
 async function seedRolePermission(prisma: PrismaService, doLog: boolean = false) {
   const rolePermission = [
     {
-      roleId: BaseRoles.ADMIN,
+      roleId: StaticRoles.ADMIN,
       permissionId: Permissions.USER_MANAGE,
     },
     {
-      roleId: BaseRoles.USER,
+      roleId: StaticRoles.USER,
       permissionId: Permissions.USER_READ,
     },
   ];
@@ -41,7 +41,7 @@ async function seedRolePermission(prisma: PrismaService, doLog: boolean = false)
       });
     }
 
-    if (doLog) console.log(`Role '${BaseRoles[relation.roleId]} Permission '${Permissions[relation.permissionId]}''`);
+    if (doLog) console.log(`Role '${StaticRoles[relation.roleId]} Permission '${Permissions[relation.permissionId]}''`);
   }
   if (doLog) console.log('/// Role-Permission seeded. ///');
 }

@@ -1,8 +1,8 @@
 import { vi, describe, beforeEach, it, expect } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useProfileForm, UseProfileFormDependencies } from './profile.use';
-import { UserDto } from '@dto/user/dto/user.dto';
-import { HttpStatus } from '@web/app/common/http-status.enum';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { HttpStatus } from '@web/common/enums/http-status.enum';
 
 describe('useProfileForm', () => {
   const mockGetUserByIdAction = vi.fn();

@@ -2,7 +2,7 @@ import React from 'react';
 import { Paper, Stack, Button, Text, Anchor, TextInput, PasswordInput } from '@mantine/core';
 import { UseSignup, useSignup as defaultUseSignup } from './signup.use';
 import { useDisclosure } from '@mantine/hooks';
-import { showSuccessNotification, showErrorNotification } from '@web/app/utils/notifications';
+import { showSuccessNotification, showErrorNotification } from '@web/common/helpers/notifications.helpers';
 import { useRouter } from 'next/navigation';
 
 export interface SignupFormProps {

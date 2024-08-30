@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testWeb/utils/unit-test/index';
+import { render, screen, fireEvent, waitFor } from '@webRoot/test/common/unit-test/helpers/index';
 import { SignupForm } from './SignupForm';
-import { mockRouter } from '@testWeb/utils/unit-test/mock-router.utils';
+import { mockRouter } from '@webRoot/test/common/unit-test/helpers/mock-router.helpers';
 
 describe('SignupForm', () => {
   const mockUseSignupProps = {

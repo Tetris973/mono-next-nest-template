@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, TextInput, List, Text, Loader, Paper, ScrollArea } from '@mantine/core';
-import { UserDto } from '@dto/user/dto/user.dto';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
 import classes from './UserList.module.css';
 
 export interface UserListProps {

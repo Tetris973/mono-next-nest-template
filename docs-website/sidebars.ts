@@ -34,6 +34,15 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
     },
     {
       type: 'category',
+      label: 'Core Concepts',
+      items: [
+        'core-concepts/controller-service-repository-layers',
+        'core-concepts/api-response-structure',
+        'core-concepts/data-transfer-objects-dto',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Development Principles and Practices',
       items: [
         'development-principles-and-practices/simplicity-first',
@@ -86,6 +95,13 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
       type: 'category',
       label: 'Project Specific',
       items: ['project-specific/backend-nestjs', 'project-specific/frontend-nextjs'],
+    },
+    {
+      type: 'category',
+      label: 'Troubleshooting',
+      items: [
+        'troubleshooting/troubleshooting',
+      ],
     },
   ],
 };

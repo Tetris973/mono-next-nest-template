@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { validateSignupForm } from './validation';
-import { CreateUserDto } from '@dto/user/dto/create-user.dto';
+import { CreateUserDto } from '@dto/modules/user/dto/create-user.dto';
 import { signupAction as defaultSignupAction } from './signup.service';
 import { useRouter } from 'next/navigation';
 import { AuthContextInterface, useAuth as defaultUseAuth } from '@web/app/auth/AuthContext';
-import { ActionErrorResponse } from '@web/app/common/action-response.type';
-import { HttpStatus } from '@web/app/common/http-status.enum';
-import { FormSubmitResult } from '@web/app/common/form-submit-result.interface';
-import { useServerAction } from '@web/app/utils/server-action.use';
-import { DtoValidationError } from '@web/app/common/dto-validation-error.type';
+import { ActionErrorResponse } from '@web/common/types/action-response.type';
+import { HttpStatus } from '@web/common/enums/http-status.enum';
+import { FormSubmitResult } from '@web/common/interfaces/form-submit-result.interface';
+import { useServerAction } from '@web/common/helpers/server-action.use';
+import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
 
 export interface UseSignup {
   error: DtoValidationError<CreateUserDto>;

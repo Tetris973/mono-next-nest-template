@@ -5,10 +5,10 @@ import { INestApplication, HttpStatus } from '@nestjs/common';
 import { AppModule } from '@server/app.module';
 import { seedRoles } from '@server/prisma/seeding/production/role.seed';
 import { PrismaService } from '@server/prisma/prisma.service';
-import { TestPrismaService } from './utils/testPrisma.service';
+import { TestPrismaService } from './common/helpers/test-prisma.service';
 import { Users, seedUsers } from '@server/prisma/seeding/user.seed';
 import { seedUserRoleRelations } from '@server/prisma/seeding/user-role.seed';
-import { loginAsTetris, loginAsTestUser } from './utils/login-as.utils';
+import { loginAsTetris, loginAsTestUser } from './common/helpers/login-as.helpers';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;

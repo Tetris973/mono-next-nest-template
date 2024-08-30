@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { loginAction, isAuthenticatedAction, getRolesAction } from './login.service';
-import { HttpStatus } from '@web/app/common/http-status.enum';
-import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';
+import { HttpStatus } from '@web/common/enums/http-status.enum';
+import { LoginUserDto } from '@dto/modules/user/dto/log-in-user.dto';
 import { Role } from '@web/app/auth/role.enum';
 import { cookies } from 'next/headers';
-import { safeFetch } from '@web/app/utils/safe-fetch.utils';
+import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 import { jwtDecode } from 'jwt-decode';
-import { DtoValidationError } from '@web/app/common/dto-validation-error.type';
+import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
 
 describe('login.service', () => {
   const mockCookies = {

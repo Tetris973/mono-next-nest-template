@@ -1,12 +1,12 @@
 'use server';
 
 import { getConfig } from '@web/config/configuration';
-import { HttpStatus } from '@web/app/common/http-status.enum';
-import { UpdateUserDto } from '@dto/user/dto/update-user.dto';
-import { UserDto } from '@dto/user/dto/user.dto';
-import { ActionResponse } from '@web/app/common/action-response.type';
-import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
-import { safeFetch } from '@web/app/utils/safe-fetch.utils';
+import { HttpStatus } from '@web/common/enums/http-status.enum';
+import { UpdateUserDto } from '@dto/modules/user/dto/update-user.dto';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { ActionResponse } from '@web/common/types/action-response.type';
+import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
+import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 
 export const getUserByIdAction = async (id: number): Promise<ActionResponse<UserDto>> => {
   const { result: token, error } = checkAuthentication();

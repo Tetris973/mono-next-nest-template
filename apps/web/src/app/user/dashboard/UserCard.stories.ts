@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { UserCard, UserCardProps } from '@web/app/user/dashboard/UserCard';
-import { UserDto } from '@dto/user/dto/user.dto';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
 
 const meta = {
   title: 'Components/UserCard',

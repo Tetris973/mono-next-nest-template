@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testWeb/utils/unit-test/index';
+import { render, screen, fireEvent } from '@webRoot/test/common/unit-test/helpers/index';
 import { UserCard } from './UserCard';
-import { UserDto } from '@dto/user/dto/user.dto';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
 
 describe('UserCard', () => {
   const mockUser: UserDto = {

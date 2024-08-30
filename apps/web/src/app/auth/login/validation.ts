@@ -1,6 +1,6 @@
-import { validateUsername, validatePassword } from '@web/app/auth/validation-common';
-import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';
-import { DtoValidationError } from '@web/app/common/dto-validation-error.type';
+import { validateUsername, validatePassword } from '@web/common/validations/validation';
+import { LoginUserDto } from '@dto/modules/user/dto/log-in-user.dto';
+import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
 
 export const validateLoginForm = (loginDto: LoginUserDto): DtoValidationError<LoginUserDto> | null => {
   const errors = {

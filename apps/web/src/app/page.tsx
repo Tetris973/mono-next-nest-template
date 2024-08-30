@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Box, Title, Stack, Loader, Button, Container, useMantineTheme } from '@mantine/core';
-import { Header } from './components/Header';
+import { Header } from '@web/components/Header';
 import { useProfile } from './auth/ProfileContext';
 import { useRouter } from 'next/navigation';
 

@@ -155,12 +155,3 @@ code --version
 :::caution
 If any command is not recognized, you may need to revisit the installation steps for that tool.
 :::
-
-## Troubleshooting
-
-If you encounter issues during setup:
-
-1. Ensure your system meets the minimum requirements for all the tools.
-2. Check that you have the necessary permissions to install software on your system.
-3. If you're behind a firewall or proxy, ensure you have the necessary network access.
-4. For persistent issues, consult the official documentation of the respective tools or reach out to Google, Reddit, Stack Overflow, or an LLM for assistance.

@@ -1,9 +1,9 @@
 'use server';
-import { ActionResponse } from '@web/app/common/action-response.type';
+import { ActionResponse } from '@web/common/types/action-response.type';
 import { getConfig } from '@web/config/configuration';
-import { HttpStatus } from '@web/app/common/http-status.enum';
-import { CreateUserDto } from '@dto/user/dto/create-user.dto';
-import { safeFetch } from '@web/app/utils/safe-fetch.utils';
+import { HttpStatus } from '@web/common/enums/http-status.enum';
+import { CreateUserDto } from '@dto/modules/user/dto/create-user.dto';
+import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 
 export const signupAction = async (
   createUserDto: CreateUserDto,

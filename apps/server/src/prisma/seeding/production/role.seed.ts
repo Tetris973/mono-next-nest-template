@@ -1,13 +1,13 @@
 import { PrismaService } from '@server/prisma/prisma.service';
-import { BaseRoles } from '@server/authz/baseRoles.enum';
+import { StaticRoles } from '@server/authz/static-roles.enum';
 
 async function seedRoles(prisma: PrismaService, doLog: boolean = false) {
-  for (const enumMember in BaseRoles) {
+  for (const enumMember in StaticRoles) {
     const enumIndex = parseInt(enumMember, 10);
     const isBaseRoleId = !Number.isNaN(enumIndex);
     if (isBaseRoleId) {
       const id = enumIndex;
-      const name = BaseRoles[enumMember];
+      const name = StaticRoles[enumMember];
 
       try {
         const existingRole = await prisma.role.findUnique({

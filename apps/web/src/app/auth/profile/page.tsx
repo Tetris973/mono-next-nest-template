@@ -1,4 +1,4 @@
-import { Header } from '@web/app/components/Header';
+import { Header } from '@web/components/Header';
 import { ProtectedRoute } from '@web/app/auth/protected-route.service';
 import { ProfilePageClient } from './client-page';
 

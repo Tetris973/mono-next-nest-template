@@ -4,6 +4,11 @@ import { PERMISSION_CHECKER_KEY, RequiredPermission } from './permissions.decora
 import { CaslAbilityFactory, AppAbility } from './casl-ability.factory/casl-ability.factory';
 
 /**
+ * This file is not moved to the general common/guards folders because it is deeply coupled with casl ability library.
+ * It is better to colocate it with the decorator and the authz module.
+ */
+
+/**
  * Checks if the given ability allows the specified permission
  * @param ability The application ability
  * @param permission The required permission

@@ -2,7 +2,7 @@ import { describe, beforeEach, it, expect } from 'vitest';
 import { CaslAbilityFactory } from './casl-ability.factory';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthzService } from '@server/authz/authz.service';
-import { UserRepository } from '@server/user/user.repository';
+import { UserRepository } from '@server/modules/user/user.repository';
 import { PrismaService } from '@server/prisma/prisma.service';
 
 describe('CaslAbilityFactory', () => {

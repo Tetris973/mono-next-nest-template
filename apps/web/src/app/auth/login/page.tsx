@@ -2,7 +2,7 @@
 import React from 'react';
 import { Container, Stack, Title, Box, useMantineTheme } from '@mantine/core';
 import { LoginForm } from './LoginForm';
-import { Header } from '@web/app/components/Header';
+import { Header } from '@web/components/Header';
 
 export default function Login(): JSX.Element {
   const theme = useMantineTheme();

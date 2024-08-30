@@ -4,6 +4,8 @@ import { Kysely, PostgresAdapter, PostgresIntrospector, PostgresQueryCompiler } 
 import kyselyExtension from 'prisma-extension-kysely';
 import type { DB } from './generated/types';
 
+// TODO: those types used, search in git commit history
+// It should have something to do with setting up kysely
 type A<T extends string> = T extends `${infer U}ScalarFieldEnum` ? U : never;
 type Entity = A<keyof typeof Prisma>;
 type Keys<T extends Entity> = Extract<keyof (typeof Prisma)[keyof Pick<typeof Prisma, `${T}ScalarFieldEnum`>], string>;
@@ -15,6 +17,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   constructor() {
     super();
 
+    // TODO: explain why this is needed
     const extension = this.$extends(
       kyselyExtension({
         kysely: (driver) =>
@@ -36,6 +39,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   }
 }
 
+// TODO: explain why this function is here, search in git commit history
 export function prismaExclude<T extends Entity, K extends Keys<T>>(type: T, omit: K[]) {
   type Key = Exclude<Keys<T>, K>;
   type TMap = Record<Key, true>;

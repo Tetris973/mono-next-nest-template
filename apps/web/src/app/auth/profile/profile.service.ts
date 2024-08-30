@@ -1,10 +1,10 @@
 'use server';
 
 import { getConfig } from '@web/config/configuration';
-import { UserDto } from '@dto/user/dto/user.dto';
-import { ActionResponse } from '@web/app/common/action-response.type';
-import { safeFetch } from '@web/app/utils/safe-fetch.utils';
-import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { ActionResponse } from '@web/common/types/action-response.type';
+import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
+import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
 
 export async function getProfileAction(): Promise<ActionResponse<UserDto>> {
   const { result: token, error: authError } = checkAuthentication();

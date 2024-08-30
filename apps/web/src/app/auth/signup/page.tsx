@@ -2,7 +2,7 @@
 import React from 'react';
 import { Container, Stack, Title, Box, useMantineTheme } from '@mantine/core';
 import { SignupForm } from './SignupForm';
-import { Header } from '@web/app/components/Header';
+import { Header } from '@web/components/Header';
 
 export default function Signup(): JSX.Element {
   const theme = useMantineTheme();
