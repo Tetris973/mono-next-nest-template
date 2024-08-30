@@ -38,5 +38,3 @@ Follow these steps to set up the project on your local machine:
    ```bash
    pnpm install
    ```
-
-If you encounter any issues during the setup process, please refer to the troubleshooting section in the [Prerequisites Setup Guide](./prerequisites-setup.md)

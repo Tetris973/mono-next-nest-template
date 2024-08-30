@@ -4,7 +4,7 @@ import React from 'react';
 import { AppShell, Flex, Box, Stack, useMantineTheme, Paper, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { useDisclosure } from '@mantine/hooks';
-import { showSuccessNotification, showErrorNotification } from '@web/app/utils/notifications';
+import { showSuccessNotification, showErrorNotification } from '@web/common/helpers/notifications.helpers';
 
 import { useDashboard as defaultUseDashboard } from './dashboard.use';
 import { UserCard } from './UserCard';

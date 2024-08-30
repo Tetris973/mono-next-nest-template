@@ -1,6 +1,6 @@
 import { Module, Global } from '@nestjs/common';
 import { AuthzService } from './authz.service';
-import { UserModule } from '@server/user/user.module';
+import { UserModule } from '@server/modules/user/user.module';
 import { CaslAbilityFactory } from './casl-ability.factory/casl-ability.factory';
 import { PermissionsGuard } from './permissions.guard';
 

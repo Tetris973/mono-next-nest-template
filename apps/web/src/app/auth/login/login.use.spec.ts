@@ -1,10 +1,10 @@
 import { vi, describe, beforeEach, it, expect } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useLogin, UseLoginDependencies } from './login.use';
-import { HttpStatus } from '@web/app/common/http-status.enum';
-import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';
-import { mockRouter } from '@testWeb/utils/unit-test/mock-router.utils';
-import { createFormElement } from '@testWeb/utils/unit-test/create-form-element';
+import { HttpStatus } from '@web/common/enums/http-status.enum';
+import { LoginUserDto } from '@dto/modules/user/dto/log-in-user.dto';
+import { mockRouter } from '@webRoot/test/common/unit-test/helpers/mock-router.helpers';
+import { createFormElement } from '@webRoot/test/common/unit-test/helpers/create-form-element.helpers';
 
 describe('useLogin', () => {
   const mockAuth = {

@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testWeb/utils/unit-test/index';
+import { render, screen, fireEvent, waitFor } from '@webRoot/test/common/unit-test/helpers/index';
 import { Dashboard } from './Dashboard';
-import { UserDto } from '@dto/user/dto/user.dto';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
 import { AuthContextInterface } from '@web/app/auth/AuthContext';
 import { Role } from '@web/app/auth/role.enum';
 import { UseDashboardDependencies, useDashboard } from './dashboard.use';
 import { ProfileContextInterface } from '@web/app/auth/ProfileContext';
-import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
-import { safeFetch } from '@web/app/utils/safe-fetch.utils';
+import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
+import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 
 /**
  * Example of how an integration test would be done

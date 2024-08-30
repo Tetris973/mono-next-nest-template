@@ -1,5 +1,5 @@
 import { Card, Avatar, Text, Group, Stack, Loader, ActionIcon } from '@mantine/core';
-import { UserDto } from '@dto/user/dto/user.dto';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faEdit } from '@fortawesome/free-solid-svg-icons';
 

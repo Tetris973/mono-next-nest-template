@@ -108,6 +108,13 @@ If tests fail due to "Error reading storage state" or inability to find a userna
 3. Then run the remaining tests
 </details>
 
+<details>
+<summary>Protected route error because of timeout</summary>
+
+The root cause is still under investigation, but as a workaround you can just retry the test, either in terminal or ui mode.
+In CI, the test retries at least 3 times, so they mostly passes.
+</details>
+
 :::info
 For any other issues, please open an issue in the project repository.
 :::

@@ -2,11 +2,11 @@
 import '@testing-library/jest-dom/vitest'
 import { afterEach, vi, beforeEach } from 'vitest';
 import { cleanup } from '@testing-library/react';
-import { safeFetch } from '@web/app/utils/safe-fetch.utils';
-import { checkAuthentication } from '@web/app/utils/check-authentication.utils';
-import { mockRouter } from '@testWeb/utils/unit-test/mock-router.utils';
-import { getLogger, clearLogs, getLogs } from '@testWeb/utils/unit-test/test-logger.utils';
-import { mockGetConfig } from '@testWeb/utils/unit-test/mock-config.utils';
+import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
+import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
+import { mockRouter } from '@webRoot/test/common/unit-test/helpers/mock-router.helpers';
+import { getLogger, clearLogs, getLogs } from '@webRoot/test/common/unit-test/helpers/test-logger.helpers';
+import { mockGetConfig } from '@webRoot/test/common/unit-test/helpers/mock-config.helpers';
 import { getConfig } from '@web/config/configuration';
 
 /**
@@ -97,7 +97,7 @@ function exampleMock() {
 function mockSafeFetch() {
     throw new Error('safeFetch was called but not mocked in this test, refer to the documentaion in vitest.setup.mts');
 }
-vi.mock('@web/app/utils/safe-fetch.utils', () => ({
+vi.mock('@web/common/helpers/safe-fetch.helpers', () => ({
     safeFetch: vi.fn().mockImplementation(mockSafeFetch),
 }));
 
@@ -118,7 +118,7 @@ vi.mock('@web/app/utils/safe-fetch.utils', () => ({
 function mockCheckAuthentication() {
     throw new Error('checkAuthentication was called but not mocked in this test, refer to the documentaion in vitest.setup.mts');
 }
-vi.mock('@web/app/utils/check-authentication.utils', () => ({
+vi.mock('@web/common/helpers/check-authentication.helpers', () => ({
     checkAuthentication: vi.fn().mockImplementation(mockCheckAuthentication),
 }));
 

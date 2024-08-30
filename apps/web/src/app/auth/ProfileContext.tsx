@@ -1,10 +1,10 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { getProfileAction as defaultGetProfileAction } from '@web/app/auth/profile/profile.service';
 import { useAuth as defaultUseAuth } from './AuthContext';
-import { UserDto } from '@dto/user/dto/user.dto';
-import { showErrorNotification } from '@web/app/utils/notifications';
-import { ActionErrorResponse } from '@web/app/common/action-response.type';
-import { useServerAction } from '@web/app/utils/server-action.use';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { showErrorNotification } from '@web/common/helpers/notifications.helpers';
+import { ActionErrorResponse } from '@web/common/types/action-response.type';
+import { useServerAction } from '@web/common/helpers/server-action.use';
 
 export interface ProfileContextInterface {
   profile: UserDto | null;

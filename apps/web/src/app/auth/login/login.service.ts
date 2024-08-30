@@ -2,14 +2,14 @@
 
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
-import { ActionErrorResponse, ActionResponse } from '@web/app/common/action-response.type';
+import { ActionErrorResponse, ActionResponse } from '@web/common/types/action-response.type';
 import { getConfig } from '@web/config/configuration';
-import { HttpStatus } from '@web/app/common/http-status.enum';
+import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { Role } from '@web/app/auth/role.enum';
 import { JwtPayload } from '@web/app/auth/jwt-payload.interface';
-import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';
-import { safeFetch } from '@web/app/utils/safe-fetch.utils';
-import { DtoValidationError } from '@web/app/common/dto-validation-error.type';
+import { LoginUserDto } from '@dto/modules/user/dto/log-in-user.dto';
+import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
+import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
 import { getLogger } from '@web/lib/logger';
 
 const logger = getLogger('Login');

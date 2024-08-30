@@ -4,12 +4,12 @@ import {
   getUserByIdAction as defaultGetUserByIdAction,
   updateUserAction as defaultUpdateUserAction,
 } from '@web/app/user/user.service';
-import { UserDto } from '@dto/user/dto/user.dto';
-import { HttpStatus } from '@web/app/common/http-status.enum';
-import { UpdateUserDto } from '@dto/user/dto/update-user.dto';
-import { FormSubmitResult } from '@web/app/common/form-submit-result.interface';
-import { useServerAction } from '@web/app/utils/server-action.use';
-import { DtoValidationError } from '@web/app/common/dto-validation-error.type';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { HttpStatus } from '@web/common/enums/http-status.enum';
+import { UpdateUserDto } from '@dto/modules/user/dto/update-user.dto';
+import { FormSubmitResult } from '@web/common/interfaces/form-submit-result.interface';
+import { useServerAction } from '@web/common/helpers/server-action.use';
+import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
 
 export interface UseProfileForm {
   profileError: DtoValidationError<UpdateUserDto>;

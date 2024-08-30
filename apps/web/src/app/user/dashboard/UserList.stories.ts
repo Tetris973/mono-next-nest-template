@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { UserList, UserListProps } from '@web/app/user/dashboard/UserList';
-import { UserDto } from '@dto/user/dto/user.dto';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
 
 const meta = {
   title: 'Components/UserList',

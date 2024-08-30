@@ -6,9 +6,9 @@ import {
 } from '@web/app/auth/login/login.service';
 import { logoutAction as defaultLogoutAction } from '@web/app/auth/logout/logout.service';
 import { Role } from './role.enum';
-import { LoginUserDto } from '@dto/user/dto/log-in-user.dto';
-import { ActionResponse } from '@web/app/common/action-response.type';
-import { useServerAction } from '@web/app/utils/server-action.use';
+import { LoginUserDto } from '@dto/modules/user/dto/log-in-user.dto';
+import { ActionResponse } from '@web/common/types/action-response.type';
+import { useServerAction } from '@web/common/helpers/server-action.use';
 
 export interface AuthContextInterface {
   login: (formData: LoginUserDto) => Promise<ActionResponse<null, LoginUserDto>>;

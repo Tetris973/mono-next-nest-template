@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ProfileForm, ProfileFormProps } from '@web/app/auth/profile/ProfileForm';
-import { UserDto } from '@dto/user/dto/user.dto';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
 
 const meta = {
   title: 'Components/ProfileForm',

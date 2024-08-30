@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Stack, Paper, Avatar, type MantineTheme } from '@mantine/core';
 import { useProfileForm as defaultUseProfileForm } from './profile.use';
-import { ProfileField } from '@web/app/components/ProfileField';
-import { showSuccessNotification, showErrorNotification } from '@web/app/utils/notifications';
+import { ProfileField } from '@web/components/ProfileField';
+import { showSuccessNotification, showErrorNotification } from '@web/common/helpers/notifications.helpers';
 
 export interface ProfileFormProps {
   userId: number;

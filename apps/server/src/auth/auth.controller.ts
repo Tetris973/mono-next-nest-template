@@ -1,14 +1,14 @@
 import { Controller, Body, Post, Get, HttpCode, HttpStatus, UseGuards, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './passport/local-auth.guard';
-import { Public } from './public.decorator';
-import { CurrentUser } from './user.decorator';
+import { LocalAuthGuard } from '@server/common/guards/local-auth.guard';
+import { Public } from '@server/common/decorators/public.decorator';
+import { LoggedInUser } from '@server/common/decorators/requests/logged-in-user.decorator';
 import { User } from '@prisma/client';
-import { UserDto } from '@server/user/dto/user.dto';
+import { UserDto } from '@server/modules/user/dto/user.dto';
 import { plainToClass } from 'class-transformer';
 import { ApiBody } from '@nestjs/swagger';
-import { CreateUserDto } from '@server/user/dto/create-user.dto';
-import { LoginUserDto } from '@server/user/dto/log-in-user.dto';
+import { CreateUserDto } from '@server/modules/user/dto/create-user.dto';
+import { LoginUserDto } from '@server/modules/user/dto/log-in-user.dto';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import ms from 'ms';
@@ -33,7 +33,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@CurrentUser() user: User, @Res({ passthrough: true }) response: Response) {
+  async login(@LoggedInUser() user: User, @Res({ passthrough: true }) response: Response) {
     const expires = new Date();
     /**
      * TODO: Implement token refresh mechanism:
@@ -54,7 +54,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Get('profile')
-  getProfile(@CurrentUser() user: User) {
+  getProfile(@LoggedInUser() user: User) {
     return plainToClass(UserDto, user);
   }
 }

@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { USER_DASHBOARD_URL, BASE_URL } from './config/urls';
 import { test as customTest } from '@webRoot/playwright/fixtures';
-import { createTestUser } from './utils/create-user.utils';
-import { deleteTestUser } from './utils/delete-user.utils';
+import { createTestUser } from './common/helpers/create-user.helpers';
+import { deleteTestUser } from './common/helpers/delete-user.helpers';
 import { ADMIN_CONTEXT_PATH } from './config/accounts';
 
 customTest.describe('regular user dashboard', () => {

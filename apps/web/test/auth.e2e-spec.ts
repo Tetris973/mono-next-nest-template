@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LOGIN_URL, BASE_URL, SIGNUP_URL } from './config/urls';
-import { deleteTestUser } from './utils/delete-user.utils';
-import { UserDto } from '@dto/user/dto/user.dto';
+import { deleteTestUser } from './common/helpers/delete-user.helpers';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
 import { test as customTest } from '@webRoot/playwright/fixtures';
 
 test.describe('Authentication Flow', () => {

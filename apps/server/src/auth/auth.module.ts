@@ -1,11 +1,11 @@
 import { Module, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UserModule } from '@server/user/user.module';
+import { UserModule } from '@server/modules/user/user.module';
 import { LocalStrategy } from './passport/local.strategy';
 import { JwtStrategy } from './passport/jwt.strategy';
 import { AuthzService } from '@server/authz/authz.service';
-import { customValidationPipe } from '@server/custom-validation.pipe';
+import { customValidationPipe } from '@server/common/pipes/custom-validation.pipe';
 
 @Module({
   imports: [UserModule],
