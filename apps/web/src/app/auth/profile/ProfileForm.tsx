@@ -4,15 +4,9 @@ import { useProfileForm as defaultUseProfileForm } from './profile.use';
 import { ProfileField } from '@web/components/ProfileField';
 import { showSuccessNotification, showErrorNotification } from '@web/common/helpers/notifications.helpers';
 import { UserDto } from '@dto/modules/user/dto/user.dto';
-
-const getColorFromName = (name: string): string => {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const hue = hash % 360;
-  return `hsl(${hue}, 40%, 70%)`;
-};
+import { UpdateUserDto } from '@dto/modules/user/dto/update-user.dto';
+import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
+import { getColorFromName } from '@web/utils/get-color-from-name.utils';
 
 interface UserAvatarProps {
   username: string;
@@ -37,7 +31,7 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ username }) => {
 
 interface UserInfoFieldsProps {
   user: UserDto | null;
-  profileError: any; // Replace 'any' with the actual error type
+  profileError: DtoValidationError<UpdateUserDto>;
   profilePending: boolean;
 }
 const UserInfoFields: React.FC<UserInfoFieldsProps> = ({ user, profileError, profilePending }) => {

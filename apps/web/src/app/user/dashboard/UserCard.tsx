@@ -3,15 +3,7 @@ import { Card, Avatar, Text, Group, Stack, Loader, ActionIcon, Flex, Box } from 
 import { UserDto } from '@dto/modules/user/dto/user.dto';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faEdit } from '@fortawesome/free-solid-svg-icons';
-
-const getColorFromName = (name: string): string => {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const hue = hash % 360;
-  return `hsl(${hue}, 40%, 70%)`;
-};
+import { getColorFromName } from '@web/utils/get-color-from-name.utils';
 
 interface UserCardHeaderProps {
   loading: boolean;
