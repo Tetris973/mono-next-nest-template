@@ -8,7 +8,7 @@ import { showSuccessNotification, showErrorNotification } from '@web/common/help
 
 import { useDashboard as defaultUseDashboard } from './dashboard.use';
 import { UserCard } from './UserCard';
-import { UserList } from './UserList';
+import { FilteredUserList } from './FilteredUserList';
 import { ProfileForm } from '@web/app/auth/profile/ProfileForm';
 import { useProfile as defaultUseProfile } from '@web/app/auth/ProfileContext';
 
@@ -86,11 +86,12 @@ export function Dashboard({
             p="md"
             bg="transparent"
             style={{ flex: 2 }}>
-            <UserList
+            <FilteredUserList
               users={users}
-              loading={getAllUsersPending}
+              isLoading={getAllUsersPending}
               error={error}
               onUserSelect={loadUserById}
+              selectedUserId={selectedUser?.id}
             />
           </Paper>
           <Box style={{ flex: 1 }} />

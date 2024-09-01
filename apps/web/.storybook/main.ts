@@ -10,6 +10,7 @@ const config: StorybookConfig = {
      * Can be removed or kept bu then the read should be updated.
      */
     '@storybook/addon-styling-webpack',
+    '@storybook/test',
   ],
   framework: {
     name: '@storybook/nextjs',

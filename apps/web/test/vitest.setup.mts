@@ -4,9 +4,9 @@ import { afterEach, vi, beforeEach } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
-import { mockRouter } from '@webRoot/test/common/unit-test/helpers/mock-router.helpers';
+import { mockRouter } from '@testWeb/common/unit-test/mocks/router.mock';
 import { getLogger, clearLogs, getLogs } from '@webRoot/test/common/unit-test/helpers/test-logger.helpers';
-import { mockGetConfig } from '@webRoot/test/common/unit-test/helpers/mock-config.helpers';
+import { mockGetConfig } from '@testWeb/common/unit-test/mocks/config.mock';
 import { getConfig } from '@web/config/configuration';
 
 /**
