@@ -1,15 +1,9 @@
 import React from 'react';
-import { Button, Stack, Paper, Avatar, type MantineTheme } from '@mantine/core';
+import { Button, Stack, Paper, Avatar } from '@mantine/core';
 import { useProfileForm as defaultUseProfileForm } from './profile.use';
 import { ProfileField } from '@web/components/ProfileField';
 import { showSuccessNotification, showErrorNotification } from '@web/common/helpers/notifications.helpers';
-
-export interface ProfileFormProps {
-  userId: number;
-  onCancel: () => void;
-  onSubmitSuccess: () => void;
-  useProfileForm?: typeof defaultUseProfileForm;
-}
+import { UserDto } from '@dto/modules/user/dto/user.dto';
 
 const getColorFromName = (name: string): string => {
   let hash = 0;
@@ -20,14 +14,108 @@ const getColorFromName = (name: string): string => {
   return `hsl(${hue}, 40%, 70%)`;
 };
 
+interface UserAvatarProps {
+  username: string;
+}
+const UserAvatar: React.FC<UserAvatarProps> = ({ username }) => {
+  const avatarColor = getColorFromName(username);
+
+  return (
+    <Avatar
+      src={null}
+      size="xl"
+      bg={avatarColor}
+      styles={{
+        placeholder: {
+          color: 'var(--mantine-color-gray-8)',
+        },
+      }}>
+      {username?.charAt(0).toUpperCase()}
+    </Avatar>
+  );
+};
+
+interface UserInfoFieldsProps {
+  user: UserDto | null;
+  profileError: any; // Replace 'any' with the actual error type
+  profilePending: boolean;
+}
+const UserInfoFields: React.FC<UserInfoFieldsProps> = ({ user, profileError, profilePending }) => {
+  return (
+    <Stack gap="md">
+      <ProfileField
+        id="username"
+        name="username"
+        label="User name"
+        defaultValue={user?.username || ''}
+        error={Array.isArray(profileError.username) ? profileError.username.join(', ') : profileError.username}
+        loading={profilePending}
+      />
+      <ProfileField
+        id="createdAt"
+        name="createdAt"
+        label="Created At"
+        value={user ? new Date(user.createdAt).toLocaleString() : ''}
+        error={undefined}
+        loading={profilePending}
+        disabled
+      />
+      <ProfileField
+        id="updatedAt"
+        name="updatedAt"
+        label="Updated At"
+        value={user ? new Date(user.updatedAt).toLocaleString() : ''}
+        error={undefined}
+        loading={profilePending}
+        disabled
+      />
+    </Stack>
+  );
+};
+
+interface ActionButtonsProps {
+  onCancel: () => void;
+  submitPending: boolean;
+}
+const ActionButtons: React.FC<ActionButtonsProps> = ({ onCancel, submitPending }) => {
+  return (
+    <Stack
+      gap="sm"
+      style={{ flexDirection: 'row' }}>
+      <Button
+        aria-label="Cancel editing profile"
+        onClick={onCancel}
+        color="red"
+        fullWidth>
+        Cancel
+      </Button>
+      <Button
+        aria-label="Submit profile changes"
+        type="submit"
+        color="blue"
+        fullWidth
+        loading={submitPending}
+        loaderProps={{ type: 'dots' }}>
+        Submit
+      </Button>
+    </Stack>
+  );
+};
+
+export interface ProfileFormProps {
+  userId: number;
+  onCancel: () => void;
+  onSubmitSuccess: () => void;
+  useProfileForm?: typeof defaultUseProfileForm;
+}
+
 export const ProfileForm: React.FC<ProfileFormProps> = ({
   userId,
   onCancel,
   onSubmitSuccess,
   useProfileForm = defaultUseProfileForm,
 }) => {
-  const { user, profileError, newUsername, profilePending, submitPending, setNewUsername, handleSubmit } =
-    useProfileForm(userId);
+  const { user, profileError, profilePending, submitPending, handleSubmit } = useProfileForm(userId);
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -44,79 +132,27 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
     }
   };
 
-  const avatarColor = newUsername ? getColorFromName(newUsername) : undefined;
-
   return (
     <Paper
       shadow="md"
       p="lg"
       radius="md"
       withBorder
-      style={{ width: '30rem' }}>
+      w="30rem">
       <form
         onSubmit={handleFormSubmit}
         aria-label="Profile form">
         <Stack gap="md">
-          <Avatar
-            aria-label="User menu"
-            src={null}
-            alt={newUsername}
-            size="xl"
-            styles={(theme: MantineTheme) => ({
-              placeholder: {
-                backgroundColor: avatarColor,
-                color: theme.colors.gray[8],
-              },
-            })}>
-            {newUsername?.charAt(0).toUpperCase()}
-          </Avatar>
-          <ProfileField
-            id="username"
-            name="username"
-            label="User name"
-            placeholder={newUsername}
-            error={Array.isArray(profileError.username) ? profileError.username.join(', ') : profileError.username}
-            loading={profilePending}
-            onChange={(e) => setNewUsername(e.target.value)}
+          <UserAvatar username={user?.username || ''} />
+          <UserInfoFields
+            user={user}
+            profileError={profileError}
+            profilePending={profilePending}
           />
-          <ProfileField
-            id="createdAt"
-            name="createdAt"
-            label="Created At"
-            value={user ? new Date(user.createdAt).toLocaleString() : ''}
-            error={undefined}
-            loading={profilePending}
-            disabled
+          <ActionButtons
+            onCancel={onCancel}
+            submitPending={submitPending}
           />
-          <ProfileField
-            id="updatedAt"
-            name="updatedAt"
-            label="Updated At"
-            value={user ? new Date(user.updatedAt).toLocaleString() : ''}
-            error={undefined}
-            loading={profilePending}
-            disabled
-          />
-          <Stack
-            gap="sm"
-            style={{ flexDirection: 'row' }}>
-            <Button
-              aria-label="Cancel editing profile"
-              onClick={onCancel}
-              color="red"
-              fullWidth>
-              Cancel
-            </Button>
-            <Button
-              aria-label="Submit profile changes"
-              type="submit"
-              color="blue"
-              fullWidth
-              loading={submitPending}
-              loaderProps={{ type: 'dots' }}>
-              Submit
-            </Button>
-          </Stack>
         </Stack>
       </form>
     </Paper>

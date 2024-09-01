@@ -13,10 +13,8 @@ import { DtoValidationError } from '@web/common/types/dto-validation-error.type'
 
 export interface UseProfileForm {
   profileError: DtoValidationError<UpdateUserDto>;
-  newUsername: string;
   submitPending: boolean;
   profilePending: boolean;
-  setNewUsername: (username: string) => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<FormSubmitResult>;
   user: UserDto | null;
 }
@@ -35,7 +33,6 @@ export const useProfileForm = (
 ): UseProfileForm => {
   const [user, setUser] = useState<UserDto | null>(null);
   const [profileError, setProfileError] = useState<DtoValidationError<UpdateUserDto>>({ username: [] });
-  const [newUsername, setNewUsername] = useState('');
   const [submitPending, updateUserActionM] = useServerAction(updateUserAction);
   const [profilePending, getProfileActionM] = useServerAction(getUserByIdAction);
 
@@ -46,7 +43,6 @@ export const useProfileForm = (
         // Nothing when error for the moment
       } else {
         setUser(result);
-        setNewUsername(result.username);
       }
     };
 
@@ -56,14 +52,16 @@ export const useProfileForm = (
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<FormSubmitResult> => {
     if (!user) return { error: 'No user selected, cannot update profile' };
     event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const username = (formData.get('username') as string).trim();
 
-    const validationErrors = validateUserProfileEditForm({ username: newUsername });
+    const validationErrors = validateUserProfileEditForm({ username });
     if (validationErrors) {
       setProfileError(validationErrors);
       return {};
     }
 
-    const { result, error } = await updateUserActionM(user.id, { username: newUsername });
+    const { result, error } = await updateUserActionM(user.id, { username });
     if (error) {
       if (error.status === HttpStatus.CONFLICT) {
         setProfileError({ username: [error.message] });
@@ -72,17 +70,14 @@ export const useProfileForm = (
       return { error: error.message };
     }
     setUser(result);
-    setNewUsername(result.username);
     setProfileError({ username: [] });
-    return { success: `Profile of ${newUsername} updated successfully` };
+    return { success: `Profile of ${username} updated successfully` };
   };
 
   return {
     profileError,
-    newUsername,
     submitPending,
     profilePending,
-    setNewUsername,
     handleSubmit,
     user,
   };

@@ -1,8 +1,9 @@
 import { vi, describe, beforeEach, it, expect } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useProfileForm, UseProfileFormDependencies } from './profile.use';
-import { UserDto } from '@dto/modules/user/dto/user.dto';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
+import { mockUsers } from '@testWeb/common/unit-test/mocks/users.mock';
+import { createFormElement } from '@testWeb/common/unit-test/helpers/create-form-element.helpers';
 
 describe('useProfileForm', () => {
   const mockGetUserByIdAction = vi.fn();
@@ -13,13 +14,8 @@ describe('useProfileForm', () => {
     updateUserAction: mockUpdateUserAction,
   };
 
-  const userId = 1;
-  const user: UserDto = {
-    id: userId,
-    username: 'testUser',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+  const userId = mockUsers[0].id;
+  const user = mockUsers[0];
 
   beforeEach(() => {
     mockGetUserByIdAction.mockReset();
@@ -36,7 +32,6 @@ describe('useProfileForm', () => {
     // CHECK RESULTS
     await waitFor(() => {
       expect(result.current.user).toEqual(user);
-      expect(result.current.newUsername).toBe(user.username);
     });
   });
 
@@ -53,14 +48,15 @@ describe('useProfileForm', () => {
 
     // RUN & CHECK RESULTS
     // Input new user data
-    await act(() => {
-      result.current.setNewUsername(newUsername);
+    const formElement = createFormElement({
+      username: newUsername,
     });
 
     // Submit form
     await act(async () => {
       const submitResult = await result.current.handleSubmit({
         preventDefault: () => {},
+        currentTarget: formElement,
       } as React.FormEvent<HTMLFormElement>);
       expect(submitResult).toEqual({ success: `Profile of ${newUsername} updated successfully` });
     });
@@ -79,14 +75,15 @@ describe('useProfileForm', () => {
     await waitFor(() => expect(result.current.user).not.toBeNull());
 
     // Input empty username
-    await act(() => {
-      result.current.setNewUsername('');
+    const invalidInputs = createFormElement({
+      username: '',
     });
 
     // RUN & CHECK RESULTS
     await act(async () => {
       const submitResult = await result.current.handleSubmit({
         preventDefault: () => {},
+        currentTarget: invalidInputs,
       } as React.FormEvent<HTMLFormElement>);
       expect(submitResult).toEqual({});
     });
@@ -96,14 +93,15 @@ describe('useProfileForm', () => {
     const newUserData = { ...user, username: 'validusername' };
     mockUpdateUserAction.mockResolvedValue({ result: newUserData });
     const validUsername = 'validusername';
-    await act(() => {
-      result.current.setNewUsername(validUsername);
+    const validInputs = createFormElement({
+      username: validUsername,
     });
 
     // RUN & CHECK RESULTS
     await act(async () => {
       const submitResult = await result.current.handleSubmit({
         preventDefault: () => {},
+        currentTarget: validInputs,
       } as React.FormEvent<HTMLFormElement>);
       expect(submitResult).toEqual({ success: `Profile of ${validUsername} updated successfully` });
     });
@@ -128,6 +126,9 @@ describe('useProfileForm', () => {
     await act(async () => {
       const submitResult = await result.current.handleSubmit({
         preventDefault: () => {},
+        currentTarget: createFormElement({
+          username: mockUsers[0].username,
+        }),
       } as React.FormEvent<HTMLFormElement>);
       expect(submitResult).toEqual({});
     });
@@ -152,6 +153,9 @@ describe('useProfileForm', () => {
     await act(async () => {
       const submitResult = await result.current.handleSubmit({
         preventDefault: () => {},
+        currentTarget: createFormElement({
+          username: mockUsers[0].username,
+        }),
       } as React.FormEvent<HTMLFormElement>);
       expect(submitResult).toEqual({ error: errorMessage });
       expect(result.current.profileError).toEqual({ username: [] });
