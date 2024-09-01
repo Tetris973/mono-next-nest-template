@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@webRoot/test/common/unit-test/helpers/index';
 import { Header } from './Header';
-import { mockRouter } from '@webRoot/test/common/unit-test/helpers/mock-router.helpers';
+import { mockRouter } from '@testWeb/common/unit-test/mocks/router.mock';
 import { UserDto } from '@dto/modules/user/dto/user.dto';
 
 describe('Header', () => {

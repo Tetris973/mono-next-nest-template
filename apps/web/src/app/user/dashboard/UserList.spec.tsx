@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@webRoot/test/common/unit-test/helpers/index';
-import { UserList } from './UserList';
+import { FilteredUserList } from './FilteredUserList';
 import { UserDto } from '@dto/modules/user/dto/user.dto';
 
 describe('UserList', () => {
@@ -11,16 +11,17 @@ describe('UserList', () => {
 
   const defaultProps = {
     users: mockUsers,
-    loading: false,
-    error: null,
+    isLoading: false,
+    error: undefined,
+    selectedUserId: undefined,
     onUserSelect: vi.fn(),
   };
 
   it('displays loading spinner when loading prop is true', () => {
     render(
-      <UserList
+      <FilteredUserList
         {...defaultProps}
-        loading={true}
+        isLoading={true}
       />,
     );
     expect(screen.getByTestId('user-list-loading')).toBeInTheDocument();
@@ -28,9 +29,9 @@ describe('UserList', () => {
 
   it('does not display loading spinner when loading prop is false', () => {
     render(
-      <UserList
+      <FilteredUserList
         {...defaultProps}
-        loading={false}
+        isLoading={false}
       />,
     );
     expect(screen.queryByTestId('user-list-loading')).not.toBeInTheDocument();
@@ -39,7 +40,7 @@ describe('UserList', () => {
   it('renders error message when error prop is provided', () => {
     const errorMessage = 'Test error message';
     render(
-      <UserList
+      <FilteredUserList
         {...defaultProps}
         error={errorMessage}
       />,
@@ -49,16 +50,16 @@ describe('UserList', () => {
 
   it('does not render error message when error prop is null', () => {
     render(
-      <UserList
+      <FilteredUserList
         {...defaultProps}
-        error={null}
+        error={undefined}
       />,
     );
     expect(screen.queryByTestId('user-list-error')).not.toBeInTheDocument();
   });
 
   it('renders user list when users prop is provided and not empty', () => {
-    render(<UserList {...defaultProps} />);
+    render(<FilteredUserList {...defaultProps} />);
     // user-list testid not available as well as user-list-item
     expect(screen.getByText(mockUsers[0].id.toString())).toBeInTheDocument();
     expect(screen.getByText(mockUsers[0].username)).toBeInTheDocument();
@@ -67,7 +68,7 @@ describe('UserList', () => {
   });
 
   it('filters users correctly when typing in the filter input', () => {
-    render(<UserList {...defaultProps} />);
+    render(<FilteredUserList {...defaultProps} />);
     const filterInput = screen.getByPlaceholderText('Filter users');
     fireEvent.change(filterInput, { target: { value: mockUsers[0].username } });
     expect(screen.getByText(mockUsers[0].id.toString())).toBeInTheDocument();
@@ -77,7 +78,7 @@ describe('UserList', () => {
   });
 
   it('calls onUserSelect function and updates selected user when a user item is clicked', () => {
-    render(<UserList {...defaultProps} />);
+    render(<FilteredUserList {...defaultProps} />);
     const userItemText = screen.getByText(mockUsers[0].username);
     const userItem = userItemText.closest('p');
 

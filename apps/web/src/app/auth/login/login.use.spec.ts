@@ -3,8 +3,8 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 import { useLogin, UseLoginDependencies } from './login.use';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { LoginUserDto } from '@dto/modules/user/dto/log-in-user.dto';
-import { mockRouter } from '@webRoot/test/common/unit-test/helpers/mock-router.helpers';
-import { createFormElement } from '@webRoot/test/common/unit-test/helpers/create-form-element.helpers';
+import { mockRouter } from '@testWeb/common/unit-test/mocks/router.mock';
+import { createFormElement } from '@testWeb/common/unit-test/helpers/create-form-element.helpers';
 
 describe('useLogin', () => {
   const mockAuth = {

@@ -70,8 +70,8 @@
     },
     "apps/web/package.json": {
       "scripts.preinstall": "to prevent from installing packages without pnpm",
-      "devDependencies.@storybook/addon-essentials": "\"@storybook/test\": \"^8.1.11\" can't be used as it override \"vitest.setup.mts\" config where vitest have extends type with jsdom (expect().toBeInTheDocument(), for instance). Also, according to storybook doc, Nestjs and composite story does not work with vitest, only jest.",
-      "scripts.test:e2e": "Yes we use prod env for runing 2e2 tests, to use prod backend server and frontend, to be closer to real production environment"
+      "scripts.test:e2e": "Yes we use prod env for runing 2e2 tests, to use prod backend server and frontend, to be closer to real production environment",
+      "devDependencies.@storybook/test": "Added to use action mocking in storybook stories, causes problems with vitest jsdom that are fixed with import of types in tsconfig!"
     },
     "apps/server/nest-cli.json": {
       "compilerOptions.plugins[0].name": "Swagger plugin to automatically infer ApiProperty from DTO, class-validator, comments over properties and endpoints",

@@ -223,3 +223,90 @@ Similar to `eslint-rules.js`, this file exports Prettier rules to be used in the
 
 ### `tsconfig.json`
 This is a standard TypeScript configuration file that contains the general and shared TypeScript settings. Individual apps should extend this configuration and may add or override rules as needed for their specific requirements.
+
+
+:::info
+This guide is being updated, taking inspiration from [this Medium article](https://medium.com/the-crowdlinker-chronicle/best-way-to-structure-your-directory-code-nestjs-a06c7a641401).
+
+The following outlines the current state of implemented, future, or not planned elements in the project structure.
+:::
+
+<details>
+  <summary>Project architecture roadmap</summary>
+  <div>
+    <p>Legend</p>
+    <p>✅ Implemented</p>
+    <p>🔜 Planned</p>
+    <p>❓ Undecided</p>
+    <p>🚫 Not planned</p>
+    <p>🤔 Under consideration</p>
+  </div>
+
+## Directory Structure
+
+```
+src/
+├── authentication ✅
+├── common ✅
+│   ├── constants 🔜 # Planned when there will be constants in the project
+│   ├── decorators ✅
+│   │   ├── metadata
+│   │   └── requests
+│   ├── exceptions ✅
+│   ├── guards ✅
+│   ├── helpers ✅
+│   │   ├── exceptions
+│   │   └── responses
+│   ├── interfaces ✅
+│   ├── middlewares 🔜 # Planned when there will be middlewares in the project
+│   │   └── models
+│   ├── pipes ✅
+│   ├── serializers ❓ # Don't know yet what this is
+│   │   ├── exceptions
+│   │   └── responses
+│   └── validations ✅
+├── config ✅
+│   ├── api ❓
+│   ├── app ❓
+│   ├── cache ❓
+│   ├── database ❓
+│   │   └── postgres
+│   ├── queue ❓
+│   ├── session ❓
+│   └── storage ❓
+├── database 🤔 # Maybe used if we use provider folder and move Prisma seeding and migration to this folder
+│   ├── factories ❓
+│   │   ├── addresses ❓
+│   │   └── users ❓
+│   ├── migrations ✅ # OK but used elsewhere for the moment
+│   └── seeders ✅ # OK but used elsewhere for the moment
+│       ├── addresses
+│       └── users
+├── jobs ❓ # Don't know yet what this is
+│   ├── consumers
+│   │   └── verification-mail
+│   └── producers
+│       └── verification-mail
+├── mails 🚫 # Not planned for the moment
+│   └── verification
+├── models ✅ # OK but renamed as modules (maybe more fitting to keep models?)
+│   ├── addresses
+│   │   ├── constants
+│   │   ├── entities
+│   │   ├── interfaces
+│   │   └── serializers
+│   └── users
+│       ├── constants
+│       ├── entities
+│       ├── interfaces
+│       └── serializers
+├── providers 🤔 # Maybe used if we use more than one provider (Prisma) and move config to this folder
+│   ├── cache ❓
+│   │   └── redis
+│   ├── database ❓
+│   │   └── postgres
+│   └── queue ❓
+│       └── redis
+└── main.ts
+```
+</details>

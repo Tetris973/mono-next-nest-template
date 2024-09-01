@@ -16,6 +16,13 @@
         "name": "next"
       }
     ],
+    /**
+     * This Line is very important otherwise all vitest test using jsdom element such as .toBeInTheDocument() will throw error not found.
+     * This wasn't needed until adding @storybook/test that seems to perform some kind of injection that is not compatible with jsdom.
+     * For the moment  @storybook/test was added only to mock funcrion in stories with fn().
+     * TODO: A check for using storybook for testing component and unit tests still need to be done.
+     */
+    "types": ["@testing-library/jest-dom"],
   },
   "include": [
     "next-env.d.ts",
