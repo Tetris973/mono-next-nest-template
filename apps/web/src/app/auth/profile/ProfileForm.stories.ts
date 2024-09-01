@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ProfileForm, ProfileFormProps } from '@web/app/auth/profile/ProfileForm';
-import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { mockUsers } from '@webRoot/test/common/unit-test/mocks/users.mock';
+import { fn } from '@storybook/test';
 
 const meta = {
   title: 'Components/ProfileForm',
@@ -23,20 +24,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const mockUser: UserDto = {
-  id: 1,
-  username: 'testuser',
-  createdAt: new Date('2023-01-01'),
-  updatedAt: new Date('2023-06-15'),
-};
-
 const mockUseProfileForm = () => ({
-  user: mockUser,
+  user: mockUsers[0],
   profileError: {},
-  newUsername: 'testuser',
   profilePending: false,
   submitPending: false,
-  setNewUsername: () => {},
   handleSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     return { success: 'Profile updated successfully' };
@@ -46,13 +38,13 @@ const mockUseProfileForm = () => ({
 export const Default: Story = {
   args: {
     userId: 1,
-    onCancel: () => console.log('Cancel clicked'),
-    onSubmitSuccess: () => console.log('Submit success'),
+    onCancel: fn(),
+    onSubmitSuccess: fn(),
     useProfileForm: mockUseProfileForm,
   },
 };
 
-export const Loading: Story = {
+export const FetchProfilePending: Story = {
   args: {
     ...Default.args,
     useProfileForm: () => ({
@@ -67,12 +59,16 @@ export const WithErrors: Story = {
     ...Default.args,
     useProfileForm: () => ({
       ...mockUseProfileForm(),
+      user: {
+        ...mockUsers[0],
+        username: '',
+      },
       profileError: { username: ['Username is required'] },
     }),
   },
 };
 
-export const Submitting: Story = {
+export const SubmitPending: Story = {
   args: {
     ...Default.args,
     useProfileForm: () => ({

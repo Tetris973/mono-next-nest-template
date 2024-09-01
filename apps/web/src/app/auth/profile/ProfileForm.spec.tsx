@@ -14,10 +14,8 @@ describe('ProfileForm', () => {
   const mockUseProfileProps = {
     user: mockUser,
     profileError: {},
-    newUsername: 'testuser',
     profilePending: false,
     submitPending: false,
-    setNewUsername: vi.fn(),
     handleSubmit: vi.fn(),
   };
   const mockUseProfileForm = () => mockUseProfileProps;
@@ -58,7 +56,7 @@ describe('ProfileForm', () => {
     // Check username field
     const usernameLabel = screen.getByText('User name');
     expect(usernameLabel).toBeInTheDocument();
-    const usernameField = screen.getByPlaceholderText(mockUser.username);
+    const usernameField = screen.getByDisplayValue(mockUser.username);
     expect(usernameField).toBeInTheDocument();
 
     // Check createdAt field
@@ -74,18 +72,6 @@ describe('ProfileForm', () => {
     const updatedAtField = screen.getByDisplayValue(mockUser.updatedAt.toLocaleString());
     expect(updatedAtField).toBeInTheDocument();
     expect(updatedAtField).toBeDisabled();
-  });
-
-  it('calls setNewUsername when username input changes', () => {
-    render(
-      <ProfileForm
-        {...defaultProps}
-        useProfileForm={mockUseProfileForm}
-      />,
-    );
-    const usernameInput = screen.getByPlaceholderText(mockUser.username);
-    fireEvent.change(usernameInput!, { target: { value: 'newusername' } });
-    expect(mockUseProfileProps.setNewUsername).toHaveBeenCalledWith('newusername');
   });
 
   it('displays multiple error messages when profileError.username is set', () => {
