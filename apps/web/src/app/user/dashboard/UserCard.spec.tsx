@@ -83,10 +83,8 @@ describe('UserCard', () => {
         showAdmin={false}
       />,
     );
-    const deleteButton = screen.getByLabelText('Delete user');
-    const editButton = screen.getByLabelText('Edit user');
-    expect(deleteButton).not.toBeVisible();
-    expect(editButton).not.toBeVisible();
+    expect(screen.queryByLabelText('Delete user')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Edit user')).not.toBeInTheDocument();
   });
 
   it('calls onDelete function when delete button is clicked', () => {

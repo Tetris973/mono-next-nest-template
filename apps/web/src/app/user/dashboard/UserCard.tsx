@@ -1,55 +1,8 @@
-import { Card, Avatar, Text, Group, Stack, Loader, ActionIcon } from '@mantine/core';
+import React from 'react';
+import { Card, Avatar, Text, Group, Stack, Loader, ActionIcon, Flex, Box } from '@mantine/core';
 import { UserDto } from '@dto/modules/user/dto/user.dto';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faEdit } from '@fortawesome/free-solid-svg-icons';
-
-export interface UserCardProps {
-  user: UserDto | null;
-  loading: boolean;
-  onDelete: () => void;
-  showAdmin: boolean;
-  onEdit: () => void;
-}
-
-const renderLoading = () => (
-  <Loader
-    size="sm"
-    style={{
-      position: 'absolute',
-      top: '0.5rem',
-      left: '0.5rem',
-    }}
-    data-testid="user-card-loading"
-  />
-);
-
-const renderAdminButtons = (onDelete: () => void, onEdit: () => void, visible: boolean) => (
-  <Group
-    justify="center"
-    gap="xs"
-    style={{
-      position: 'absolute',
-      top: '0.5rem',
-      right: '0.5rem',
-      opacity: visible ? 1 : 0,
-      pointerEvents: visible ? 'auto' : 'none',
-    }}>
-    <ActionIcon
-      aria-label="Edit user"
-      color="blue"
-      size="lg"
-      onClick={onEdit}>
-      <FontAwesomeIcon icon={faEdit} />
-    </ActionIcon>
-    <ActionIcon
-      aria-label="Delete user"
-      color="red"
-      size="lg"
-      onClick={onDelete}>
-      <FontAwesomeIcon icon={faTimes} />
-    </ActionIcon>
-  </Group>
-);
 
 const getColorFromName = (name: string): string => {
   let hash = 0;
@@ -60,33 +13,87 @@ const getColorFromName = (name: string): string => {
   return `hsl(${hue}, 40%, 70%)`;
 };
 
-const renderUserInfo = (user: UserDto | null) => {
-  const backgroundColor = user?.username ? getColorFromName(user.username) : undefined;
+interface UserCardHeaderProps {
+  loading: boolean;
+  showAdmin: boolean;
+  onEdit: () => void;
+  onDelete: () => void;
+}
+const UserCardHeader: React.FC<UserCardHeaderProps> = ({ loading, showAdmin, onEdit, onDelete }) => {
+  return (
+    <Group
+      justify="space-between"
+      wrap="nowrap">
+      <Box>
+        {loading && (
+          <Loader
+            size="sm"
+            data-testid="user-card-loading"
+          />
+        )}
+      </Box>
+      {showAdmin && (
+        <Group gap="xs">
+          <ActionIcon
+            onClick={onEdit}
+            color="blue"
+            size="lg"
+            aria-label="Edit user">
+            <FontAwesomeIcon icon={faEdit} />
+          </ActionIcon>
+          <ActionIcon
+            onClick={onDelete}
+            color="red"
+            size="lg"
+            aria-label="Delete user">
+            <FontAwesomeIcon icon={faTimes} />
+          </ActionIcon>
+        </Group>
+      )}
+    </Group>
+  );
+};
+
+interface UserAvatarProps {
+  username?: string;
+}
+const UserAvatar: React.FC<UserAvatarProps> = ({ username }) => {
+  const backgroundColor = username ? getColorFromName(username) : undefined;
 
   return (
-    <Stack
-      align="center"
-      gap="sm">
+    <Flex justify="center">
       <Avatar
         src={null}
         size="xl"
-        styles={(theme) => ({
+        bg={backgroundColor}
+        styles={{
           placeholder: {
-            backgroundColor,
-            color: theme.colors.gray[8],
+            color: 'var(--mantine-color-gray-8)',
           },
-        })}>
-        {user?.username?.charAt(0).toUpperCase()}
+        }}>
+        {username?.charAt(0).toUpperCase()}
       </Avatar>
+    </Flex>
+  );
+};
+
+interface UserDetailsProps {
+  user: UserDto | null;
+}
+const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
+  return (
+    <Stack
+      align="center"
+      gap="xs">
       <Text
         size="lg"
         fw={700}>
-        {user?.username}
+        {user?.username || ''}
       </Text>
       <Text
         size="sm"
         c="dimmed">
-        ID: {user?.id}
+        ID: {user?.id || ''}
       </Text>
       <Text
         size="sm"
@@ -102,19 +109,31 @@ const renderUserInfo = (user: UserDto | null) => {
   );
 };
 
-export const UserCard: React.FC<UserCardProps> = ({ user, loading, onDelete, showAdmin, onEdit }) => {
+export interface UserCardProps {
+  user: UserDto | null;
+  loading: boolean;
+  showAdmin: boolean;
+  onEdit: () => void;
+  onDelete: () => void;
+}
+export const UserCard: React.FC<UserCardProps> = ({ user, loading, showAdmin, onEdit, onDelete }) => {
   return (
     <Card
       aria-label="User card"
+      miw={280}
       shadow="sm"
-      pl="xl"
-      pr="xl"
       radius="md"
-      withBorder
-      style={{ position: 'relative' }}>
-      {loading && renderLoading()}
-      {renderAdminButtons(onDelete, onEdit, !!user && showAdmin)}
-      <Card.Section py="md">{renderUserInfo(user)}</Card.Section>
+      withBorder>
+      <Stack gap="md">
+        <UserCardHeader
+          loading={loading}
+          showAdmin={showAdmin}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
+        <UserAvatar username={user?.username} />
+        <UserDetails user={user} />
+      </Stack>
     </Card>
   );
 };

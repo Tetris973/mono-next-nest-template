@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
 import { UserCard, UserCardProps } from '@web/app/user/dashboard/UserCard';
-import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { mockUsers } from '@testWeb/common/unit-test/mocks/users.mock';
 
 const meta = {
   title: 'Components/UserCard',
@@ -14,27 +15,19 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const mockUser: UserDto = {
-  id: 1,
-  username: 'johndoe',
-  createdAt: new Date('2023-01-01'),
-  updatedAt: new Date('2023-06-15'),
-};
-
 export const Default: Story = {
   args: {
-    user: mockUser,
+    user: mockUsers[0],
     loading: false,
-    onDelete: () => console.log('Delete clicked'),
     showAdmin: false,
-    onEdit: () => console.log('Edit clicked'),
+    onEdit: fn(),
+    onDelete: fn(),
   },
 };
 
 export const Loading: Story = {
   args: {
     ...Default.args,
-    user: null,
     loading: true,
   },
 };
@@ -53,12 +46,11 @@ export const NoUser: Story = {
   },
 };
 
-export const LongUsername: Story = {
+const longUser = { ...mockUsers[0] };
+longUser.username = 'verylongusernameverylongusernamevery';
+export const LongUserDetails: Story = {
   args: {
     ...Default.args,
-    user: {
-      ...mockUser,
-      username: 'johndoewithaverylongusername',
-    },
+    user: longUser,
   },
 };
