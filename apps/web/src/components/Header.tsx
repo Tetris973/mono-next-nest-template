@@ -7,33 +7,46 @@ import { useAuth as defaultUseAuth } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSignOutAlt, faSignInAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+import { getColorFromName } from '@web/utils/get-color-from-name.utils';
+import { UserDto } from '@dto/modules/user/dto/user.dto';
 
-export interface HeaderProps {
-  useAuth?: typeof defaultUseAuth;
-  useProfile?: typeof defaultUseProfile;
-}
+const HomeButton = () => {
+  const router = useRouter();
+  const onClick = () => router.push('/');
 
-const getColorFromName = (name: string): string => {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const hue = hash % 360;
-  return `hsl(${hue}, 40%, 70%)`;
+  return (
+    <Button
+      variant="subtle"
+      color="gray.9"
+      leftSection={
+        <FontAwesomeIcon
+          icon={faHome}
+          size="2x"
+          style={{ color: 'var(--mantine-color-gray-9)' }}
+        />
+      }
+      onClick={onClick}>
+      <Text
+        size="xl"
+        fw={700}
+        c="gray.9">
+        My App
+      </Text>
+    </Button>
+  );
 };
 
-export function Header({ useAuth = defaultUseAuth, useProfile = defaultUseProfile }: HeaderProps) {
-  const { logout, isAuthenticated } = useAuth();
-  const { profile, loading } = useProfile();
+interface AuthenticatedMenuProps {
+  profile: UserDto;
+  onLogout: () => void;
+}
+const AuthenticatedMenu: React.FC<AuthenticatedMenuProps> = ({ profile, onLogout }) => {
+  const backgroundColor = profile?.username ? getColorFromName(profile.username) : undefined;
   const router = useRouter();
 
-  const handleHomeClick = () => router.push('/');
-  const handleProfileClick = () => router.push('/auth/profile');
-  const handleSignupClick = () => router.push('/auth/signup');
+  const onProfileClick = () => router.push('/auth/profile');
 
-  const backgroundColor = profile?.username ? getColorFromName(profile.username) : undefined;
-
-  const AuthenticatedMenu = () => (
+  return (
     <Menu
       shadow="md"
       width={200}>
@@ -68,7 +81,7 @@ export function Header({ useAuth = defaultUseAuth, useProfile = defaultUseProfil
               style={{ width: rem(14), height: rem(14) }}
             />
           }
-          onClick={handleProfileClick}>
+          onClick={onProfileClick}>
           Profile
         </Menu.Item>
         <Menu.Divider />
@@ -79,17 +92,22 @@ export function Header({ useAuth = defaultUseAuth, useProfile = defaultUseProfil
               style={{ width: rem(14), height: rem(14) }}
             />
           }
-          onClick={logout}
+          onClick={onLogout}
           color="red">
           Logout
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>
   );
+};
 
-  const UnauthenticatedMenu = () => (
+const UnauthenticatedMenu = () => {
+  const router = useRouter();
+  const onSignupClick = () => router.push('/auth/signup');
+
+  return (
     <Button
-      onClick={handleSignupClick}
+      onClick={onSignupClick}
       leftSection={
         <FontAwesomeIcon
           icon={faSignInAlt}
@@ -100,18 +118,41 @@ export function Header({ useAuth = defaultUseAuth, useProfile = defaultUseProfil
       Signup
     </Button>
   );
+};
 
-  const MenuContent = () => {
-    if (loading || isAuthenticated === undefined) {
-      return (
-        <Loader
-          size="sm"
-          data-testid="header-loading-spinner"
-        />
-      );
-    }
-    return profile ? <AuthenticatedMenu /> : <UnauthenticatedMenu />;
-  };
+interface MenuContentProps {
+  loading: boolean;
+  isAuthenticated: boolean | undefined;
+  profile: UserDto | null;
+  onLogout: () => void;
+}
+const MenuContent: React.FC<MenuContentProps> = ({ loading, isAuthenticated, profile, onLogout }) => {
+  if (loading || isAuthenticated === undefined) {
+    return (
+      <Loader
+        size="sm"
+        data-testid="header-loading-spinner"
+      />
+    );
+  }
+  return profile ? (
+    <AuthenticatedMenu
+      profile={profile}
+      onLogout={onLogout}
+    />
+  ) : (
+    <UnauthenticatedMenu />
+  );
+};
+
+export interface HeaderProps {
+  useAuth?: typeof defaultUseAuth;
+  useProfile?: typeof defaultUseProfile;
+}
+
+export function Header({ useAuth = defaultUseAuth, useProfile = defaultUseProfile }: HeaderProps) {
+  const { logout, isAuthenticated } = useAuth();
+  const { profile, loading } = useProfile();
 
   return (
     <AppShell.Header>
@@ -120,27 +161,13 @@ export function Header({ useAuth = defaultUseAuth, useProfile = defaultUseProfil
         justify="space-between"
         h="100%"
         px="md">
-        <Group>
-          <Button
-            variant="subtle"
-            color="gray.9"
-            leftSection={
-              <FontAwesomeIcon
-                icon={faHome}
-                size="2x"
-                style={{ color: 'var(--mantine-color-gray-9)' }}
-              />
-            }
-            onClick={handleHomeClick}>
-            <Text
-              size="xl"
-              fw={700}
-              c="gray.9">
-              My App
-            </Text>
-          </Button>
-        </Group>
-        <MenuContent />
+        <HomeButton />
+        <MenuContent
+          loading={loading}
+          isAuthenticated={isAuthenticated}
+          profile={profile}
+          onLogout={logout}
+        />
       </Group>
     </AppShell.Header>
   );

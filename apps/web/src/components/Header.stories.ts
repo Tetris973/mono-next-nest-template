@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Header } from '@web/components/Header';
-import { UserDto } from '@dto/modules/user/dto/user.dto';
-import { AuthContextInterface } from '@web/app/auth/AuthContext';
-import { ProfileContextInterface } from '@web/app/auth/ProfileContext';
+import { mockUsers } from '@testWeb/common/unit-test/mocks/users.mock';
+import { fn } from '@storybook/test';
 
 const meta = {
   title: 'Components/Header',
@@ -31,43 +30,37 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const mockUser: UserDto = {
-  id: 1,
-  username: 'testuser',
-  createdAt: new Date('2023-01-01'),
-  updatedAt: new Date('2023-06-15'),
-};
-
 const mockBaseAuth = {
   isAuthenticated: true,
-  logout: () => console.log('Logout clicked'),
-  login: () => console.log('Login clicked'),
+  logout: fn(),
+  login: fn(),
   roles: [],
   loading: false,
 };
 
 const mockBaseProfile = {
-  profile: mockUser,
+  profile: mockUsers[0],
   loading: false,
+  loadProfile: fn(),
 };
 
 export const Authenticated: Story = {
   args: {
-    useAuth: () => ({ ...mockBaseAuth, isAuthenticated: true }) as unknown as AuthContextInterface,
-    useProfile: () => mockBaseProfile as unknown as ProfileContextInterface,
+    useAuth: () => mockBaseAuth,
+    useProfile: () => mockBaseProfile,
   },
 };
 
 export const Unauthenticated: Story = {
   args: {
-    useAuth: () => ({ ...mockBaseAuth, isAuthenticated: false }) as unknown as AuthContextInterface,
-    useProfile: () => ({ ...mockBaseProfile, profile: null }) as unknown as ProfileContextInterface,
+    useAuth: () => ({ ...mockBaseAuth, isAuthenticated: false }),
+    useProfile: () => ({ ...mockBaseProfile, profile: null }),
   },
 };
 
 export const Loading: Story = {
   args: {
-    useAuth: () => ({ ...mockBaseAuth, isAuthenticated: undefined }) as unknown as AuthContextInterface,
-    useProfile: () => ({ ...mockBaseProfile, loading: true }) as unknown as ProfileContextInterface,
+    useAuth: () => ({ ...mockBaseAuth, isAuthenticated: undefined }),
+    useProfile: () => ({ ...mockBaseProfile, loading: true }),
   },
 };
