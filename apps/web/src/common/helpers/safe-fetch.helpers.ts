@@ -1,5 +1,5 @@
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { ServerActionResponse } from '@web/common/types/action-response.type';
+import { ServerActionResponse } from '@web/common/types/server-action-response.type';
 import { getLogger } from '@web/lib/logger';
 import { logoutAction } from '@web/app/auth/logout/logout.service';
 

@@ -1,8 +1,8 @@
 'use server';
-import { ServerActionResponseDto } from '@web/common/types/action-response.type';
+import { ServerActionResponseDto } from '@web/common/types/server-action-response.type';
 import { getConfig } from '@web/config/configuration';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { CreateUserDto } from '@dto/modules/user/dto/create-user.dto';
+import { CreateUserDto } from '@web/common/dto/backend-index.dto';
 import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 
 export const signupAction = async (createUserDto: CreateUserDto): Promise<ServerActionResponseDto<CreateUserDto>> => {

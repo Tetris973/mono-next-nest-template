@@ -3,7 +3,7 @@ import { getProfileAction } from './profile.service';
 import { getConfig } from '@web/config/configuration';
 import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
-import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { UserDto } from '@web/common/dto/backend-index.dto';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
 
 describe('profile.service', () => {

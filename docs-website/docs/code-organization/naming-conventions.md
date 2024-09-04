@@ -17,7 +17,7 @@ These conventions are guidelines. While they should be followed in most cases, d
 1. Use kebab-case for file names, unless the file exports a React component: `log-in-user.dto.ts`, `auth-service.ts`
 2. React component files should be in PascalCase: `LoginForm.tsx`, `Button.tsx`
 3. Test files should have the same name as the file they're testing, with a `.spec` suffix: `auth-service.spec.ts`, `Button.spec.tsx`
-4. Use extensions to qualify a file when appropriate: `.use` or `.hook` for React hooks, `.interface` for interfaces, `.type` for type definitions, `.utils` for utility functions, etc. There's no definitive set of extensions; use what's pertinent when you find multiple files exporting the same kind of code.
+4. Use extensions to qualify a file when appropriate: `.hook` for React hooks, `.interface` for interfaces, `.type` for type definitions, `.utils` for utility functions, etc. There's no definitive set of extensions; use what's pertinent when you find multiple files exporting the same kind of code.
 
 Example:
 ```

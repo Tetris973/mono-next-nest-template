@@ -2,9 +2,8 @@
 
 import { getConfig } from '@web/config/configuration';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { UpdateUserDto } from '@dto/modules/user/dto/update-user.dto';
-import { UserDto } from '@dto/modules/user/dto/user.dto';
-import { ServerActionResponse } from '@web/common/types/action-response.type';
+import { UpdateUserDto, UserDto } from '@web/common/dto/backend-index.dto';
+import { ServerActionResponse } from '@web/common/types/server-action-response.type';
 import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
 import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 

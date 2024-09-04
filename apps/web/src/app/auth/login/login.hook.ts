@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { validateLoginForm } from './validation';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { ServerActionResponseErrorDto } from '@web/common/types/action-response.type';
+import { ServerActionResponseErrorDto } from '@web/common/types/server-action-response.type';
 import { useAuth as defaultUseAuth, AuthContextInterface } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
-import { LoginUserDto } from '@dto/modules/user/dto/log-in-user.dto';
+import { LoginUserDto } from '@web/common/dto/backend-index.dto';
 import { FormSubmitResult } from '@web/common/interfaces/form-submit-result.interface';
 import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
 
