@@ -236,9 +236,12 @@ importers:
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0
+      mantine-form-zod-resolver:
+        specifier: ^1.1.0
+        version: 1.1.0(@mantine/form@7.12.2(react@18.3.1))(zod@3.23.8)
       next:
         specifier: 14.2.5
-        version: 14.2.5(@babel/core@7.25.2)(@opentelemetry/api@1.4.1)(@playwright/test@1.45.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 14.2.5(patch_hash=brpdbxywewlzekp5hvuclgjsfy)(@babel/core@7.25.2)(@opentelemetry/api@1.4.1)(@playwright/test@1.45.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nookies:
         specifier: ^2.5.2
         version: 2.5.2
@@ -278,7 +281,7 @@ importers:
         version: 8.2.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.2.9(@babel/preset-env@7.25.4(@babel/core@7.25.2)))
       '@storybook/nextjs':
         specifier: ^8.2.9
-        version: 8.2.9(esbuild@0.21.5)(next@14.2.5(@babel/core@7.25.2)(@opentelemetry/api@1.4.1)(@playwright/test@1.45.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.2.9(@babel/preset-env@7.25.4(@babel/core@7.25.2)))(type-fest@4.25.0)(typescript@5.5.4)(vitest@2.0.5(@types/node@20.14.14)(jsdom@24.1.1)(sugarss@4.0.1(postcss@8.4.41))(terser@5.31.3))(webpack-dev-server@4.15.2(webpack@5.94.0(esbuild@0.21.5)))(webpack-hot-middleware@2.26.1)(webpack@5.94.0(esbuild@0.21.5))
+        version: 8.2.9(esbuild@0.21.5)(next@14.2.5(patch_hash=brpdbxywewlzekp5hvuclgjsfy)(@babel/core@7.25.2)(@opentelemetry/api@1.4.1)(@playwright/test@1.45.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.2.9(@babel/preset-env@7.25.4(@babel/core@7.25.2)))(type-fest@4.25.0)(typescript@5.5.4)(vitest@2.0.5(@types/node@20.14.14)(jsdom@24.1.1)(sugarss@4.0.1(postcss@8.4.41))(terser@5.31.3))(webpack-dev-server@4.15.2(webpack@5.94.0(esbuild@0.21.5)))(webpack-hot-middleware@2.26.1)(webpack@5.94.0(esbuild@0.21.5))
       '@storybook/preview-api':
         specifier: ^8.2.9
         version: 8.2.9(storybook@8.2.9(@babel/preset-env@7.25.4(@babel/core@7.25.2)))
@@ -6538,6 +6541,13 @@ packages:
 
   make-error@1.3.6:
     resolution: {integrity: sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==}
+
+  mantine-form-zod-resolver@1.1.0:
+    resolution: {integrity: sha512-hidTuYq6agSF5XbkcVVcr0mkGs9ki/x8OC9ldZMxGLVGja6bdl+x4k1hCNrigCG90DBoMDnu0bo3hprGBBlUZA==}
+    engines: {node: '>=16.6.0'}
+    peerDependencies:
+      '@mantine/form': '>=7.0.0'
+      zod: '>=3.0.0'
 
   map-or-similar@1.5.0:
     resolution: {integrity: sha512-0aF7ZmVon1igznGI4VS30yugpduQW3y3GkcgGJOp7d8x8QrizhigUxjI/m2UojsXXto+jLAH3KSz+xOJTiORjg==}
@@ -13089,7 +13099,7 @@ snapshots:
     dependencies:
       storybook: 8.2.9(@babel/preset-env@7.25.4(@babel/core@7.25.2))
 
-  '@storybook/nextjs@8.2.9(esbuild@0.21.5)(next@14.2.5(@babel/core@7.25.2)(@opentelemetry/api@1.4.1)(@playwright/test@1.45.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.2.9(@babel/preset-env@7.25.4(@babel/core@7.25.2)))(type-fest@4.25.0)(typescript@5.5.4)(vitest@2.0.5(@types/node@20.14.14)(jsdom@24.1.1)(sugarss@4.0.1(postcss@8.4.41))(terser@5.31.3))(webpack-dev-server@4.15.2(webpack@5.94.0(esbuild@0.21.5)))(webpack-hot-middleware@2.26.1)(webpack@5.94.0(esbuild@0.21.5))':
+  '@storybook/nextjs@8.2.9(esbuild@0.21.5)(next@14.2.5(patch_hash=brpdbxywewlzekp5hvuclgjsfy)(@babel/core@7.25.2)(@opentelemetry/api@1.4.1)(@playwright/test@1.45.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.2.9(@babel/preset-env@7.25.4(@babel/core@7.25.2)))(type-fest@4.25.0)(typescript@5.5.4)(vitest@2.0.5(@types/node@20.14.14)(jsdom@24.1.1)(sugarss@4.0.1(postcss@8.4.41))(terser@5.31.3))(webpack-dev-server@4.15.2(webpack@5.94.0(esbuild@0.21.5)))(webpack-hot-middleware@2.26.1)(webpack@5.94.0(esbuild@0.21.5))':
     dependencies:
       '@babel/core': 7.25.2
       '@babel/plugin-syntax-bigint': 7.8.3(@babel/core@7.25.2)
@@ -13117,7 +13127,7 @@ snapshots:
       fs-extra: 11.2.0
       image-size: 1.1.1
       loader-utils: 3.3.1
-      next: 14.2.5(@babel/core@7.25.2)(@opentelemetry/api@1.4.1)(@playwright/test@1.45.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next: 14.2.5(patch_hash=brpdbxywewlzekp5hvuclgjsfy)(@babel/core@7.25.2)(@opentelemetry/api@1.4.1)(@playwright/test@1.45.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       node-polyfill-webpack-plugin: 2.0.1(webpack@5.94.0(esbuild@0.21.5))
       pnp-webpack-plugin: 1.7.0(typescript@5.5.4)
       postcss: 8.4.41
@@ -17981,6 +17991,11 @@ snapshots:
 
   make-error@1.3.6: {}
 
+  mantine-form-zod-resolver@1.1.0(@mantine/form@7.12.2(react@18.3.1))(zod@3.23.8):
+    dependencies:
+      '@mantine/form': 7.12.2(react@18.3.1)
+      zod: 3.23.8
+
   map-or-similar@1.5.0: {}
 
   mark.js@8.11.1: {}
@@ -18645,7 +18660,7 @@ snapshots:
 
   new-github-issue-url@0.2.1: {}
 
-  next@14.2.5(@babel/core@7.25.2)(@opentelemetry/api@1.4.1)(@playwright/test@1.45.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next@14.2.5(patch_hash=brpdbxywewlzekp5hvuclgjsfy)(@babel/core@7.25.2)(@opentelemetry/api@1.4.1)(@playwright/test@1.45.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@next/env': 14.2.5
       '@swc/helpers': 0.5.5

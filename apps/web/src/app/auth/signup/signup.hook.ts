@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { validateSignupForm } from './validation';
+import { useEffect } from 'react';
+import { signupFormSchema, SignupFormValues } from './validation';
+import { zodResolver } from 'mantine-form-zod-resolver';
 import { CreateUserDto } from '@web/common/dto/backend-index.dto';
 import { signupAction as defaultSignupAction } from './signup.service';
 import { useRouter } from 'next/navigation';
@@ -8,11 +9,11 @@ import { ServerActionResponseErrorDto } from '@web/common/types/server-action-re
 import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { FormSubmitResult } from '@web/common/interfaces/form-submit-result.interface';
 import { useServerAction } from '@web/common/helpers/server-action.hook';
-import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
+import { useForm, UseFormReturnType } from '@mantine/form';
 
 export interface UseSignup {
-  error: DtoValidationError<CreateUserDto>;
-  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => Promise<FormSubmitResult>;
+  form: UseFormReturnType<CreateUserDto>;
+  handleSubmit: (createUserDto: CreateUserDto) => Promise<FormSubmitResult>;
   signupPending: boolean;
 }
 
@@ -25,14 +26,18 @@ export const useSignup = ({
   useAuth = defaultUseAuth,
   signupAction = defaultSignupAction,
 }: UseSignupDependencies = {}): UseSignup => {
-  const [error, setError] = useState<DtoValidationError<CreateUserDto>>({
-    username: [],
-    password: [],
-    confirmPassword: [],
-  });
   const [signupPending, signupActionM] = useServerAction(signupAction);
   const router = useRouter();
   const { isAuthenticated } = useAuth();
+
+  const form = useForm<SignupFormValues>({
+    initialValues: {
+      username: '',
+      password: '',
+      confirmPassword: '',
+    },
+    validate: zodResolver(signupFormSchema),
+  });
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -42,27 +47,13 @@ export const useSignup = ({
 
   const handleSignupError = (signupError: ServerActionResponseErrorDto<CreateUserDto>): FormSubmitResult => {
     if (signupError.error.status === HttpStatus.CONFLICT || signupError.error.status === HttpStatus.BAD_REQUEST) {
-      setError(signupError.data || {});
+      form.setErrors(signupError.data || {});
       return {};
     }
     return { error: signupError.error.message };
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<FormSubmitResult> => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const createUserDto: CreateUserDto = {
-      username: (formData.get('username') as string).trim(),
-      password: (formData.get('password') as string).trim(),
-      confirmPassword: (formData.get('confirmPassword') as string).trim(),
-    };
-
-    const validationErrors = validateSignupForm(createUserDto);
-    if (validationErrors) {
-      setError(validationErrors);
-      return {};
-    }
-
+  const handleSubmit = async (createUserDto: CreateUserDto): Promise<FormSubmitResult> => {
     const signupRes = await signupActionM(createUserDto);
     if (signupRes.error) {
       return handleSignupError(signupRes);
@@ -72,7 +63,7 @@ export const useSignup = ({
   };
 
   return {
-    error,
+    form,
     handleSubmit,
     signupPending,
   };

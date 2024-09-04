@@ -1,15 +1,9 @@
-import { validateUsername, validatePassword } from '@web/common/validations/validation';
-import { LoginUserDto } from '@web/common/dto/backend-index.dto';
-import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
+import { z } from 'zod';
+import { usernameSchema, passwordSchema } from '@web/common/validations/validation';
 
-export const validateLoginForm = (loginDto: LoginUserDto): DtoValidationError<LoginUserDto> | null => {
-  const errors = {
-    username: validateUsername(loginDto.username),
-    password: validatePassword(loginDto.password),
-  };
+export const loginFormSchema = z.object({
+  username: usernameSchema,
+  password: passwordSchema,
+});
 
-  if (Object.values(errors).every((error) => error.length === 0)) {
-    return null;
-  }
-  return errors;
-};
+export type LoginFormValues = z.infer<typeof loginFormSchema>;

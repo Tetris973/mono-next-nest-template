@@ -1,10 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@webRoot/test/common/unit-test/helpers/index';
+import { render, screen, fireEvent, waitFor, renderHook } from '@webRoot/test/common/unit-test/helpers/index';
 import { LoginForm } from './LoginForm';
+import { useForm } from '@mantine/form';
 
 describe('LoginForm', () => {
   const mockUseLoginProps = {
-    error: {},
+    form: renderHook(() =>
+      useForm({
+        initialValues: {
+          username: '',
+          password: '',
+        },
+      }),
+    ).result.current,
     showPassword: false,
     setShowPassword: vi.fn(),
     handleSubmit: vi.fn(),
@@ -18,6 +26,7 @@ describe('LoginForm', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUseLoginProps.form.reset();
   });
 
   it('renders username and password fields', () => {
@@ -49,21 +58,6 @@ describe('LoginForm', () => {
     await waitFor(() => {
       expect(mockUseLoginProps.handleSubmit).toHaveBeenCalled();
     });
-  });
-
-  it('displays multiple error messages when error object has values', () => {
-    // INIT
-    const errorMockUseLogin = () => ({
-      ...mockUseLogin(),
-      error: { username: ['Username error'], password: ['Password error'] },
-    });
-
-    // RUN
-    render(<LoginForm useLogin={errorMockUseLogin} />);
-
-    // CHECK RESULTS
-    expect(screen.getByText('Username error')).toBeInTheDocument();
-    expect(screen.getByText('Password error')).toBeInTheDocument();
   });
 
   it('renders "Remember me" checkbox as disabled', () => {

@@ -17,9 +17,9 @@ test.describe('Authentication Flow', () => {
     await page.waitForURL(SIGNUP_URL);
 
     // Fill in the signup form
-    await page.fill('input[name="username"]', username);
-    await page.fill('input[name="password"]', password);
-    await page.fill('input[name="confirmPassword"]', password);
+    await page.getByLabel('Username').fill(username);
+    await page.getByLabel('Password', { exact: true }).fill(password);
+    await page.getByLabel('Confirm Password').fill(password);
 
     // Submit the form
     await page.click('button[type="submit"]');
@@ -32,8 +32,8 @@ test.describe('Authentication Flow', () => {
     await expect(successMessage).toBeVisible();
 
     // Fill in the login form
-    await page.fill('input[name="username"]', username);
-    await page.fill('input[name="password"]', password);
+    await page.getByLabel('Username').fill(username);
+    await page.getByLabel('Password', { exact: true }).fill(password);
 
     // Submit the form
     await page.click('button[type="submit"]');

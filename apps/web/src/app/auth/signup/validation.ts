@@ -1,15 +1,15 @@
-import { validateUsername, validatePassword, validateConfirmPassword } from '@web/common/validations/validation';
-import { CreateUserDto } from '@web/common/dto/backend-index.dto';
-import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
+import { z } from 'zod';
+import { usernameSchema, passwordSchema } from '@web/common/validations/validation';
 
-export const validateSignupForm = (createUserDto: CreateUserDto): DtoValidationError<CreateUserDto> | null => {
-  const errors = {
-    username: validateUsername(createUserDto.username),
-    password: validatePassword(createUserDto.password),
-    confirmPassword: validateConfirmPassword(createUserDto.confirmPassword, createUserDto.password),
-  };
-  if (Object.values(errors).every((error) => error.length === 0)) {
-    return null;
-  }
-  return errors;
-};
+export const signupFormSchema = z
+  .object({
+    username: usernameSchema,
+    password: passwordSchema,
+    confirmPassword: z.string().min(1, 'You must confirm your password.'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
+
+export type SignupFormValues = z.infer<typeof signupFormSchema>;

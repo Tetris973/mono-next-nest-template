@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { validateUserProfileEditForm } from './validation';
+import { profileFormSchema } from './validation';
+import { zodResolver } from 'mantine-form-zod-resolver';
 import {
   getUserByIdActionNew as defaultGetUserByIdAction,
   updateUserAction as defaultUpdateUserAction,
@@ -43,7 +44,7 @@ export const useProfileForm = (
     initialValues: {
       username: '',
     },
-    validate: validateUserProfileEditForm,
+    validate: zodResolver(profileFormSchema),
   });
   const setFormValues = form.setValues;
 

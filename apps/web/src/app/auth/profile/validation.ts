@@ -1,12 +1,8 @@
-import { UpdateUserDto } from '@web/common/dto/backend-index.dto';
-import { UseFormInput } from '@mantine/form';
 import { z } from 'zod';
+import { usernameSchema } from '@web/common/validations/validation';
 
-export const usernameSchema = z.string().min(6, 'Username must be at least 6 characters.');
+export const profileFormSchema = z.object({
+  username: usernameSchema,
+});
 
-export const validateUserProfileEditForm: UseFormInput<UpdateUserDto>['validate'] = {
-  username: (value) => {
-    const result = usernameSchema.safeParse(value);
-    return result.success ? null : result.error.errors[0].message;
-  },
-};
+export type ProfileFormValues = z.infer<typeof profileFormSchema>;
