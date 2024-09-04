@@ -1,8 +1,8 @@
 import { vi, describe, beforeEach, it, expect } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { useSignup, UseSignupDependencies } from './signup.use';
+import { useSignup, UseSignupDependencies } from './signup.hook';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { CreateUserDto } from '@dto/modules/user/dto/create-user.dto';
+import { CreateUserDto } from '@web/common/dto/backend-index.dto';
 import { mockRouter } from '@testWeb/common/unit-test/mocks/router.mock';
 import { createFormElement } from '@testWeb/common/unit-test/helpers/create-form-element.helpers';
 

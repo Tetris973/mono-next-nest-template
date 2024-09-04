@@ -1,4 +1,4 @@
-import { UpdateUserDto } from '@dto/modules/user/dto/update-user.dto';
+import { UpdateUserDto } from '@web/common/dto/backend-index.dto';
 import { UseFormInput } from '@mantine/form';
 import { z } from 'zod';
 

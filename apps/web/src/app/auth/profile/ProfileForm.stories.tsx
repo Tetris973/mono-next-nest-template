@@ -4,7 +4,7 @@ import { ProfileForm, ProfileFormProps } from '@web/app/auth/profile/ProfileForm
 import { mockUsers } from '@webRoot/test/common/unit-test/mocks/users.mock';
 import { fn } from '@storybook/test';
 import { useForm, UseFormReturnType } from '@mantine/form';
-import { UpdateUserDto } from '@dto/modules/user/dto/update-user.dto';
+import { UpdateUserDto } from '@web/common/dto/backend-index.dto';
 import { validateUserProfileEditForm } from '@web/app/auth/profile/validation';
 
 const meta = {

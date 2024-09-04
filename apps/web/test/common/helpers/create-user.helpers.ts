@@ -1,7 +1,6 @@
 import { request, APIRequestContext, APIResponse } from '@playwright/test';
 import { getConfig } from '@web/config/configuration';
-import { FullUserDto } from '@dto/modules/user/dto/full-user.dto';
-import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { FullUserDto, UserDto } from '@web/common/dto/backend-index.dto';
 
 /**
  * Creates a test user.

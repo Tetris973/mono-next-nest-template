@@ -4,10 +4,10 @@ import {
   getUserByIdAction as defaultGetUserByIdAction,
   deleteUserAction as defaultDeleteUserAction,
 } from '@web/app/user/user.service';
-import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { UserDto } from '@web/common/dto/backend-index.dto';
 import { useAuth as defaultUseAuth, AuthContextInterface } from '@web/app/auth/AuthContext';
 import { Role } from '@web/app/auth/role.enum';
-import { useServerAction } from '@web/common/helpers/server-action.use';
+import { useServerAction } from '@web/common/helpers/server-action.hook';
 
 export interface useDashboard {
   users: UserDto[];

@@ -2,12 +2,12 @@
 
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
-import { ServerActionResponse } from '@web/common/types/action-response.type';
+import { ServerActionResponse } from '@web/common/types/server-action-response.type';
 import { getConfig } from '@web/config/configuration';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { Role } from '@web/app/auth/role.enum';
 import { JwtPayload } from '@web/app/auth/jwt-payload.interface';
-import { LoginUserDto } from '@dto/modules/user/dto/log-in-user.dto';
+import { LoginUserDto } from '@web/common/dto/backend-index.dto';
 import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
 import { getLogger } from '@web/lib/logger';

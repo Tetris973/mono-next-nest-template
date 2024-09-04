@@ -1,5 +1,5 @@
 import useSWR, { SWRConfiguration, SWRResponse } from 'swr';
-import { ServerActionResponse, ServerActionError } from '@web/common/types/action-response.type';
+import { ServerActionResponse, ServerActionError } from '@web/common/types/server-action-response.type';
 
 /**
  * Adapts a server action returning ServerActionResponse for use with SWR.

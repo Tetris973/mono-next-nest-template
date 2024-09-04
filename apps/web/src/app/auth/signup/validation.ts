@@ -1,5 +1,5 @@
 import { validateUsername, validatePassword, validateConfirmPassword } from '@web/common/validations/validation';
-import { CreateUserDto } from '@dto/modules/user/dto/create-user.dto';
+import { CreateUserDto } from '@web/common/dto/backend-index.dto';
 import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
 
 export const validateSignupForm = (createUserDto: CreateUserDto): DtoValidationError<CreateUserDto> | null => {

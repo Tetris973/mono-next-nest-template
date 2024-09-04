@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { signupAction } from './signup.service';
 import { getConfig } from '@web/config/configuration';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { CreateUserDto } from '@dto/modules/user/dto/create-user.dto';
+import { CreateUserDto } from '@web/common/dto/backend-index.dto';
 import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 
 describe('signup.service', () => {

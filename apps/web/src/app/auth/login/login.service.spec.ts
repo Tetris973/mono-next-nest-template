@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { loginAction, isAuthenticatedAction, getRolesAction } from './login.service';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { LoginUserDto } from '@dto/modules/user/dto/log-in-user.dto';
+import { LoginUserDto } from '@web/common/dto/backend-index.dto';
 import { Role } from '@web/app/auth/role.enum';
 import { cookies } from 'next/headers';
 import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';

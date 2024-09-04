@@ -1,6 +1,6 @@
 import { vi, describe, beforeEach, it, expect } from 'vitest';
 import { renderHook, act, waitFor, SwrWrapper } from '@testWeb/common/unit-test/helpers/index';
-import { useProfileForm, UseProfileFormDependencies } from './profile.use';
+import { useProfileForm, UseProfileFormDependencies } from './profile.hook';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { mockUsers } from '@testWeb/common/unit-test/mocks/users.mock';
 

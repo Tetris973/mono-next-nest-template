@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { SignupForm, SignupFormProps } from '@web/app/auth/signup/SignupForm';
-import { UseSignup } from '@web/app/auth/signup/signup.use';
+import { UseSignup } from '@web/app/auth/signup/signup.hook';
 
 const meta = {
   title: 'Components/SignupForm',

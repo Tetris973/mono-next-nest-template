@@ -6,7 +6,7 @@ import { modals } from '@mantine/modals';
 import { useDisclosure } from '@mantine/hooks';
 import { showSuccessNotification, showErrorNotification } from '@web/common/helpers/notifications.helpers';
 
-import { useDashboard as defaultUseDashboard } from './dashboard.use';
+import { useDashboard as defaultUseDashboard } from './dashboard.hook';
 import { UserCard } from './UserCard';
 import { FilteredUserList } from './FilteredUserList';
 import { ProfileForm } from '@web/app/auth/profile/ProfileForm';

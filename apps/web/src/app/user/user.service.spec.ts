@@ -2,8 +2,7 @@ import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { getUserByIdAction, updateUserAction, getAllUsersAction, deleteUserAction } from './user.service';
 import { getConfig } from '@web/config/configuration';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { UserDto } from '@dto/modules/user/dto/user.dto';
-import { UpdateUserDto } from '@dto/modules/user/dto/update-user.dto';
+import { UserDto, UpdateUserDto } from '@web/common/dto/backend-index.dto';
 import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
 

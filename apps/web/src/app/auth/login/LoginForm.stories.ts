@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LoginForm, LoginFormProps } from '@web/app/auth/login/LoginForm';
-import { UseLogin } from '@web/app/auth/login/login.use';
+import { UseLogin } from '@web/app/auth/login/login.hook';
 
 const meta = {
   title: 'Components/LoginForm',

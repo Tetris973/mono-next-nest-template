@@ -4,11 +4,10 @@ import {
   getUserByIdActionNew as defaultGetUserByIdAction,
   updateUserAction as defaultUpdateUserAction,
 } from '@web/app/user/user.service';
-import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { UserDto, UpdateUserDto } from '@web/common/dto/backend-index.dto';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { UpdateUserDto } from '@dto/modules/user/dto/update-user.dto';
 import { FormSubmitResult } from '@web/common/interfaces/form-submit-result.interface';
-import { useServerAction } from '@web/common/helpers/server-action.use';
+import { useServerAction } from '@web/common/helpers/server-action.hook';
 import { useForm, UseFormReturnType } from '@mantine/form';
 import { useServerActionSWR } from '@web/common/helpers/server-action-swr.hook';
 

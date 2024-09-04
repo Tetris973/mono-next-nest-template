@@ -19,7 +19,7 @@ Contains utility logic, including Pino logger configuration and FontAwesome setu
 
 Frontend structure emphasizes:
 
-1. **Separation of Concerns**: Logic (.use files) is separated from UI components for better maintainability and testability.
+1. **Separation of Concerns**: Logic (.hook files) is separated from UI components for better maintainability and testability.
 
 2. **Dependency Injection**: Both hooks and components use a dependency injection pattern, allowing for easy mocking in tests and storybook scenarios.
 

@@ -1,10 +1,9 @@
 import React from 'react';
 import { Button, Stack, Paper, Avatar } from '@mantine/core';
-import { useProfileForm as defaultUseProfileForm } from './profile.use';
+import { useProfileForm as defaultUseProfileForm } from './profile.hook';
 import { ProfileField } from '@web/components/ProfileField';
 import { showSuccessNotification, showErrorNotification } from '@web/common/helpers/notifications.helpers';
-import { UserDto } from '@dto/modules/user/dto/user.dto';
-import { UpdateUserDto } from '@dto/modules/user/dto/update-user.dto';
+import { UserDto, UpdateUserDto } from '@web/common/dto/backend-index.dto';
 import { getColorFromName } from '@web/utils/get-color-from-name.utils';
 import { UseFormReturnType } from '@mantine/form';
 

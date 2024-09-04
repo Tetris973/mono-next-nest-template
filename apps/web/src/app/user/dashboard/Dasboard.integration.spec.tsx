@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@webRoot/test/common/unit-test/helpers/index';
 import { Dashboard } from './Dashboard';
-import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { UserDto } from '@web/common/dto/backend-index.dto';
 import { AuthContextInterface } from '@web/app/auth/AuthContext';
 import { Role } from '@web/app/auth/role.enum';
-import { UseDashboardDependencies, useDashboard } from './dashboard.use';
+import { UseDashboardDependencies, useDashboard } from './dashboard.hook';
 import { ProfileContextInterface } from '@web/app/auth/ProfileContext';
 import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
 import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';

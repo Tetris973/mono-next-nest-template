@@ -1,4 +1,4 @@
-import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { UserDto } from '@web/common/dto/backend-index.dto';
 
 export const mockUsers: UserDto[] = [
   {

@@ -1,8 +1,8 @@
 'use server';
 
 import { getConfig } from '@web/config/configuration';
-import { UserDto } from '@dto/modules/user/dto/user.dto';
-import { ServerActionResponse } from '@web/common/types/action-response.type';
+import { UserDto } from '@web/common/dto/backend-index.dto';
+import { ServerActionResponse } from '@web/common/types/server-action-response.type';
 import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
 
