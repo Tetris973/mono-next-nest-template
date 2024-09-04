@@ -39,7 +39,7 @@ describe('login.service', () => {
           get: vi.fn().mockReturnValue('Authentication=token; Path=/; HttpOnly'),
         },
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
       const exp1H = Date.now() + 3600000;
       (jwtDecode as Mock).mockReturnValue({ exp: exp1H });
 
@@ -48,7 +48,7 @@ describe('login.service', () => {
 
       // CHECK RESULTS
       const SECONDS_TO_MILLISECONDS = 1000;
-      expect(result).toEqual({ result: null });
+      expect(result).toEqual({ data: undefined });
       expect(mockCookies.set).toHaveBeenCalledWith({
         name: 'Authentication',
         value: 'token',
@@ -68,7 +68,7 @@ describe('login.service', () => {
           get: vi.fn().mockReturnValue('Authentication=token; Path=/; HttpOnly'),
         },
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
       (jwtDecode as Mock).mockReturnValue({ wrongData: 'wrongData' });
 
       // RUN
@@ -83,7 +83,7 @@ describe('login.service', () => {
     it('should return fatal error if no Set-Cookie header', async () => {
       // INIT
       const loginData: LoginUserDto = { username: 'testUser', password: 'Chocolat123!' };
-      (safeFetch as Mock).mockResolvedValue({ result: { ok: true, headers: { get: vi.fn().mockReturnValue(null) } } });
+      (safeFetch as Mock).mockResolvedValue({ data: { ok: true, headers: { get: vi.fn().mockReturnValue(null) } } });
 
       // RUN
       const result = await loginAction(loginData);
@@ -102,7 +102,7 @@ describe('login.service', () => {
         status: HttpStatus.BAD_REQUEST,
         json: vi.fn().mockResolvedValue({ username: ['Username is required'] }),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse, error: null });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await loginAction(loginData);
@@ -112,8 +112,8 @@ describe('login.service', () => {
         error: {
           message: 'Validation error',
           status: HttpStatus.BAD_REQUEST,
-          details: { username: ['Username is required'] },
         },
+        data: { username: ['Username is required'] },
       });
     });
 
@@ -126,14 +126,15 @@ describe('login.service', () => {
         status: HttpStatus.UNAUTHORIZED,
         json: vi.fn().mockResolvedValue(resDto),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await loginAction(loginData);
 
       // CHECK RESULTS
       expect(result).toEqual({
-        error: { message: 'Unauthorized', status: HttpStatus.UNAUTHORIZED, details: resDto },
+        error: { message: 'Unauthorized', status: HttpStatus.UNAUTHORIZED },
+        data: resDto,
       });
     });
 
@@ -146,14 +147,15 @@ describe('login.service', () => {
         status: HttpStatus.NOT_FOUND,
         json: vi.fn().mockResolvedValue(resDto),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await loginAction(loginData);
 
       // CHECK RESULTS
       expect(result).toEqual({
-        error: { message: 'Unauthorized', status: HttpStatus.NOT_FOUND, details: resDto },
+        error: { message: 'Unauthorized', status: HttpStatus.NOT_FOUND },
+        data: resDto,
       });
     });
 
@@ -165,7 +167,7 @@ describe('login.service', () => {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         json: vi.fn().mockResolvedValue({}),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await loginAction(loginData);

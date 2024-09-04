@@ -23,18 +23,18 @@ describe('user.service', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
+      (checkAuthentication as Mock).mockReturnValue({ data: mockToken });
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockUser),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await getUserByIdAction(userId);
 
       // CHECK RESULTS
-      expect(result).toEqual({ result: mockUser });
+      expect(result).toEqual({ data: mockUser });
       expect(safeFetch).toHaveBeenCalledWith(`${getConfig().BACKEND_URL}/users/${userId}`, {
         method: 'GET',
         headers: {
@@ -47,13 +47,13 @@ describe('user.service', () => {
       // INIT
       const userId = 1;
       const mockToken = 'mockToken';
-      (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
+      (checkAuthentication as Mock).mockReturnValue({ data: mockToken });
       const mockResponse = {
         ok: false,
         status: HttpStatus.NOT_FOUND,
         json: vi.fn().mockResolvedValue({}),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await getUserByIdAction(userId);
@@ -62,7 +62,7 @@ describe('user.service', () => {
       expect(result).toEqual({
         error: {
           status: HttpStatus.NOT_FOUND,
-          message: 'Failed to fetch profile',
+          message: 'Failed to fetch user',
         },
       });
     });
@@ -80,18 +80,18 @@ describe('user.service', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
+      (checkAuthentication as Mock).mockReturnValue({ data: mockToken });
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockUser),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await updateUserAction(userId, updateUserDto);
 
       // CHECK RESULTS
-      expect(result).toEqual({ result: mockUser });
+      expect(result).toEqual({ data: mockUser });
       expect(safeFetch).toHaveBeenCalledWith(`${getConfig().BACKEND_URL}/users/${userId}`, {
         method: 'PATCH',
         headers: {
@@ -107,13 +107,13 @@ describe('user.service', () => {
       const userId = 1;
       const mockToken = 'mockToken';
       const updateUserDto: UpdateUserDto = { username: 'updatedUser' };
-      (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
+      (checkAuthentication as Mock).mockReturnValue({ data: mockToken });
       const mockResponse = {
         ok: false,
         status: HttpStatus.CONFLICT,
         json: vi.fn().mockResolvedValue({}),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await updateUserAction(userId, updateUserDto);
@@ -132,13 +132,13 @@ describe('user.service', () => {
       const userId = 1;
       const mockToken = 'mockToken';
       const updateUserDto: UpdateUserDto = { username: 'updatedUser' };
-      (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
+      (checkAuthentication as Mock).mockReturnValue({ data: mockToken });
       const mockResponse = {
         ok: false,
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         json: vi.fn().mockResolvedValue({}),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await updateUserAction(userId, updateUserDto);
@@ -161,18 +161,18 @@ describe('user.service', () => {
         { id: 1, username: 'user1', createdAt: new Date(), updatedAt: new Date() },
         { id: 2, username: 'user2', createdAt: new Date(), updatedAt: new Date() },
       ];
-      (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
+      (checkAuthentication as Mock).mockReturnValue({ data: mockToken });
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockUsers),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await getAllUsersAction();
 
       // CHECK RESULTS
-      expect(result).toEqual({ result: mockUsers });
+      expect(result).toEqual({ data: mockUsers });
       expect(safeFetch).toHaveBeenCalledWith(`${getConfig().BACKEND_URL}/users`, {
         method: 'GET',
         headers: {
@@ -184,13 +184,13 @@ describe('user.service', () => {
     it('should return error if response is not ok', async () => {
       // INIT
       const mockToken = 'mockToken';
-      (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
+      (checkAuthentication as Mock).mockReturnValue({ data: mockToken });
       const mockResponse = {
         ok: false,
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         json: vi.fn().mockResolvedValue({}),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await getAllUsersAction();
@@ -210,18 +210,18 @@ describe('user.service', () => {
       // INIT
       const userId = 1;
       const mockToken = 'mockToken';
-      (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
+      (checkAuthentication as Mock).mockReturnValue({ data: mockToken });
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(null),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await deleteUserAction(userId);
 
       // CHECK RESULTS
-      expect(result).toEqual({ result: null });
+      expect(result).toEqual({ data: undefined });
       expect(safeFetch).toHaveBeenCalledWith(`${getConfig().BACKEND_URL}/users/${userId}`, {
         method: 'DELETE',
         headers: {
@@ -234,13 +234,13 @@ describe('user.service', () => {
       // INIT
       const userId = 1;
       const mockToken = 'mockToken';
-      (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
+      (checkAuthentication as Mock).mockReturnValue({ data: mockToken });
       const mockResponse = {
         ok: false,
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         json: vi.fn().mockResolvedValue({}),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await deleteUserAction(userId);

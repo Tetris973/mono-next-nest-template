@@ -11,7 +11,7 @@ When looking for, using, or updating troubleshooting information, verify that it
 
 ## Common Issues
 
-### Storybook Errors
+### Storybook package nextjs not found Errors
 
 :::info
 Currently, the project uses a pnpm patch to modify the NextJS package and add a custom HTTP logger. This patch causes Storybook to display errors on startup, preventing components from being displayed.
@@ -31,3 +31,13 @@ Follow these steps to temporarily resolve the Storybook issues:
 :::caution
 Be careful not to commit the changes that remove the patch, especially the lockfile!
 :::
+
+### Storybook Hot Reload Not Working
+
+:::info
+When using Storybook in Chrome (`npm run storybook`), hot reload does not work. Components may load indefinitely, and reloading the page can also get stuck.
+:::
+
+#### Workaround
+
+Use Firefox to access the Storybook website. Hot reload works as expected.

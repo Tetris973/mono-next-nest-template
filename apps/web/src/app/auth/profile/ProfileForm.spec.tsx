@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@webRoot/test/common/unit-test/helpers/index';
+import { render, screen, fireEvent, waitFor, renderHook } from '@webRoot/test/common/unit-test/helpers/index';
 import { ProfileForm } from './ProfileForm';
 import { UserDto } from '@dto/modules/user/dto/user.dto';
+import { useForm } from '@mantine/form';
 
 describe('ProfileForm', () => {
   const mockUser: UserDto = {
@@ -13,7 +14,13 @@ describe('ProfileForm', () => {
 
   const mockUseProfileProps = {
     user: mockUser,
-    profileError: {},
+    form: renderHook(() =>
+      useForm({
+        initialValues: {
+          username: mockUser.username,
+        },
+      }),
+    ).result.current,
     profilePending: false,
     submitPending: false,
     handleSubmit: vi.fn(),
@@ -29,9 +36,10 @@ describe('ProfileForm', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUseProfileProps.form.reset();
   });
 
-  it('displays loading state when profilePending is true', () => {
+  it('displays loading state and prevent submit when profilePending is true', () => {
     // INIT
     const loadingMockUseProfileForm = () => ({
       ...mockUseProfileForm(),
@@ -48,6 +56,7 @@ describe('ProfileForm', () => {
 
     // CHECK RESULT there should be three skeleton test ids from the three fields
     expect(screen.getAllByTestId('profile-field-skeleton')).toHaveLength(3);
+    expect(screen.getByLabelText('Submit profile changes')).toBeDisabled();
   });
 
   it('renders ProfileAvatar, ProfileField for username, createdAt, UpdatedAt, component with correct props', () => {
@@ -72,22 +81,6 @@ describe('ProfileForm', () => {
     const updatedAtField = screen.getByDisplayValue(mockUser.updatedAt.toLocaleString());
     expect(updatedAtField).toBeInTheDocument();
     expect(updatedAtField).toBeDisabled();
-  });
-
-  it('displays multiple error messages when profileError.username is set', () => {
-    const errorMockUseProfileForm = () => ({
-      ...mockUseProfileForm(),
-      profileError: { username: ['Error 1', 'Error 2'] },
-    });
-    render(
-      <ProfileForm
-        {...defaultProps}
-        useProfileForm={errorMockUseProfileForm}
-      />,
-    );
-    // Check for the error messages
-    const errorElement = screen.getByText(/Error 1, Error 2/i);
-    expect(errorElement).toBeInTheDocument();
   });
 
   it('disables submit button when submitPending is true', () => {

@@ -5,8 +5,8 @@ import { ProfileField } from '@web/components/ProfileField';
 import { showSuccessNotification, showErrorNotification } from '@web/common/helpers/notifications.helpers';
 import { UserDto } from '@dto/modules/user/dto/user.dto';
 import { UpdateUserDto } from '@dto/modules/user/dto/update-user.dto';
-import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
 import { getColorFromName } from '@web/utils/get-color-from-name.utils';
+import { UseFormReturnType } from '@mantine/form';
 
 interface UserAvatarProps {
   username: string;
@@ -30,27 +30,24 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ username }) => {
 };
 
 interface UserInfoFieldsProps {
-  user: UserDto | null;
-  profileError: DtoValidationError<UpdateUserDto>;
+  user?: UserDto;
   profilePending: boolean;
+  form: UseFormReturnType<UpdateUserDto>;
 }
-const UserInfoFields: React.FC<UserInfoFieldsProps> = ({ user, profileError, profilePending }) => {
+const UserInfoFields: React.FC<UserInfoFieldsProps> = ({ user, profilePending, form }) => {
   return (
     <Stack gap="md">
       <ProfileField
-        id="username"
-        name="username"
         label="User name"
-        defaultValue={user?.username || ''}
-        error={Array.isArray(profileError.username) ? profileError.username.join(', ') : profileError.username}
         loading={profilePending}
+        key={form.key('username')}
+        {...form.getInputProps('username')}
       />
       <ProfileField
         id="createdAt"
         name="createdAt"
         label="Created At"
         value={user ? new Date(user.createdAt).toLocaleString() : ''}
-        error={undefined}
         loading={profilePending}
         disabled
       />
@@ -59,7 +56,6 @@ const UserInfoFields: React.FC<UserInfoFieldsProps> = ({ user, profileError, pro
         name="updatedAt"
         label="Updated At"
         value={user ? new Date(user.updatedAt).toLocaleString() : ''}
-        error={undefined}
         loading={profilePending}
         disabled
       />
@@ -89,6 +85,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ onCancel, submitPending }
         color="blue"
         fullWidth
         loading={submitPending}
+        disabled={submitPending}
         loaderProps={{ type: 'dots' }}>
         Submit
       </Button>
@@ -109,21 +106,21 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
   onSubmitSuccess,
   useProfileForm = defaultUseProfileForm,
 }) => {
-  const { user, profileError, profilePending, submitPending, handleSubmit } = useProfileForm(userId);
+  const { form, user, profilePending, submitPending, handleSubmit } = useProfileForm(userId);
 
-  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const { success, error } = await handleSubmit(event);
-    if (error) {
-      showErrorNotification({
-        message: error,
-      });
-    } else if (success) {
-      showSuccessNotification({
-        message: success,
-      });
-      onSubmitSuccess();
-    }
+  const handleFormSubmit = async (updateUserDto: UpdateUserDto) => {
+    handleSubmit(updateUserDto).then(({ success, error }) => {
+      if (error) {
+        showErrorNotification({
+          message: error,
+        });
+      } else if (success) {
+        showSuccessNotification({
+          message: success,
+        });
+        onSubmitSuccess();
+      }
+    });
   };
 
   return (
@@ -134,18 +131,18 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
       withBorder
       w="30rem">
       <form
-        onSubmit={handleFormSubmit}
+        onSubmit={form.onSubmit((values: UpdateUserDto) => handleFormSubmit(values))}
         aria-label="Profile form">
         <Stack gap="md">
           <UserAvatar username={user?.username || ''} />
           <UserInfoFields
+            form={form}
             user={user}
-            profileError={profileError}
             profilePending={profilePending}
           />
           <ActionButtons
             onCancel={onCancel}
-            submitPending={submitPending}
+            submitPending={submitPending || profilePending}
           />
         </Stack>
       </form>

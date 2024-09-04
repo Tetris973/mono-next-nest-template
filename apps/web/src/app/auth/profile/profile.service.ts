@@ -2,17 +2,17 @@
 
 import { getConfig } from '@web/config/configuration';
 import { UserDto } from '@dto/modules/user/dto/user.dto';
-import { ActionResponse } from '@web/common/types/action-response.type';
+import { ServerActionResponse } from '@web/common/types/action-response.type';
 import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
 
-export async function getProfileAction(): Promise<ActionResponse<UserDto>> {
-  const { result: token, error: authError } = checkAuthentication();
+export async function getProfileAction(): Promise<ServerActionResponse<UserDto>> {
+  const { data: token, error: authError } = checkAuthentication();
   if (authError) {
     return { error: authError };
   }
 
-  const { result: response, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/auth/profile`, {
+  const { data: response, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/auth/profile`, {
     headers: {
       Cookie: `Authentication=${token}`,
     },
@@ -30,5 +30,5 @@ export async function getProfileAction(): Promise<ActionResponse<UserDto>> {
     };
   }
 
-  return { result: await response.json() };
+  return { data: await response.json() };
 }

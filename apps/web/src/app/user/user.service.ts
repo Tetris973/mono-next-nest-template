@@ -4,17 +4,17 @@ import { getConfig } from '@web/config/configuration';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { UpdateUserDto } from '@dto/modules/user/dto/update-user.dto';
 import { UserDto } from '@dto/modules/user/dto/user.dto';
-import { ActionResponse } from '@web/common/types/action-response.type';
+import { ServerActionResponse } from '@web/common/types/action-response.type';
 import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
 import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 
-export const getUserByIdAction = async (id: number): Promise<ActionResponse<UserDto>> => {
-  const { result: token, error } = checkAuthentication();
+export const getUserByIdAction = async (id: number): Promise<ServerActionResponse<UserDto>> => {
+  const { data: token, error } = checkAuthentication();
   if (error) {
     return { error };
   }
 
-  const { result: response, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/users/${id}`, {
+  const { data: response, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/users/${id}`, {
     method: 'GET',
     headers: {
       Cookie: `Authentication=${token}`,
@@ -28,19 +28,47 @@ export const getUserByIdAction = async (id: number): Promise<ActionResponse<User
     return {
       error: {
         status: response.status,
-        message: 'Failed to fetch profile',
+        message: 'Failed to fetch user',
       },
     };
   }
 
-  return { result: await response.json() };
+  return { data: await response.json() };
+};
+
+export const getUserByIdActionNew = async (id: number): Promise<ServerActionResponse<UserDto>> => {
+  const { data: token, error } = checkAuthentication();
+  if (error) {
+    return { error };
+  }
+
+  const { data: response, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/users/${id}`, {
+    method: 'GET',
+    headers: {
+      Cookie: `Authentication=${token}`,
+    },
+  });
+  if (fetchError) {
+    return { error: fetchError };
+  }
+
+  if (!response.ok) {
+    return {
+      error: {
+        status: response.status,
+        message: 'Failed to fetch user',
+      },
+    };
+  }
+
+  return { data: await response.json() };
 };
 
 export const updateUserAction = async (
   userId: number,
   updateUserDto: UpdateUserDto,
-): Promise<ActionResponse<UserDto>> => {
-  const { result: token, error } = checkAuthentication();
+): Promise<ServerActionResponse<UserDto>> => {
+  const { data: token, error } = checkAuthentication();
   if (error) {
     return { error };
   }
@@ -54,7 +82,7 @@ export const updateUserAction = async (
     };
   }
 
-  const { result: response, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/users/${userId}`, {
+  const { data: response, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/users/${userId}`, {
     method: 'PATCH',
     headers: {
       Cookie: `Authentication=${token}`,
@@ -83,16 +111,16 @@ export const updateUserAction = async (
     };
   }
 
-  return { result: await response.json() };
+  return { data: await response.json() };
 };
 
-export const getAllUsersAction = async (): Promise<ActionResponse<UserDto[]>> => {
-  const { result: token, error } = checkAuthentication();
+export const getAllUsersAction = async (): Promise<ServerActionResponse<UserDto[]>> => {
+  const { data: token, error } = checkAuthentication();
   if (error) {
     return { error };
   }
 
-  const { result: response, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/users`, {
+  const { data: response, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/users`, {
     method: 'GET',
     headers: {
       Cookie: `Authentication=${token}`,
@@ -111,16 +139,16 @@ export const getAllUsersAction = async (): Promise<ActionResponse<UserDto[]>> =>
     };
   }
 
-  return { result: await response.json() };
+  return { data: await response.json() };
 };
 
-export const deleteUserAction = async (id: number): Promise<ActionResponse<null>> => {
-  const { result: token, error } = checkAuthentication();
+export const deleteUserAction = async (id: number): Promise<ServerActionResponse<undefined>> => {
+  const { data: token, error } = checkAuthentication();
   if (error) {
     return { error };
   }
 
-  const { result: response, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/users/${id}`, {
+  const { data: response, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/users/${id}`, {
     method: 'DELETE',
     headers: {
       Cookie: `Authentication=${token}`,
@@ -139,5 +167,5 @@ export const deleteUserAction = async (id: number): Promise<ActionResponse<null>
     };
   }
 
-  return { result: null };
+  return { data: undefined };
 };

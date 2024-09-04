@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { validateLoginForm } from './validation';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { ActionErrorResponse } from '@web/common/types/action-response.type';
+import { ServerActionResponseErrorDto } from '@web/common/types/action-response.type';
 import { useAuth as defaultUseAuth, AuthContextInterface } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
 import { LoginUserDto } from '@dto/modules/user/dto/log-in-user.dto';
@@ -29,13 +29,13 @@ export const useLogin = ({ useAuth = defaultUseAuth }: UseLoginDependencies = {}
     }
   }, [isAuthenticated, router]);
 
-  const handleLoginError = (loginError: ActionErrorResponse<LoginUserDto>): FormSubmitResult => {
+  const handleLoginError = (loginError: ServerActionResponseErrorDto<LoginUserDto>): FormSubmitResult => {
     const formError = [HttpStatus.BAD_REQUEST, HttpStatus.NOT_FOUND, HttpStatus.UNAUTHORIZED];
-    if (formError.includes(loginError.status)) {
-      setError(loginError.details || {});
+    if (formError.includes(loginError.error.status)) {
+      setError(loginError.data || {});
       return {};
     }
-    return { error: loginError.message };
+    return { error: loginError.error.message };
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<FormSubmitResult> => {
@@ -52,7 +52,7 @@ export const useLogin = ({ useAuth = defaultUseAuth }: UseLoginDependencies = {}
       return {};
     }
 
-    const { error: loginError } = await login(loginDto);
+    const loginError = await login(loginDto);
 
     if (loginError) {
       return handleLoginError(loginError);

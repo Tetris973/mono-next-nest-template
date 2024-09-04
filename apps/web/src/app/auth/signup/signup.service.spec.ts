@@ -23,13 +23,13 @@ describe('signup.service', () => {
         status: HttpStatus.CREATED,
         json: vi.fn().mockResolvedValue(createUserDto),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await signupAction(createUserDto);
 
       // CHECK RESULTS
-      expect(result).toEqual({ result: createUserDto });
+      expect(result).toEqual({ data: createUserDto });
       expect(safeFetch).toHaveBeenCalledWith(`${getConfig().BACKEND_URL}/auth/signup`, {
         method: 'POST',
         headers: {
@@ -51,7 +51,7 @@ describe('signup.service', () => {
         status: HttpStatus.CONFLICT,
         json: vi.fn().mockResolvedValue({}),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await signupAction(createUserDto);
@@ -61,8 +61,8 @@ describe('signup.service', () => {
         error: {
           message: 'User already exists',
           status: HttpStatus.CONFLICT,
-          details: { username: ['User already exists'] },
         },
+        data: { username: ['User already exists'] },
       });
     });
 
@@ -83,7 +83,7 @@ describe('signup.service', () => {
         status: HttpStatus.BAD_REQUEST,
         json: vi.fn().mockResolvedValue(mockErrorDetails),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await signupAction(createUserDto);
@@ -93,8 +93,8 @@ describe('signup.service', () => {
         error: {
           message: 'Bad request',
           status: HttpStatus.BAD_REQUEST,
-          details: mockErrorDetails,
         },
+        data: mockErrorDetails,
       });
     });
 
@@ -110,7 +110,7 @@ describe('signup.service', () => {
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         json: vi.fn().mockResolvedValue({}),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await signupAction(createUserDto);

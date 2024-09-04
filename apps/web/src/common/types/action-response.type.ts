@@ -2,68 +2,117 @@ import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
 
 /**
- * Utility type to check if T is an object-like structure.
+ * Represents a successful server action response.
+ * @template T The type of the successful response data.
  */
-type IsObject<T> = T extends object ? (T extends any[] ? false : true) : false;
+export type ServerActionResponseSuccess<T> = { data: T; error?: never };
 
 /**
- * Represents an error response from an API action.
- *
- * @template D - The type of additional details about the error, usually validation errors.
+ * Represents an error response from a server action.
+ * @template E The type of the error details. Defaults to undefined if not specified, when no data is needed for error details.
  */
-export type ActionErrorResponse<D = undefined> = {
-  /**
-   * A descriptive message providing details about the error.
-   */
-  message: string;
-  /**
-   * The HTTP status code associated with the error.
-   */
-  status: HttpStatus;
-  /**
-   * The details of the error.
-   * If D is not given, then the default is undefined and so details is not present.
-   * If D is an object, then the details are a DtoValidationError.
-   * If D is a string, then the details are a string.
-   */
-  details?: D extends undefined ? never : IsObject<D> extends true ? DtoValidationError<D> : string;
+export type ServerActionResponseError<E = undefined> = { data?: E; error: { status: HttpStatus; message: string } };
+
+/**
+ * Represents an error response from a server action with DTO validation errors.
+ * @template E The type of the DTO.
+ */
+export type ServerActionResponseErrorDto<E> = {
+  data?: DtoValidationError<E>;
+  error: { status: HttpStatus; message: string };
 };
 
 /**
- * Represents a response from a server action.
- * Either `result` or `error` must be specified, but not both.
+ * Represents the response structure for server actions.
  *
- * @template T - The type of the successful result of the server action.
- * @template D - The type of additional details about the error, usually validation errors.
+ * This type uses a discriminated union of ServerActionResponseSuccess and ServerActionResponseError
+ * to ensure that a response is either a success (with data) or an error (with status and message),
+ * but never both.
+ *
+ * @template T The type of the successful response data.
+ * @template E The type of the error details. Defaults to undefined if not specified.
+ *
+ * @see ServerActionResponseSuccess
+ * @see ServerActionResponseError
  *
  * @example
- * type UserDto = {
- *   username: string;
- *   password: string;
+ * // Success case
+ * const successResponse: ServerActionResponse<User> = {
+ *   data: { id: 1, name: "John Doe" }
  * };
  *
- * let actionResponse: ActionResponse<UserDto, UserDto>;
- *
- * // Successful response with a result
- * actionResponse = {
- *   result: {
- *     username: 'test',
- *     password: 'test',
- *   },
+ * // Error case
+ * const errorResponse: ServerActionResponse<User, string> = {
+ *   data: "Additional error context",
+ *   error: { status: HttpStatus.NOT_FOUND, message: "User not found" }
  * };
- *
- * // Error response with details
- * actionResponse = {
- *   error: {
- *     message: 'Validation error',
- *     status: HttpStatus.BAD_REQUEST,
- *     details: { password: ['Incorrect password'] },
- *   },
- * };
- *
- * @property result - The successful result of the server action.
- * @property error - The error information if the server action fails.
  */
-export type ActionResponse<T, D = undefined> =
-  | { result: T; error?: never }
-  | { result?: never; error: ActionErrorResponse<D> };
+export type ServerActionResponse<T, E = undefined> = ServerActionResponseSuccess<T> | ServerActionResponseError<E>;
+
+/**
+ * A helper type for server action responses specifically tailored for DTOs with validation errors.
+ * It simplifies typing by requiring only the DTO type T. The validation error type is automatically inferred.
+ *
+ * @template T The type of the DTO, extending Record<string, any>.
+ *
+ * The response can be either:
+ * 1. A success response with the DTO data.
+ * 2. An error response with DTO validation errors.
+ *
+ * Note: For non-DTO success responses or different error types, use ServerActionResponse<T, E> directly.
+ *
+ * @see ServerActionResponseSuccess
+ * @see ServerActionResponseErrorDto
+ * @see DtoValidationError
+ *
+ * @example
+ * type UserDto = { name: string; age: number };
+ *
+ * // Success case
+ * const successResponse: ServerActionResponseDto<UserDto> = {
+ *   data: { name: "John Doe", age: 30 }
+ * };
+ *
+ * // Error case with validation errors
+ * const errorResponse: ServerActionResponseDto<UserDto> = {
+ *   error: {
+ *     status: HttpStatus.BAD_REQUEST,
+ *     message: "Validation failed"
+ *   },
+ *   data: { name: ["Name is required"], age: ["Age must be a positive number"] }
+ * };
+ *
+ * // Using ServerActionResponseDto in a function
+ * function createUser(): ServerActionResponseDto<UserDto> {
+ *   // Implementation
+ * }
+ *
+ * // For non-DTO responses, use ServerActionResponse directly
+ * function deleteUser(): ServerActionResponse<boolean, DtoValidationError<UserDto>> {
+ *   // Implementation
+ * }
+ */
+export type ServerActionResponseDto<T extends Record<string, any>> =
+  | ServerActionResponseSuccess<T>
+  | ServerActionResponseErrorDto<T>;
+
+/**
+ * Represents an error response from a server action with typed details.
+ * @template T The type of the error details.
+ */
+export class ServerActionError<T = undefined> extends Error {
+  /**
+   * Creates a new ServerActionError.
+   * @param status The HTTP status code of the error.
+   * @param message The error message.
+   * @param details Optional additional details about the error.
+   */
+  constructor(
+    public readonly status: HttpStatus,
+    public readonly message: string,
+    public readonly details?: T,
+  ) {
+    super(message);
+    this.name = 'ServerActionError';
+  }
+}

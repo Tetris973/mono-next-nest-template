@@ -2,7 +2,7 @@
 
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
-import { ActionErrorResponse, ActionResponse } from '@web/common/types/action-response.type';
+import { ServerActionResponse } from '@web/common/types/action-response.type';
 import { getConfig } from '@web/config/configuration';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { Role } from '@web/app/auth/role.enum';
@@ -48,21 +48,23 @@ const setAuthCookie = (response: Response) => {
 const formatLoginError = (
   status: HttpStatus,
   parsedRes: DtoValidationError<LoginUserDto>,
-): ActionErrorResponse<LoginUserDto> => {
+): ServerActionResponse<undefined, DtoValidationError<LoginUserDto>> => {
   switch (status) {
     case HttpStatus.BAD_REQUEST:
-      return { message: 'Validation error', status, details: parsedRes };
+      return { error: { message: 'Validation error', status }, data: parsedRes };
     case HttpStatus.UNAUTHORIZED:
-      return { message: 'Unauthorized', status, details: { password: ['Incorrect password'] } };
+      return { error: { message: 'Unauthorized', status }, data: { password: ['Incorrect password'] } };
     case HttpStatus.NOT_FOUND:
-      return { message: 'Unauthorized', status, details: { username: ['User not found'] } };
+      return { error: { message: 'Unauthorized', status }, data: { username: ['User not found'] } };
     default:
-      return { message: 'An unexpected error occurred, please try again', status };
+      return { error: { message: 'An unexpected error occurred, please try again', status } };
   }
 };
 
-export const loginAction = async (loginData: LoginUserDto): Promise<ActionResponse<null, LoginUserDto>> => {
-  const { result: res, error } = await safeFetch(`${getConfig().BACKEND_URL}/auth/login`, {
+export const loginAction = async (
+  loginData: LoginUserDto,
+): Promise<ServerActionResponse<undefined, DtoValidationError<LoginUserDto>>> => {
+  const { data: res, error } = await safeFetch(`${getConfig().BACKEND_URL}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(loginData),
@@ -81,11 +83,10 @@ export const loginAction = async (loginData: LoginUserDto): Promise<ActionRespon
         error: { message: 'An unexpected error occurred, please try again', status: HttpStatus.INTERNAL_SERVER_ERROR },
       };
     }
-    return { result: null };
+    return { data: undefined };
   }
-
   const parsedRes = await res.json();
-  return { error: formatLoginError(res.status, parsedRes) };
+  return formatLoginError(res.status, parsedRes);
 };
 
 export const isAuthenticatedAction = async (): Promise<boolean> => {

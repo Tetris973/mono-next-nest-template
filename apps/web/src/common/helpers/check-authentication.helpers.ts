@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { ActionResponse } from '@web/common/types/action-response.type';
+import { ServerActionResponse } from '@web/common/types/action-response.type';
 
 /**
  * Checks if the user is logged in by verifying the presence of an authentication token.
@@ -10,7 +10,7 @@ import { ActionResponse } from '@web/common/types/action-response.type';
  *
  * @returns - An object containing either the token or an error response.
  */
-export const checkAuthentication = (): ActionResponse<string> => {
+export const checkAuthentication = (): ServerActionResponse<string> => {
   const cookieStore = cookies();
   const token = cookieStore.get('Authentication')?.value;
 
@@ -23,5 +23,5 @@ export const checkAuthentication = (): ActionResponse<string> => {
     };
   }
 
-  return { result: token };
+  return { data: token };
 };

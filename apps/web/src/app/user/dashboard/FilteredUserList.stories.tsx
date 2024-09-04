@@ -5,7 +5,7 @@ import { FilteredUserList, FilteredUserListProps } from '@web/app/user/dashboard
 import { mockUsers } from '@testWeb/common/unit-test/mocks/users.mock';
 
 const meta = {
-  title: 'Components/UserList',
+  title: 'Components/FilteredUserList',
   component: FilteredUserList,
   parameters: {
     layout: 'centered',

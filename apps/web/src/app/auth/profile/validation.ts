@@ -1,14 +1,12 @@
-import { validateUsername } from '@web/common/validations/validation';
 import { UpdateUserDto } from '@dto/modules/user/dto/update-user.dto';
-import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
+import { UseFormInput } from '@mantine/form';
+import { z } from 'zod';
 
-export const validateUserProfileEditForm = (updateUserDto: UpdateUserDto): DtoValidationError<UpdateUserDto> | null => {
-  const errors = {
-    username: validateUsername(updateUserDto.username),
-  };
+export const usernameSchema = z.string().min(6, 'Username must be at least 6 characters.');
 
-  if (Object.values(errors).every((error) => error.length === 0)) {
-    return null;
-  }
-  return errors;
+export const validateUserProfileEditForm: UseFormInput<UpdateUserDto>['validate'] = {
+  username: (value) => {
+    const result = usernameSchema.safeParse(value);
+    return result.success ? null : result.error.errors[0].message;
+  },
 };

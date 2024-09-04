@@ -101,8 +101,8 @@ describe('useSignup', () => {
       error: {
         status: HttpStatus.CONFLICT,
         message: usernameError,
-        details: { username: [usernameError] },
       },
+      data: { username: [usernameError] },
     });
 
     const formElement = createFormElement({
@@ -135,8 +135,8 @@ describe('useSignup', () => {
       error: {
         status: HttpStatus.BAD_REQUEST,
         message: errorMessage,
-        details,
       },
+      data: details,
     });
 
     const { result } = renderHook(() => useSignup(dependencies));

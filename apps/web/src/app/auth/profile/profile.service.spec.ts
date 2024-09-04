@@ -21,18 +21,18 @@ describe('profile.service', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
+      (checkAuthentication as Mock).mockReturnValue({ data: mockToken });
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue(mockProfile),
       };
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await getProfileAction();
 
       // CHECK RESULTS
-      expect(result).toEqual({ result: mockProfile });
+      expect(result).toEqual({ data: mockProfile });
       expect(safeFetch).toHaveBeenCalledWith(`${getConfig().BACKEND_URL}/auth/profile`, {
         headers: {
           Cookie: `Authentication=${mockToken}`,
@@ -48,8 +48,8 @@ describe('profile.service', () => {
         status: HttpStatus.NOT_FOUND,
         json: vi.fn().mockResolvedValue({}),
       };
-      (checkAuthentication as Mock).mockReturnValue({ result: mockToken });
-      (safeFetch as Mock).mockResolvedValue({ result: mockResponse });
+      (checkAuthentication as Mock).mockReturnValue({ data: mockToken });
+      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
 
       // RUN
       const result = await getProfileAction();
