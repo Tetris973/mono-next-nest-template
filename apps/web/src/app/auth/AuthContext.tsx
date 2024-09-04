@@ -7,11 +7,11 @@ import {
 import { logoutAction as defaultLogoutAction } from '@web/app/auth/logout/logout.service';
 import { Role } from './role.enum';
 import { LoginUserDto } from '@dto/modules/user/dto/log-in-user.dto';
-import { ActionResponse } from '@web/common/types/action-response.type';
+import { ServerActionResponseErrorDto } from '@web/common/types/action-response.type';
 import { useServerAction } from '@web/common/helpers/server-action.use';
 
 export interface AuthContextInterface {
-  login: (formData: LoginUserDto) => Promise<ActionResponse<null, LoginUserDto>>;
+  login: (formData: LoginUserDto) => Promise<ServerActionResponseErrorDto<LoginUserDto> | undefined>;
   logout: () => void;
   /**
    * Indicates whether the user is authenticated.
@@ -57,14 +57,13 @@ export const AuthProvider: React.FC<React.PropsWithChildren<AuthProviderDependen
     rehydrateAuth();
   }, [getRolesActionM, isAuthenticatedAction]);
 
-  const login = async (formData: LoginUserDto): Promise<ActionResponse<null, LoginUserDto>> => {
-    const { error: loginError } = await loginActionM(formData);
-    if (loginError) {
-      return { error: loginError };
+  const login = async (formData: LoginUserDto): Promise<ServerActionResponseErrorDto<LoginUserDto> | undefined> => {
+    const res = await loginActionM(formData);
+    if (res.error) {
+      return res;
     }
     setIsAuthenticated(true);
     setRoles(await getRolesActionM());
-    return { result: null };
   };
 
   const logout = async () => {

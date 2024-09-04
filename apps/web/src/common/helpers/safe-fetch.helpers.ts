@@ -1,5 +1,5 @@
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { ActionResponse } from '@web/common/types/action-response.type';
+import { ServerActionResponse } from '@web/common/types/action-response.type';
 import { getLogger } from '@web/lib/logger';
 import { logoutAction } from '@web/app/auth/logout/logout.service';
 
@@ -11,7 +11,7 @@ const logger = getLogger('safeFetch');
  * @param options - The options for the fetch request.
  * @returns - The fetch result containing either the response or an error.
  */
-export const safeFetch = async (url: RequestInfo, options?: RequestInit): Promise<ActionResponse<Response>> => {
+export const safeFetch = async (url: RequestInfo, options?: RequestInit): Promise<ServerActionResponse<Response>> => {
   try {
     const response = await fetch(url, options);
     if (response.status === HttpStatus.UNAUTHORIZED) {
@@ -27,7 +27,7 @@ export const safeFetch = async (url: RequestInfo, options?: RequestInit): Promis
         };
       }
     }
-    return { result: response };
+    return { data: response };
   } catch (error: any) {
     // Determine the type of error
     let message = 'An unknown error occurred!';

@@ -31,7 +31,7 @@ describe('useDashboard', () => {
   it('should load users on mount', async () => {
     // INIT
     const users: UserDto[] = [{ id: 1, username: 'user1', createdAt: new Date(), updatedAt: new Date() }];
-    mockGetAllUsersAction.mockResolvedValue({ result: users });
+    mockGetAllUsersAction.mockResolvedValue({ data: users });
     const { result } = renderHook(() => useDashboard(dependencies));
 
     // CHECK RESULTS
@@ -65,7 +65,7 @@ describe('useDashboard', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      mockGetUserByIdAction.mockResolvedValue({ result: user });
+      mockGetUserByIdAction.mockResolvedValue({ data: user });
       const { result } = renderHook(() => useDashboard(dependencies));
 
       // RUN & CHECK RESULTS
@@ -111,7 +111,7 @@ describe('useDashboard', () => {
     it('should handle deleteUser', async () => {
       // INIT
       const users: UserDto[] = [{ id: 1, username: 'user1', createdAt: new Date(), updatedAt: new Date() }];
-      mockGetAllUsersAction.mockResolvedValue({ result: users });
+      mockGetAllUsersAction.mockResolvedValue({ data: users });
       mockDeleteUserAction.mockResolvedValue({});
       const { result } = renderHook(() => useDashboard(dependencies));
 

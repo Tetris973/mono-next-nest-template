@@ -51,7 +51,7 @@ describe('ProfileContext', () => {
 
   it('loads profile when authenticated', async () => {
     // INIT
-    mockGetProfileAction.mockResolvedValue({ result: mockUser });
+    mockGetProfileAction.mockResolvedValue({ data: mockUser });
     const { result } = renderProfileHook();
 
     // RUN
@@ -89,7 +89,7 @@ describe('ProfileContext', () => {
 
   it('updates profile when loadProfile is called', async () => {
     // INIT
-    mockGetProfileAction.mockResolvedValue({ result: mockUser });
+    mockGetProfileAction.mockResolvedValue({ data: mockUser });
     const { result } = renderProfileHook();
 
     // RUN

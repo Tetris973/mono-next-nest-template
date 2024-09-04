@@ -49,12 +49,12 @@ export const useDashboard = ({
    * @returns The error message if there is an error, otherwise undefined
    */
   const loadUserById = async (id: number) => {
-    const { result, error } = await getUserByIdActionM(id);
+    const { data, error } = await getUserByIdActionM(id);
     if (error) {
       setError(error.message);
       return error.message;
     }
-    setSelectedUser(result);
+    setSelectedUser(data);
   };
 
   /**
@@ -77,13 +77,13 @@ export const useDashboard = ({
    * @returns The error message if there is an error, otherwise undefined
    */
   const loadUsers = async () => {
-    const { result, error } = await getAllUsersActionM();
+    const { data, error } = await getAllUsersActionM();
     if (error) {
       setError(error.message);
       return error.message;
     }
-    setUsers(result);
-    const user = result.find((user) => user.id === selectedUser?.id);
+    setUsers(data);
+    const user = data.find((user) => user.id === selectedUser?.id);
     setSelectedUser(user || null);
   };
 

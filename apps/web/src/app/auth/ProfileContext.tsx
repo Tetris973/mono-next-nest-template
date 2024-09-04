@@ -3,13 +3,13 @@ import { getProfileAction as defaultGetProfileAction } from '@web/app/auth/profi
 import { useAuth as defaultUseAuth } from './AuthContext';
 import { UserDto } from '@dto/modules/user/dto/user.dto';
 import { showErrorNotification } from '@web/common/helpers/notifications.helpers';
-import { ActionErrorResponse } from '@web/common/types/action-response.type';
+import { ServerActionResponse } from '@web/common/types/action-response.type';
 import { useServerAction } from '@web/common/helpers/server-action.use';
 
 export interface ProfileContextInterface {
   profile: UserDto | null;
   loading: boolean;
-  loadProfile: () => Promise<ActionErrorResponse | void>;
+  loadProfile: () => Promise<ServerActionResponse<UserDto> | void>;
 }
 
 export interface ProfileProviderDependencies {
@@ -28,22 +28,22 @@ export const ProfileProvider: React.FC<React.PropsWithChildren<ProfileProviderDe
   const { isAuthenticated } = useAuth();
   const [getProfilePending, getProfileActionM] = useServerAction(getProfileAction);
 
-  const loadProfile = useCallback(async (): Promise<ActionErrorResponse | void> => {
-    const { result, error } = await getProfileActionM();
+  const loadProfile = useCallback(async (): Promise<ServerActionResponse<UserDto> | void> => {
+    const response = await getProfileActionM();
 
-    if (error) {
+    if (response.error) {
       setProfile(null);
-      return error;
+      return response;
     }
-    setProfile(result);
+    setProfile(response.data);
   }, [getProfileActionM]);
 
   useEffect(() => {
     if (isAuthenticated) {
-      loadProfile().then((error) => {
-        if (error) {
+      loadProfile().then((res) => {
+        if (res && res.error) {
           showErrorNotification({
-            message: error.message,
+            message: res.error.message,
           });
         }
       });

@@ -1,14 +1,12 @@
 'use server';
-import { ActionResponse } from '@web/common/types/action-response.type';
+import { ServerActionResponseDto } from '@web/common/types/action-response.type';
 import { getConfig } from '@web/config/configuration';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { CreateUserDto } from '@dto/modules/user/dto/create-user.dto';
 import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 
-export const signupAction = async (
-  createUserDto: CreateUserDto,
-): Promise<ActionResponse<CreateUserDto, CreateUserDto>> => {
-  const { result: res, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/auth/signup`, {
+export const signupAction = async (createUserDto: CreateUserDto): Promise<ServerActionResponseDto<CreateUserDto>> => {
+  const { data: res, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/auth/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -26,8 +24,8 @@ export const signupAction = async (
         error: {
           message: 'User already exists',
           status: HttpStatus.CONFLICT,
-          details: { username: ['User already exists'] },
         },
+        data: { username: ['User already exists'] },
       };
     }
     if (res.status === HttpStatus.BAD_REQUEST) {
@@ -35,8 +33,8 @@ export const signupAction = async (
         error: {
           message: 'Bad request',
           status: res.status,
-          details: await res.json(),
         },
+        data: await res.json(),
       };
     }
     return { error: { message: 'Failed to sign up', status: res.status } };
@@ -44,5 +42,5 @@ export const signupAction = async (
 
   // Empty userDto as, backend returns 204 no content on success for the moment
   const userDto = await res.json();
-  return { result: userDto };
+  return { data: userDto };
 };

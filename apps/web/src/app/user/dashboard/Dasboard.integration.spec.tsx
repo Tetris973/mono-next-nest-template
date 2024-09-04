@@ -62,9 +62,9 @@ describe('Dashboard Integration', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockGetAllUsersAction.mockResolvedValue({ result: mockUsers });
-    mockGetUserByIdAction.mockResolvedValue({ result: mockUsers[0] });
-    mockDeleteUserAction.mockResolvedValue({ result: null });
+    mockGetAllUsersAction.mockResolvedValue({ data: mockUsers });
+    mockGetUserByIdAction.mockResolvedValue({ data: mockUsers[0] });
+    mockDeleteUserAction.mockResolvedValue({ data: null });
   });
 
   it('renders user list and selected user details', async () => {
@@ -152,7 +152,7 @@ describe('Dashboard Integration', () => {
     // Mocking the checkAuthentication and safeFetch functions that are used by the useProfile hook, by the ProfileForm
     // This is were testing composed components such as Dashboard with mocking becomes a hasle and may benefit from being only e2e tests.
     const jwtToken = 'token';
-    (checkAuthentication as Mock).mockReturnValue({ result: jwtToken });
+    (checkAuthentication as Mock).mockReturnValue({ data: jwtToken });
     const responseMock = { result: { ok: true, json: () => Promise.resolve(mockUsers[0]) } };
     (safeFetch as Mock).mockResolvedValue(responseMock);
 

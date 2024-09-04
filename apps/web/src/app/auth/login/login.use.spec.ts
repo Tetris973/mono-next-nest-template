@@ -43,7 +43,7 @@ describe('useLogin', () => {
   it('should handle form submission', async () => {
     // INIT
     const loginDto: LoginUserDto = { username: 'testUser', password: 'Chocolat123!' };
-    mockAuth.login.mockResolvedValue({ result: null });
+    mockAuth.login.mockResolvedValue(undefined);
     const { result } = renderHook(() => useLogin(dependencies));
 
     // Create a mock form element
@@ -89,7 +89,8 @@ describe('useLogin', () => {
     // INIT
     const details = { username: ['Username not found'] };
     mockAuth.login.mockResolvedValue({
-      error: { status: HttpStatus.NOT_FOUND, message: 'Username not found', details },
+      error: { status: HttpStatus.NOT_FOUND, message: 'Username not found' },
+      data: details,
     });
     const formElement = createFormElement({
       username: 'testUser',
@@ -112,7 +113,8 @@ describe('useLogin', () => {
     // INIT
     const details = { password: ['Incorrect password'] };
     mockAuth.login.mockResolvedValue({
-      error: { status: HttpStatus.UNAUTHORIZED, message: 'Unauthorized', details },
+      error: { status: HttpStatus.UNAUTHORIZED, message: 'Unauthorized' },
+      data: details,
     });
     const formElement = createFormElement({
       username: 'testUser',
@@ -142,7 +144,8 @@ describe('useLogin', () => {
       password: ['password error', 'password error 2'],
     };
     mockAuth.login.mockResolvedValue({
-      error: { status: HttpStatus.BAD_REQUEST, message: errorMessage, details },
+      error: { status: HttpStatus.BAD_REQUEST, message: errorMessage },
+      data: details,
     });
     const { result } = renderHook(() => useLogin(dependencies));
 

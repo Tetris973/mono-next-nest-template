@@ -4,7 +4,7 @@ import { CreateUserDto } from '@dto/modules/user/dto/create-user.dto';
 import { signupAction as defaultSignupAction } from './signup.service';
 import { useRouter } from 'next/navigation';
 import { AuthContextInterface, useAuth as defaultUseAuth } from '@web/app/auth/AuthContext';
-import { ActionErrorResponse } from '@web/common/types/action-response.type';
+import { ServerActionResponseErrorDto } from '@web/common/types/action-response.type';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { FormSubmitResult } from '@web/common/interfaces/form-submit-result.interface';
 import { useServerAction } from '@web/common/helpers/server-action.use';
@@ -40,12 +40,12 @@ export const useSignup = ({
     }
   }, [isAuthenticated, router]);
 
-  const handleSignupError = (signupError: ActionErrorResponse<CreateUserDto>): FormSubmitResult => {
-    if (signupError.status === HttpStatus.CONFLICT || signupError.status === HttpStatus.BAD_REQUEST) {
-      setError(signupError.details || {});
+  const handleSignupError = (signupError: ServerActionResponseErrorDto<CreateUserDto>): FormSubmitResult => {
+    if (signupError.error.status === HttpStatus.CONFLICT || signupError.error.status === HttpStatus.BAD_REQUEST) {
+      setError(signupError.data || {});
       return {};
     }
-    return { error: signupError.message };
+    return { error: signupError.error.message };
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<FormSubmitResult> => {
@@ -63,9 +63,9 @@ export const useSignup = ({
       return {};
     }
 
-    const { error: signupError } = await signupActionM(createUserDto);
-    if (signupError) {
-      return handleSignupError(signupError);
+    const signupRes = await signupActionM(createUserDto);
+    if (signupRes.error) {
+      return handleSignupError(signupRes);
     }
 
     return { success: 'Signup successful' };
