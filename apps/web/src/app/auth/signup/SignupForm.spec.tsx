@@ -1,11 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@webRoot/test/common/unit-test/helpers/index';
+import { render, screen, fireEvent, waitFor, renderHook } from '@webRoot/test/common/unit-test/helpers/index';
 import { SignupForm } from './SignupForm';
 import { mockRouter } from '@testWeb/common/unit-test/mocks/router.mock';
+import { useForm } from '@mantine/form';
 
 describe('SignupForm', () => {
   const mockUseSignupProps = {
-    error: {},
+    form: renderHook(() =>
+      useForm({
+        initialValues: {
+          username: '',
+          password: '',
+          confirmPassword: '',
+        },
+      }),
+    ).result.current,
     showPassword: false,
     setShowPassword: vi.fn(),
     handleSubmit: vi.fn(),
@@ -19,6 +28,7 @@ describe('SignupForm', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUseSignupProps.form.reset();
   });
 
   it('renders username, password, and confirm password fields', () => {
@@ -72,21 +82,6 @@ describe('SignupForm', () => {
     await waitFor(() => {
       expect(mockRouter.push).toHaveBeenCalledWith('/auth/login');
     });
-  });
-
-  it('displays multiple error messages when error object has values', () => {
-    const errorMockUseSignup = () => ({
-      ...mockUseSignup(),
-      error: {
-        username: ['Username error'],
-        password: ['Password error'],
-        confirmPassword: ['Confirm password error'],
-      },
-    });
-    render(<SignupForm useSignup={errorMockUseSignup} />);
-    expect(screen.getByText('Username error')).toBeInTheDocument();
-    expect(screen.getByText('Password error')).toBeInTheDocument();
-    expect(screen.getByText('Confirm password error')).toBeInTheDocument();
   });
 
   it('renders login link correctly', () => {

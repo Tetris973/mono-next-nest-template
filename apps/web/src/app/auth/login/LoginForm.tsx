@@ -2,22 +2,23 @@ import React from 'react';
 import { Paper, Stack, Button, Text, Tooltip, Checkbox, Anchor, Group, TextInput, PasswordInput } from '@mantine/core';
 import { UseLogin, useLogin as defaultUseLogin } from './login.hook';
 import { showErrorNotification } from '@web/common/helpers/notifications.helpers';
+import { LoginUserDto } from '@web/common/dto/backend-index.dto';
 
 export interface LoginFormProps {
   useLogin?: () => UseLogin;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ useLogin = defaultUseLogin }) => {
-  const { error, handleSubmit, authLoading } = useLogin();
+  const { form, handleSubmit, authLoading } = useLogin();
 
-  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const result = await handleSubmit(event);
-    if (result.error) {
-      showErrorNotification({
-        message: result.error,
-      });
-    }
+  const handleFormSubmit = async (loginDto: LoginUserDto) => {
+    handleSubmit(loginDto).then(({ error }) => {
+      if (error) {
+        showErrorNotification({
+          message: error,
+        });
+      }
+    });
   };
 
   return (
@@ -27,23 +28,21 @@ export const LoginForm: React.FC<LoginFormProps> = ({ useLogin = defaultUseLogin
       radius="md"
       withBorder>
       <form
-        onSubmit={handleFormSubmit}
+        onSubmit={form.onSubmit((values: LoginUserDto) => handleFormSubmit(values))}
         aria-label="Login form">
         <Stack gap="md">
           <TextInput
-            id="username"
             label="Username"
-            type="text"
-            name="username"
-            error={Array.isArray(error.username) ? error.username.join(', ') : error.username}
+            key={form.key('username')}
             autoComplete="username"
+            {...form.getInputProps('username')}
           />
           <PasswordInput
-            id="password"
             label="Password"
-            name="password"
+            key={form.key('password')}
+            type="password"
             autoComplete="current-password"
-            error={Array.isArray(error.password) ? error.password.join(', ') : error.password}
+            {...form.getInputProps('password')}
           />
           <Group
             justify="space-between"

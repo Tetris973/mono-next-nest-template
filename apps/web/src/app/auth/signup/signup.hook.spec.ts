@@ -4,7 +4,6 @@ import { useSignup, UseSignupDependencies } from './signup.hook';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { CreateUserDto } from '@web/common/dto/backend-index.dto';
 import { mockRouter } from '@testWeb/common/unit-test/mocks/router.mock';
-import { createFormElement } from '@testWeb/common/unit-test/helpers/create-form-element.helpers';
 
 describe('useSignup', () => {
   const mockAuth = {
@@ -20,6 +19,12 @@ describe('useSignup', () => {
   const dependencies: UseSignupDependencies = {
     useAuth: () => mockAuth,
     signupAction: mockSignupAction,
+  };
+
+  const signupDto: CreateUserDto = {
+    username: 'testUser',
+    password: 'Chocolat123!',
+    confirmPassword: 'Chocolat123!',
   };
 
   beforeEach(() => {
@@ -45,53 +50,17 @@ describe('useSignup', () => {
 
   it('should handle form submission', async () => {
     // INIT
-    const signupDto: CreateUserDto = {
-      username: 'testUser',
-      password: 'Chocolat123!',
-      confirmPassword: 'Chocolat123!',
-    };
     mockSignupAction.mockResolvedValue({ result: null });
     const { result } = renderHook(() => useSignup(dependencies));
 
-    // Create a mock form element
-    const formElement = createFormElement({
-      username: signupDto.username,
-      password: signupDto.password,
-      confirmPassword: signupDto.confirmPassword,
-    });
-
     // RUN & CHECK RESULTS
     await act(async () => {
-      const submitResult = await result.current.handleSubmit({
-        preventDefault: () => {},
-        currentTarget: formElement,
-      } as unknown as React.FormEvent<HTMLFormElement>);
+      const submitResult = await result.current.handleSubmit(signupDto);
       expect(submitResult).toEqual({ success: 'Signup successful' });
     });
 
     expect(mockSignupAction).toHaveBeenCalledWith(signupDto);
-    expect(result.current.error).toEqual({ username: [], password: [], confirmPassword: [] });
-  });
-
-  it('should handle validation errors', async () => {
-    // INIT
-    const { result } = renderHook(() => useSignup(dependencies));
-    const emptyForm = createFormElement({ username: '', password: '', confirmPassword: '' });
-
-    // RUN & CHECK RESULTS
-    await act(async () => {
-      const submitResult = await result.current.handleSubmit({
-        preventDefault: () => {},
-        currentTarget: emptyForm,
-      } as unknown as React.FormEvent<HTMLFormElement>);
-      expect(submitResult).toEqual({});
-    });
-
-    expect(result.current.error).toEqual({
-      username: ['You must provide a username.'],
-      password: ['You must provide a password.'],
-      confirmPassword: [],
-    });
+    expect(result.current.form.errors).toEqual({});
   });
 
   it('should handle server errors, Errors set in error form state, Conflict', async () => {
@@ -105,22 +74,14 @@ describe('useSignup', () => {
       data: { username: [usernameError] },
     });
 
-    const formElement = createFormElement({
-      username: 'testUser',
-      password: 'Chocolat123!',
-      confirmPassword: 'Chocolat123!',
-    });
     const { result } = renderHook(() => useSignup(dependencies));
 
     // RUN & CHECK RESULTS
     await act(async () => {
-      const submitResult = await result.current.handleSubmit({
-        preventDefault: () => {},
-        currentTarget: formElement,
-      } as unknown as React.FormEvent<HTMLFormElement>);
+      const submitResult = await result.current.handleSubmit(signupDto);
       expect(submitResult).toEqual({});
     });
-    expect(result.current.error).toEqual({ username: [usernameError] });
+    expect(result.current.form.errors).toEqual({ username: [usernameError] });
   });
 
   it('should handle server errors, Errors returned by submit, Bad Request', async () => {
@@ -143,19 +104,11 @@ describe('useSignup', () => {
 
     // RUN & CHECK RESULTS
     await act(async () => {
-      const submitResult = await result.current.handleSubmit({
-        preventDefault: () => {},
-        // input good crendentials to bypass client side validation
-        currentTarget: createFormElement({
-          username: 'testUser',
-          password: 'Chocolat123!',
-          confirmPassword: 'Chocolat123!',
-        }),
-      } as unknown as React.FormEvent<HTMLFormElement>);
+      const submitResult = await result.current.handleSubmit(signupDto);
       expect(submitResult).toEqual({});
     });
 
-    expect(result.current.error).toEqual(details);
+    expect(result.current.form.errors).toEqual(details);
   });
 
   it('should handle server errors, Errors returned by submit, other status', async () => {
@@ -172,17 +125,10 @@ describe('useSignup', () => {
 
     // RUN & CHECK RESULTS
     await act(async () => {
-      const submitResult = await result.current.handleSubmit({
-        preventDefault: () => {},
-        currentTarget: createFormElement({
-          username: 'testUser',
-          password: 'Chocolat123!',
-          confirmPassword: 'Chocolat123!',
-        }),
-      } as unknown as React.FormEvent<HTMLFormElement>);
+      const submitResult = await result.current.handleSubmit(signupDto);
       expect(submitResult).toEqual({ error: errorMessage });
     });
 
-    expect(result.current.error).toEqual({ username: [], password: [], confirmPassword: [] });
+    expect(result.current.form.errors).toEqual({});
   });
 });

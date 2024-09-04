@@ -5,7 +5,8 @@ import { mockUsers } from '@webRoot/test/common/unit-test/mocks/users.mock';
 import { fn } from '@storybook/test';
 import { useForm, UseFormReturnType } from '@mantine/form';
 import { UpdateUserDto } from '@web/common/dto/backend-index.dto';
-import { validateUserProfileEditForm } from '@web/app/auth/profile/validation';
+import { profileFormSchema } from '@web/app/auth/profile/validation';
+import { zodResolver } from 'mantine-form-zod-resolver';
 
 const meta = {
   title: 'Components/ProfileForm',
@@ -41,7 +42,7 @@ const mockUseProfileForm = (form: UseFormReturnType<UpdateUserDto>) => ({
 const createMockForm = () =>
   useForm<UpdateUserDto>({
     initialValues: { username: mockUsers[0].username },
-    validate: validateUserProfileEditForm,
+    validate: zodResolver(profileFormSchema),
   });
 
 export const Default: Story = {
@@ -49,33 +50,17 @@ export const Default: Story = {
     userId: 1,
     onCancel: fn(),
     onSubmitSuccess: fn(),
-  },
-  render: (args) => {
-    const form = createMockForm();
-    return (
-      <ProfileForm
-        {...args}
-        useProfileForm={() => mockUseProfileForm(form)}
-      />
-    );
+    useProfileForm: () => mockUseProfileForm(createMockForm()),
   },
 };
 
 export const FetchProfilePending: Story = {
   args: {
     ...Default.args,
-  },
-  render: (args) => {
-    const form = createMockForm();
-    return (
-      <ProfileForm
-        {...args}
-        useProfileForm={() => ({
-          ...mockUseProfileForm(form),
-          profilePending: true,
-        })}
-      />
-    );
+    useProfileForm: () => ({
+      ...mockUseProfileForm(createMockForm()),
+      profilePending: true,
+    }),
   },
 };
 
@@ -98,17 +83,9 @@ export const WithErrors: Story = {
 export const SubmitPending: Story = {
   args: {
     ...Default.args,
-  },
-  render: (args) => {
-    const form = createMockForm();
-    return (
-      <ProfileForm
-        {...args}
-        useProfileForm={() => ({
-          ...mockUseProfileForm(form),
-          submitPending: true,
-        })}
-      />
-    );
+    useProfileForm: () => ({
+      ...mockUseProfileForm(createMockForm()),
+      submitPending: true,
+    }),
   },
 };

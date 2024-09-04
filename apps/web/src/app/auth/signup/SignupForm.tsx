@@ -4,30 +4,31 @@ import { UseSignup, useSignup as defaultUseSignup } from './signup.hook';
 import { useDisclosure } from '@mantine/hooks';
 import { showSuccessNotification, showErrorNotification } from '@web/common/helpers/notifications.helpers';
 import { useRouter } from 'next/navigation';
+import { CreateUserDto } from '@web/common/dto/backend-index.dto';
 
 export interface SignupFormProps {
   useSignup?: () => UseSignup;
 }
 
 export const SignupForm: React.FC<SignupFormProps> = ({ useSignup = defaultUseSignup }) => {
-  const { error, handleSubmit, signupPending } = useSignup();
+  const { form, handleSubmit, signupPending } = useSignup();
   const router = useRouter();
 
   const [passwordVisible, { toggle: togglePassword }] = useDisclosure(false);
 
-  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const result = await handleSubmit(event);
-    if (result.error) {
-      showErrorNotification({
-        message: result.error,
-      });
-    } else if (result.success) {
-      showSuccessNotification({
-        message: result.success,
-      });
-      router.push('/auth/login');
-    }
+  const handleFormSubmit = async (createUserDto: CreateUserDto) => {
+    handleSubmit(createUserDto).then((result) => {
+      if (result.error) {
+        showErrorNotification({
+          message: result.error,
+        });
+      } else if (result.success) {
+        showSuccessNotification({
+          message: result.success,
+        });
+        router.push('/auth/login');
+      }
+    });
   };
 
   return (
@@ -37,29 +38,25 @@ export const SignupForm: React.FC<SignupFormProps> = ({ useSignup = defaultUseSi
       radius="md"
       withBorder>
       <form
-        onSubmit={handleFormSubmit}
+        onSubmit={form.onSubmit((values: CreateUserDto) => handleFormSubmit(values))}
         aria-label="Sign up form">
         <Stack gap="x">
           <TextInput
-            id="username"
             label="Username"
-            name="username"
-            error={Array.isArray(error.username) ? error.username.join(', ') : error.username}
-            autoComplete="username"
+            key={form.key('username')}
+            {...form.getInputProps('username')}
           />
           <PasswordInput
-            id="password"
             label="Password"
-            name="password"
-            error={Array.isArray(error.password) ? error.password.join(', ') : error.password}
+            key={form.key('password')}
+            {...form.getInputProps('password')}
             visible={passwordVisible}
             onVisibilityChange={togglePassword}
           />
           <PasswordInput
-            id="confirmPassword"
             label="Confirm Password"
-            name="confirmPassword"
-            error={Array.isArray(error.confirmPassword) ? error.confirmPassword.join(', ') : error.confirmPassword}
+            key={form.key('confirmPassword')}
+            {...form.getInputProps('confirmPassword')}
             visible={passwordVisible}
             onVisibilityChange={togglePassword}
           />
