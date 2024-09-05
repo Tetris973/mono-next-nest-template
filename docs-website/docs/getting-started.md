@@ -17,7 +17,7 @@ Before you begin, ensure you have the following tools and software installed on 
 - **Visual Studio Code** (recommended): IDE
 
 :::tip
-For detailed installation instructions and recommended configurations for these prerequisites, please refer to our [Prerequisites Setup Guide](./prerequisites-setup.md).
+For detailed installation instructions and recommended configurations for these prerequisites, please refer to the [Prerequisites Setup Guide](./prerequisites-setup.md).
 :::
 
 ## Installation

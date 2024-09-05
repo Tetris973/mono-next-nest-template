@@ -10,4 +10,4 @@ While abstraction can lead to more flexible and maintainable code, premature abs
 
 3. **Refactor to Abstraction**: Instead of trying to design the perfect abstraction upfront, start with specific implementations and refactor to abstractions as patterns emerge.
 
-Remember, these principles are guidelines, not strict rules. Use your judgment to apply them appropriately in different situations. The goal is to create maintainable, efficient, and adaptable code that serves the needs of our project and team.
+Remember, these principles are guidelines, not strict rules. Use your judgment to apply them appropriately in different situations. The goal is to create maintainable, efficient, and adaptable code that serves the needs of the project and team.

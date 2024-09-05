@@ -52,7 +52,7 @@ This guide walks you through setting up the development environment for both the
 6. The backend server should now be running. You can access the API documentation at `http://localhost:4000/api` (adjust the port if you've changed it in your environment variables).
 
 :::tip
-For instructions on how to test the server, login, and API using Swagger, please refer to our [API Testing Guide](./api-testing.md).
+For instructions on how to test the server, login, and API using Swagger, please refer to the [API Testing Guide](./api-testing.md).
 :::
 
 </details>
@@ -109,7 +109,7 @@ To set up the development environment using Docker Compose:
 
 This command starts a PostgreSQL database and pgAdmin, a web-based database management tool.
 
-For detailed instructions on using pgAdmin and other Docker-related configurations, please refer to our [Docker Development Guide](./setup-docker-dev.md).
+For detailed instructions on using pgAdmin and other Docker-related configurations, please refer to the [Docker Development Guide](./setup-docker-dev.md).
 
 ## Accessing the Application
 

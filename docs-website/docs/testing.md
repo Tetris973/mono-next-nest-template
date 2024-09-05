@@ -79,12 +79,12 @@ We use Playwright for end-to-end testing, aiming to simulate a production-like e
 - Run with UI: `pnpm run test:e2e:ui`
 
 :::tip
-E2E tests use the production build of both frontend and backend, and connect to the production database. This approach ensures our tests are as close as possible to the real production environment.
+E2E tests use the production build of both frontend and backend, and connect to the production database. This approach ensures the tests are as close as possible to the real production environment.
 :::
 
 ## Continuous Integration
 
-This project uses GitLab CI/CD for continuous integration. For detailed information about our CI pipeline, including stages, environment setup, and notes on Docker builds, please refer to our [CI documentation](./continuous-integration.md).
+This project uses GitLab CI/CD for continuous integration. For detailed information about the CI pipeline, including stages, environment setup, and notes on Docker builds, please refer to the [CI documentation](./continuous-integration.md).
 
 ## Troubleshooting
 
