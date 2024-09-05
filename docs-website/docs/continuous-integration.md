@@ -8,7 +8,7 @@ This project uses GitLab CI for automated testing and building.
 
 ## Pipeline Overview
 
-Our CI pipeline consists of the following stages:
+The CI pipeline consists of the following stages:
 
 1. **Install**: Installs dependencies
 2. **Lint**: Runs linters for both backend and frontend

@@ -51,4 +51,4 @@ Proper naming is crucial for code readability and maintainability. This document
 1. Use camelCase for prop names: `userName`, `onSubmit`
 2. Boolean props should be named as adjectives: `isDisabled`, `hasError`
 
-Remember, the goal of these conventions is to make our code more readable and maintainable. Consistency is key, so always follow these conventions unless there's a compelling reason not to.
+Remember, the goal of these conventions is to make the code more readable and maintainable. Consistency is key, so always follow these conventions unless there's a compelling reason not to.

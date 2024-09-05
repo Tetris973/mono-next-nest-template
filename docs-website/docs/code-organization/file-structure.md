@@ -199,7 +199,7 @@ Contains all Docker-related files, including:
 - Docker-related scripts
 
 ### `docs-website/`
-Contains the entire documentation for the project. We keep our documentation as close to the code as possible. 
+Contains the entire documentation for the project. We keep the documentation as close to the code as possible. 
 
 :::info Exception
 Project-related documents that contains sensitive or that need to be shared with the client should not be in the repository, they might be better suited for a tool like Confluence or Bookstack.
