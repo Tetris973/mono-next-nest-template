@@ -8,9 +8,10 @@ import { UserDto } from '@web/common/dto/backend-index.dto';
 import { useAuth as defaultUseAuth, AuthContextInterface } from '@web/app/auth/AuthContext';
 import { Role } from '@web/app/auth/role.enum';
 import { useServerAction } from '@web/common/helpers/server-action.hook';
+import { useServerActionSWR } from '@web/common/helpers/server-action-swr.hook';
 
 export interface useDashboard {
-  users: UserDto[];
+  users: UserDto[] | undefined;
   selectedUser: UserDto | null;
   getAllUsersPending: boolean;
   getUserByIdPending: boolean;
@@ -18,7 +19,7 @@ export interface useDashboard {
   showAdmin: boolean;
   loadUserById: (id: number) => Promise<string | void>;
   deleteUser: (id: number) => Promise<string | void>;
-  loadUsers: () => Promise<string | void>;
+  loadUsers: () => Promise<void>;
 }
 
 export interface UseDashboardDependencies {
@@ -34,20 +35,37 @@ export const useDashboard = ({
   deleteUserAction = defaultDeleteUserAction,
   useAuth = defaultUseAuth,
 }: UseDashboardDependencies = {}): useDashboard => {
-  const [getAllUsersPending, getAllUsersActionM] = useServerAction(getAllUsersAction);
   const [getUserByIdPending, getUserByIdActionM] = useServerAction(getUserByIdAction);
   const [, deleteUserActionM] = useServerAction(deleteUserAction);
-  const [users, setUsers] = useState<UserDto[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserDto | null>(null);
   const [error, setError] = useState('');
   const [showAdmin, setShowAdmin] = useState(false);
   const { roles } = useAuth();
 
-  /**
-   * Load a user by id
-   * @param id - The id of the user to load
-   * @returns The error message if there is an error, otherwise undefined
-   */
+  const {
+    data: users,
+    error: usersError,
+    mutate: mutateUsers,
+    isLoading: getAllUsersPending,
+  } = useServerActionSWR('getAllUsers', getAllUsersAction);
+
+  useEffect(() => {
+    if (roles) {
+      setShowAdmin(roles.includes(Role.ADMIN));
+    }
+  }, [roles]);
+
+  useEffect(() => {
+    if (usersError) {
+      setError(usersError.message);
+    }
+  }, [usersError]);
+
+  const loadUsers = async () => {
+    const users = await mutateUsers();
+    setSelectedUser(users?.find((user) => user.id === selectedUser?.id) || null);
+  };
+
   const loadUserById = async (id: number) => {
     const { data, error } = await getUserByIdActionM(id);
     if (error) {
@@ -57,46 +75,15 @@ export const useDashboard = ({
     setSelectedUser(data);
   };
 
-  /**
-   * Delete a user
-   * @param id - The id of the user to delete
-   * @returns The error message if there is an error, otherwise undefined
-   */
   const deleteUser = async (id: number) => {
     const { error } = await deleteUserActionM(id);
     if (error) {
       setError(error.message);
       return error.message;
     }
-    setUsers(users.filter((user) => user.id !== id));
+    mutateUsers(users?.filter((user) => user.id !== id));
     setSelectedUser(null);
   };
-
-  /**
-   * Load all users
-   * @returns The error message if there is an error, otherwise undefined
-   */
-  const loadUsers = async () => {
-    const { data, error } = await getAllUsersActionM();
-    if (error) {
-      setError(error.message);
-      return error.message;
-    }
-    setUsers(data);
-    const user = data.find((user) => user.id === selectedUser?.id);
-    setSelectedUser(user || null);
-  };
-
-  useEffect(() => {
-    if (roles) {
-      setShowAdmin(roles.includes(Role.ADMIN));
-    }
-  }, [roles]);
-
-  useEffect(() => {
-    loadUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return {
     users,

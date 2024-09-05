@@ -24,12 +24,14 @@ export const SwrWrapper = ({ children }: { children: React.ReactNode }) => (
 export function render(ui: React.ReactNode): RenderResult {
   return testingLibraryRender(<>{ui}</>, {
     wrapper: ({ children }: { children: React.ReactNode }) => (
-      <MantineProvider theme={theme}>
-        <Notifications />
-        <ModalsProvider>
-          <AppShell header={{ height: 60 }}>{children}</AppShell>
-        </ModalsProvider>
-      </MantineProvider>
+      <SWRConfig value={{ provider: () => new Map() }}>
+        <MantineProvider theme={theme}>
+          <Notifications />
+          <ModalsProvider>
+            <AppShell header={{ height: 60 }}>{children}</AppShell>
+          </ModalsProvider>
+        </MantineProvider>
+      </SWRConfig>
     ),
   });
 }

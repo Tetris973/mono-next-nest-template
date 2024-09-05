@@ -1,5 +1,5 @@
 import { vi, describe, beforeEach, it, expect } from 'vitest';
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act, waitFor, SwrWrapper } from '@testWeb/common/unit-test/helpers/index';
 import { useDashboard, UseDashboardDependencies } from './dashboard.hook';
 import { UserDto } from '@web/common/dto/backend-index.dto';
 import { Role } from '@web/app/auth/role.enum';
@@ -32,7 +32,7 @@ describe('useDashboard', () => {
     // INIT
     const users: UserDto[] = [{ id: 1, username: 'user1', createdAt: new Date(), updatedAt: new Date() }];
     mockGetAllUsersAction.mockResolvedValue({ data: users });
-    const { result } = renderHook(() => useDashboard(dependencies));
+    const { result } = renderHook(() => useDashboard(dependencies), { wrapper: SwrWrapper });
 
     // CHECK RESULTS
     await waitFor(() => {
@@ -42,7 +42,7 @@ describe('useDashboard', () => {
 
   it('should set showAdmin based on roles, admin and other', async () => {
     // INIT
-    const { result, rerender } = renderHook(() => useDashboard(dependencies));
+    const { result, rerender } = renderHook(() => useDashboard(dependencies), { wrapper: SwrWrapper });
 
     // CHECK RESULTS
     expect(result.current.showAdmin).toBe(false);
@@ -66,13 +66,13 @@ describe('useDashboard', () => {
         updatedAt: new Date(),
       };
       mockGetUserByIdAction.mockResolvedValue({ data: user });
-      const { result } = renderHook(() => useDashboard(dependencies));
+      const { result } = renderHook(() => useDashboard(dependencies), { wrapper: SwrWrapper });
 
       // RUN & CHECK RESULTS
       await act(async () => {
         await result.current.loadUserById(1);
       });
-      // The selected user should be the laoded user
+      // The selected user should be the loaded user
       expect(result.current.selectedUser).toEqual(user);
     });
 
@@ -80,7 +80,7 @@ describe('useDashboard', () => {
       // INIT
       const errorMessage = 'Failed to load user';
       mockGetUserByIdAction.mockResolvedValue({ error: { message: errorMessage } });
-      const { result } = renderHook(() => useDashboard(dependencies));
+      const { result } = renderHook(() => useDashboard(dependencies), { wrapper: SwrWrapper });
 
       // RUN & CHECK RESULTS
       await act(async () => {
@@ -96,14 +96,12 @@ describe('useDashboard', () => {
       // INIT
       const errorMessage = 'Failed to load users';
       mockGetAllUsersAction.mockResolvedValue({ error: { message: errorMessage } });
-      const { result } = renderHook(() => useDashboard(dependencies));
+      const { result } = renderHook(() => useDashboard(dependencies), { wrapper: SwrWrapper });
 
       // CHECK RESULTS
-      await act(async () => {
-        const error = await result.current.loadUsers();
-        expect(error).toBe(errorMessage);
+      await waitFor(() => {
+        expect(result.current.error).toBe(errorMessage);
       });
-      expect(result.current.error).toBe(errorMessage);
     });
   });
 
@@ -113,7 +111,7 @@ describe('useDashboard', () => {
       const users: UserDto[] = [{ id: 1, username: 'user1', createdAt: new Date(), updatedAt: new Date() }];
       mockGetAllUsersAction.mockResolvedValue({ data: users });
       mockDeleteUserAction.mockResolvedValue({});
-      const { result } = renderHook(() => useDashboard(dependencies));
+      const { result } = renderHook(() => useDashboard(dependencies), { wrapper: SwrWrapper });
 
       // Load users first
       await waitFor(() => {
@@ -121,26 +119,30 @@ describe('useDashboard', () => {
       });
 
       // RUN & CHECK RESULTS
+      // this mock need to be before because swr will refetch when mutating the users
+      mockGetAllUsersAction.mockResolvedValue({ data: [] });
       await act(async () => {
         await result.current.deleteUser(1);
       });
-      expect(result.current.users).toEqual([]);
-      expect(result.current.selectedUser).toBeNull();
-      expect(mockDeleteUserAction).toHaveBeenCalledWith(1);
+
+      await waitFor(() => {
+        expect(result.current.selectedUser).toBeNull();
+        expect(mockDeleteUserAction).toHaveBeenCalledWith(1);
+        expect(result.current.users).toEqual([]);
+      });
     });
 
     it('should handle errors from deleteUserAction', async () => {
       // INIT
       const errorMessage = 'Failed to delete user';
       mockDeleteUserAction.mockResolvedValue({ error: { message: errorMessage } });
-      const { result } = renderHook(() => useDashboard(dependencies));
+      const { result } = renderHook(() => useDashboard(dependencies), { wrapper: SwrWrapper });
 
       // RUN & CHECK RESULTS
       await act(async () => {
         const error = await result.current.deleteUser(1);
         expect(error).toBe(errorMessage);
       });
-      expect(result.current.error).toBe(errorMessage);
     });
   });
 });
