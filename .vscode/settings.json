@@ -22,4 +22,10 @@
     "[javascript]":{
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
+    "playwright.env": {
+        "LOG_TARGET": "pino/file",
+        "LOG_LEVEL": "info",
+        "BACKEND_URL": "http://localhost:4000",
+        "NEXT_PUBLIC_BROWSER_LOG_LEVEL": "info"
+    }
 }

@@ -87,7 +87,7 @@ export function Dashboard({
             bg="transparent"
             style={{ flex: 2 }}>
             <FilteredUserList
-              users={users}
+              users={users ?? []}
               isLoading={getAllUsersPending}
               error={error}
               onUserSelect={loadUserById}
