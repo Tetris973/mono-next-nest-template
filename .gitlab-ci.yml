@@ -27,6 +27,7 @@ cache: &default_cache
     - apps/server/node_modules/
     - apps/web/node_modules/
     - apps/web/.next/cache/
+    - packages/backend-api-sdk/node_modules/
     - docs-website/node_modules/
     - docs-website/.docusaurus/
   policy: pull # policy for all job, only enable to pull
@@ -54,31 +55,31 @@ lint-frontend:
     - cd apps/web
     - pnpm run lint
 
-build-backend-frontend:
+build-backend:
   stage: build
   cache:
     <<: *default_cache
     policy: pull-push # Override the policy to pull only to update the next build cache
   script:
-    # Build backend
-    # Copy gitlab env file needed for Nest
     - cd apps/server
+    # Copy gitlab env file needed for Nest
     - cp $NEST_ENV_FILE ./.env.production.local
     - pnpm db-generate
-    # - pnpm db-migrate:prod
     - pnpm run build
-    - pnpm run build:dto || true # normal if it causes error, the true is to avoid failure
-    - echo "Error during build:dto are Ok with it is about types not found and if front build pass"
-    # Build frontend
-    - cd ../web
+  artifacts:
+    paths:
+      - apps/server/dist
+
+build-frontend:
+  stage: build
+  script:
+    - cd apps/web
     # Copy the env file needed for Next build
     - cp $NEXT_ENV_FILE ./.env.production.local
     - export NODE_ENV=production # production is needed for Next build otherwise error
     - pnpm run build
   artifacts:
     paths:
-      - apps/server/dist
-      - apps/server/shared/dto
       - apps/web/.next
 
 build-docs:

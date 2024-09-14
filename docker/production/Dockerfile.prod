@@ -15,6 +15,9 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY patches ./patches
 COPY apps/server/package.json ./apps/server/
 COPY apps/web/package.json ./apps/web/
+# The client sdk needed by the frontend otherwise "pnpm i" does not install it for the frontend
+# !!! Be careful to have generated the latest sdk before running this dockerfile !!!
+COPY packages/backend-api-sdk ./packages/backend-api-sdk
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
 
@@ -39,20 +42,12 @@ RUN cp -r ./node_modules/.pnpm/@prisma+client* /prod/server/node_modules/.pnpm/
 RUN cp ./apps/server/src/prisma/schema.prisma /prod/server/dist/prisma/schema.prisma
 RUN cp -r ./apps/server/src/prisma/migrations /prod/server/dist/prisma/migrations
 
-# Build the dto for the frotend server, normal if type error because prisma type not found so we ignore it
-RUN pnpm --filter server build:dto; EXIT_CODE=$?; \
-    if [ $EXIT_CODE -ne 0 ]; then \
-        echo "Warning: DTO build failed with exit code $EXIT_CODE"; \
-    fi
-
 
 # Next build stage
 FROM deps AS next-build
 WORKDIR /usr/src/app
 COPY --from=deps /usr/src/app/node_modules ./node_modules
-# Copy the whole server folder, some files like generated dto and some struct definitions are needed.
-COPY --from=nest-build /usr/src/app/apps/server/ ./apps/server/
-# Copy the rest of the code
+# Copy the whole web app folder
 COPY apps/web ./apps/web
 COPY tsconfig.json ./
 # Nextjs runs validation of env variables at build time, so we need env file

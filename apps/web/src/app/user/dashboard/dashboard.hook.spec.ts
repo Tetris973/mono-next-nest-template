@@ -1,7 +1,7 @@
 import { vi, describe, beforeEach, it, expect } from 'vitest';
 import { renderHook, act, waitFor, SwrWrapper } from '@testWeb/common/unit-test/helpers/index';
 import { useDashboard, UseDashboardDependencies } from './dashboard.hook';
-import { UserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto } from '@web/lib/backend-api/index';
 import { Role } from '@web/app/auth/role.enum';
 
 describe('useDashboard', () => {

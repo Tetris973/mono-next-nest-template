@@ -63,7 +63,6 @@ We use Playwright for end-to-end testing, aiming to simulate a production-like e
    ```bash
    cd apps/server
    pnpm run build
-   pnpm run build:dto
    cd ../web
    pnpm run build
    ```

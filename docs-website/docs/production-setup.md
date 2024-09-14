@@ -25,7 +25,6 @@ This guide provides instructions for setting up the Mono Next Nest Template proj
 3. Build the backend:
    ```bash
    pnpm run build
-   pnpm run build:dto # Build DTOs for the frontend
    ```
 
 4. Apply and seed production database migrations:

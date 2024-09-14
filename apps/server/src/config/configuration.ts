@@ -1,4 +1,4 @@
-import { LogLevel, LogTarget } from './log.config';
+import { LogLevel, LogTarget } from './log.enum';
 
 /**
  * Here we define all the keys and values for the ConfigService Object used in the application

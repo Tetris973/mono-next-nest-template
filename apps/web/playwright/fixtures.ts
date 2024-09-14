@@ -1,6 +1,5 @@
-import { createTestUser } from '@webRoot/test/common/helpers/create-user.helpers';
+import { createTestUser, FullUserDto } from '@webRoot/test/common/helpers/create-user.helpers';
 import { deleteTestUser } from '@webRoot/test/common/helpers/delete-user.helpers';
-import { FullUserDto } from '@web/common/dto/backend-index.dto';
 import { getConfig } from '@web/config/configuration';
 import { test as baseTest, request } from '@playwright/test';
 import fs from 'fs';

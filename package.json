@@ -62,11 +62,11 @@
       "prisma.seed": "ts-node is needed, otherwise error, Added -r tsconfig-paths/register  for path alias compilation",
       "scripts.db-seed:force": "ERASE DB and seed the tables from specified seed script inf src/prisma/seeding (sh -c is needed to load env variable in both command call)",
       "scripts.db-seed": "seed tables from specified seed script in src/prisma/seeding",
-      "scripts.build:dto": "Used to build the dto for the frontend",
       "scripts.db-generate": "Generates the prisma client types, needed when building for production in CI",
       "files": "Used with pnpm deploy --prod out, put dist/ in out directory and all the node_module required for dependency ",
       "dependencies.prisma": "prisma is needed as prod dependecy, otherwise the prisma-migrate install the latest version, which can cause unexpected behavior",
-      "devDependencies.unplugin-swc": "unplugin-swc version 1.5^ causes problems with wallabyJs, removing swc plugin for vitest wallaby config causes Env variable not found error"
+      "devDependencies.unplugin-swc": "unplugin-swc version 1.5^ causes problems with wallabyJs, removing swc plugin for vitest wallaby config causes Env variable not found error",
+      "scripts.generate-openapi": "Generates OpenAPI schema. Uses dev env for consistency with swagger UI, also needed for bootsraping the whole app otherwise error. tsconfig-paths/register for alias otherwise error "
     },
     "apps/web/package.json": {
       "scripts.preinstall": "to prevent from installing packages without pnpm",

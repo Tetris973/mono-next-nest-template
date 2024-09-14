@@ -11,7 +11,7 @@ import {
   IsString,
 } from 'class-validator';
 import { Logger } from '@nestjs/common';
-import { LogLevel, LogTarget } from './log.config';
+import { LogLevel, LogTarget } from './log.enum';
 
 enum NodeEnv {
   Development = 'development',

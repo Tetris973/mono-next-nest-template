@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@webRoot/test/common/unit-test/helpers/index';
 import { FilteredUserList } from './FilteredUserList';
-import { UserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto } from '@web/lib/backend-api/index';
 
 describe('UserList', () => {
   const mockUsers: UserDto[] = [

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Avatar, Text, Group, Stack, Loader, ActionIcon, Flex, Box } from '@mantine/core';
-import { UserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto } from '@web/lib/backend-api/index';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { getColorFromName } from '@web/utils/get-color-from-name.utils';

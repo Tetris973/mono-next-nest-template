@@ -4,7 +4,7 @@ import { UseSignup, useSignup as defaultUseSignup } from './signup.hook';
 import { useDisclosure } from '@mantine/hooks';
 import { showSuccessNotification, showErrorNotification } from '@web/common/helpers/notifications.helpers';
 import { useRouter } from 'next/navigation';
-import { CreateUserDto } from '@web/common/dto/backend-index.dto';
+import { CreateUserDto } from '@web/lib/backend-api/index';
 
 export interface SignupFormProps {
   useSignup?: () => UseSignup;

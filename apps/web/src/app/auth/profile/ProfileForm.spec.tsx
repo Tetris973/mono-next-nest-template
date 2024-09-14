@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor, renderHook } from '@webRoot/test/common/unit-test/helpers/index';
 import { ProfileForm } from './ProfileForm';
-import { UserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto } from '@web/lib/backend-api/index';
 import { useForm } from '@mantine/form';
 
 describe('ProfileForm', () => {

@@ -1,6 +1,6 @@
 import pino from 'pino';
 import { getConfig } from '@web/config/configuration';
-import { LogTarget } from '@server/config/log.config';
+import { LogTarget } from '@web/config/log.enum';
 import { join } from 'path';
 
 export function createServerLogger() {

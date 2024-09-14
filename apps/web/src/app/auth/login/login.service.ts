@@ -3,16 +3,15 @@
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
 import { ServerActionResponse } from '@web/common/types/server-action-response.type';
-import { getConfig } from '@web/config/configuration';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { Role } from '@web/app/auth/role.enum';
 import { JwtPayload } from '@web/app/auth/jwt-payload.interface';
-import { LoginUserDto } from '@web/common/dto/backend-index.dto';
-import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
 import { getLogger } from '@web/lib/logger';
+import { backendApi, StandardizedApiError, ResponseError, LoginUserDto } from '@web/lib/backend-api/index';
+import { standardizeAndLogError } from '@web/common/helpers/unhandled-server-action-error.helper';
 
-const logger = getLogger('Login');
+const logger = getLogger('Login.service');
 
 /**
  * Set the authentication cookie from the response.
@@ -42,51 +41,49 @@ const setAuthCookie = (response: Response) => {
   });
 };
 
-/**
- * Format the login error response based on the status code.
- */
-const formatLoginError = (
-  status: HttpStatus,
-  parsedRes: DtoValidationError<LoginUserDto>,
-): ServerActionResponse<undefined, DtoValidationError<LoginUserDto>> => {
-  switch (status) {
-    case HttpStatus.BAD_REQUEST:
-      return { error: { message: 'Validation error', status }, data: parsedRes };
-    case HttpStatus.UNAUTHORIZED:
-      return { error: { message: 'Unauthorized', status }, data: { password: ['Incorrect password'] } };
-    case HttpStatus.NOT_FOUND:
-      return { error: { message: 'Unauthorized', status }, data: { username: ['User not found'] } };
-    default:
-      return { error: { message: 'An unexpected error occurred, please try again', status } };
-  }
-};
-
 export const loginAction = async (
   loginData: LoginUserDto,
 ): Promise<ServerActionResponse<undefined, DtoValidationError<LoginUserDto>>> => {
-  const { data: res, error } = await safeFetch(`${getConfig().BACKEND_URL}/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(loginData),
-  });
-
-  if (error) {
-    return { error };
-  }
-
-  if (res.ok) {
+  try {
+    const { raw: response } = await backendApi.authControllerLoginRaw({ loginUserDto: loginData });
     try {
-      setAuthCookie(res);
+      setAuthCookie(response);
     } catch (error) {
-      logger.error({ error }, 'Error setting authentication cookie');
+      logger.fatal(error, 'Error setting authentication cookie');
       return {
         error: { message: 'An unexpected error occurred, please try again', status: HttpStatus.INTERNAL_SERVER_ERROR },
       };
     }
     return { data: undefined };
+  } catch (error: unknown) {
+    if (error instanceof StandardizedApiError) return { error: error.uiErrorInfo };
+
+    if (error instanceof ResponseError) {
+      if (error.response.status === HttpStatus.UNAUTHORIZED) {
+        return {
+          error: { message: 'Unauthorized', status: HttpStatus.UNAUTHORIZED },
+          data: { password: ['Incorrect password'] },
+        };
+      }
+
+      if (error.response.status === HttpStatus.NOT_FOUND) {
+        return {
+          error: { message: 'Unauthorized', status: HttpStatus.NOT_FOUND },
+          data: { username: ['User not found'] },
+        };
+      }
+
+      if (error.response.status === HttpStatus.BAD_REQUEST) {
+        const errorData = await error.response.json();
+        return {
+          error: { message: 'Validation error', status: HttpStatus.BAD_REQUEST },
+          data: errorData,
+        };
+      }
+    }
+
+    return standardizeAndLogError('Failed to login', error, logger);
   }
-  const parsedRes = await res.json();
-  return formatLoginError(res.status, parsedRes);
 };
 
 export const isAuthenticatedAction = async (): Promise<boolean> => {

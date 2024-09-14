@@ -1,6 +1,6 @@
 import { request, APIRequestContext } from '@playwright/test';
 import { getConfig } from '@web/config/configuration';
-import { UserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto } from '@web/lib/backend-api/index';
 
 /**
  * Deletes a test user created by Playwright.

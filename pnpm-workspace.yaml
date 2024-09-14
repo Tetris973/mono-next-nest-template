@@ -6,3 +6,4 @@ packages:
 # separate package, each with its own dependencies and scripts.
   - 'apps/*'
   - 'docs-website'
+  - 'packages/*'

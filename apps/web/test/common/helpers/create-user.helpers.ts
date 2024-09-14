@@ -1,6 +1,10 @@
 import { request, APIRequestContext, APIResponse } from '@playwright/test';
 import { getConfig } from '@web/config/configuration';
-import { FullUserDto, UserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto } from '@web/lib/backend-api/index';
+
+export interface FullUserDto extends UserDto {
+  password: string;
+}
 
 /**
  * Creates a test user.

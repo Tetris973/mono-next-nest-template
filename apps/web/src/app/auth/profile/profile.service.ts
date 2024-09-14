@@ -1,34 +1,18 @@
 'use server';
 
-import { getConfig } from '@web/config/configuration';
-import { UserDto } from '@web/common/dto/backend-index.dto';
 import { ServerActionResponse } from '@web/common/types/server-action-response.type';
-import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
-import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
+import { backendApi, StandardizedApiError, UserDto } from '@web/lib/backend-api/index';
+import { standardizeAndLogError } from '@web/common/helpers/unhandled-server-action-error.helper';
+import { getLogger } from '@web/lib/logger';
+
+const logger = getLogger('profile.service');
 
 export async function getProfileAction(): Promise<ServerActionResponse<UserDto>> {
-  const { data: token, error: authError } = checkAuthentication();
-  if (authError) {
-    return { error: authError };
+  try {
+    const profile = await backendApi.authControllerGetProfile();
+    return { data: profile };
+  } catch (error: unknown) {
+    if (error instanceof StandardizedApiError) return { error: error.uiErrorInfo };
+    return standardizeAndLogError('Failed to fetch profile', error, logger);
   }
-
-  const { data: response, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/auth/profile`, {
-    headers: {
-      Cookie: `Authentication=${token}`,
-    },
-  });
-  if (fetchError) {
-    return { error: fetchError };
-  }
-
-  if (!response.ok) {
-    return {
-      error: {
-        status: response.status,
-        message: 'Failed to fetch profile',
-      },
-    };
-  }
-
-  return { data: await response.json() };
 }

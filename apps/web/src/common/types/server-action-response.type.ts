@@ -8,10 +8,18 @@ import { DtoValidationError } from '@web/common/types/dto-validation-error.type'
 export type ServerActionResponseSuccess<T> = { data: T; error?: never };
 
 /**
+ * Represents basic error information with an HTTP status code and a message.
+ */
+export type ServerActionResponseErrorInfo = {
+  status: HttpStatus;
+  message: string;
+};
+
+/**
  * Represents an error response from a server action.
  * @template E The type of the error details. Defaults to undefined if not specified, when no data is needed for error details.
  */
-export type ServerActionResponseError<E = undefined> = { data?: E; error: { status: HttpStatus; message: string } };
+export type ServerActionResponseError<E = undefined> = { data?: E; error: ServerActionResponseErrorInfo };
 
 /**
  * Represents an error response from a server action with DTO validation errors.
@@ -19,7 +27,7 @@ export type ServerActionResponseError<E = undefined> = { data?: E; error: { stat
  */
 export type ServerActionResponseErrorDto<E> = {
   data?: DtoValidationError<E>;
-  error: { status: HttpStatus; message: string };
+  error: ServerActionResponseErrorInfo;
 };
 
 /**

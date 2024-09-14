@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { getProfileAction as defaultGetProfileAction } from '@web/app/auth/profile/profile.service';
 import { useAuth as defaultUseAuth } from './AuthContext';
-import { UserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto } from '@web/lib/backend-api/index';
 import { showErrorNotification } from '@web/common/helpers/notifications.helpers';
 import { ServerActionResponse } from '@web/common/types/server-action-response.type';
 import { useServerAction } from '@web/common/helpers/server-action.hook';

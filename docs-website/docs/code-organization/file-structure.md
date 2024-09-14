@@ -205,9 +205,6 @@ Contains the entire documentation for the project. We keep the documentation as 
 Project-related documents that contains sensitive or that need to be shared with the client should not be in the repository, they might be better suited for a tool like Confluence or Bookstack.
 :::
 
-### `apps/server/shared/`
-Contains generated/build files from the server app that are shared with the client app.
-
 ## Key Files
 
 ### `eslint-rules.js`

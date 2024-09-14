@@ -5,7 +5,7 @@ import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { ServerActionResponseErrorDto } from '@web/common/types/server-action-response.type';
 import { useAuth as defaultUseAuth, AuthContextInterface } from '@web/app/auth/AuthContext';
 import { useRouter } from 'next/navigation';
-import { LoginUserDto } from '@web/common/dto/backend-index.dto';
+import { LoginUserDto } from '@web/lib/backend-api/index';
 import { FormSubmitResult } from '@web/common/interfaces/form-submit-result.interface';
 import { useForm, UseFormReturnType } from '@mantine/form';
 

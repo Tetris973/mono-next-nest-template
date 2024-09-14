@@ -1,7 +1,7 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule, LoggerModuleAsyncParams, Params as PinoParams } from 'nestjs-pino';
 import { join } from 'path';
-import { LogLevel, LogTarget } from '@server/config/log.config';
+import { LogLevel, LogTarget } from '@server/config/log.enum';
 
 /**
  * Pino logger module for NestJS
@@ -64,8 +64,9 @@ const loggerConfig: LoggerModuleAsyncParams = {
 
     return {
       pinoHttp: {
-        customProps: () => ({
+        customProps: (req) => ({
           context: 'HTTP',
+          body: (req as any).body,
         }),
         transport,
         level: logLevel,

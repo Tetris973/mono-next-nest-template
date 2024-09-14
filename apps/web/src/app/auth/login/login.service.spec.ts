@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { loginAction, isAuthenticatedAction, getRolesAction } from './login.service';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { LoginUserDto } from '@web/common/dto/backend-index.dto';
 import { Role } from '@web/app/auth/role.enum';
 import { cookies } from 'next/headers';
-import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 import { jwtDecode } from 'jwt-decode';
-import { DtoValidationError } from '@web/common/types/dto-validation-error.type';
+import { backendApi, StandardizedApiError, ResponseError, LoginUserDto } from '@web/lib/backend-api/index';
+import { getLogs, getLogger, LogLevel } from '@testWeb/common/unit-test/helpers/test-logger.helpers';
+import { ServerActionResponseErrorInfo } from '@web/common/types/server-action-response.type';
 
 describe('login.service', () => {
   const mockCookies = {
@@ -30,24 +30,26 @@ describe('login.service', () => {
   });
 
   describe('loginAction', () => {
+    const loginData: LoginUserDto = { username: 'testUser', password: 'Chocolat123!' };
+
     it('should set auth cookie on successful login', async () => {
       // INIT
-      const loginData: LoginUserDto = { username: 'testUser', password: 'Chocolat123!' };
       const mockResponse = {
         ok: true,
-        headers: {
-          get: vi.fn().mockReturnValue('Authentication=token; Path=/; HttpOnly'),
+        raw: {
+          headers: {
+            get: vi.fn().mockReturnValue('Authentication=token; Path=/; HttpOnly'),
+          },
         },
       };
-      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
-      const exp1H = Date.now() + 3600000;
+      vi.mocked(backendApi.authControllerLoginRaw).mockResolvedValue(mockResponse as any);
+      const exp1H = Math.floor(Date.now() / 1000) + 3600;
       (jwtDecode as Mock).mockReturnValue({ exp: exp1H });
 
       // RUN
       const result = await loginAction(loginData);
 
       // CHECK RESULTS
-      const SECONDS_TO_MILLISECONDS = 1000;
       expect(result).toEqual({ data: undefined });
       expect(mockCookies.set).toHaveBeenCalledWith({
         name: 'Authentication',
@@ -55,78 +57,83 @@ describe('login.service', () => {
         secure: true, // Cookie must be secure, otherwise breach of security
         sameSite: 'strict',
         httpOnly: true, // Cookie must be httpOnly, otherwise breach of security
-        expires: new Date(exp1H * SECONDS_TO_MILLISECONDS),
+        expires: new Date(exp1H * 1000),
       });
     });
 
-    it('should return fatal error if jwtDecode did not correclty decode the token', async () => {
+    it('should return an error message and log fatal error when jwtDecode did not correctly decode the token', async () => {
       // INIT
-      const loginData: LoginUserDto = { username: 'testUser', password: 'Chocolat123!' };
       const mockResponse = {
-        ok: true,
-        headers: {
-          get: vi.fn().mockReturnValue('Authentication=token; Path=/; HttpOnly'),
+        raw: {
+          headers: {
+            get: vi.fn().mockReturnValue('Authentication=token; Path=/; HttpOnly'),
+          },
         },
       };
-      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
-      (jwtDecode as Mock).mockReturnValue({ wrongData: 'wrongData' });
+      vi.mocked(backendApi.authControllerLoginRaw).mockResolvedValue(mockResponse as any);
+      vi.mocked(jwtDecode).mockReturnValue({ wrongData: 'wrongData' });
 
       // RUN
       const result = await loginAction(loginData);
 
       // CHECK RESULTS
+      const error = getLogs()[0] as { level: number; err: Error; msg: string };
+      expect(error.level).toEqual(getLogger().levels.values[LogLevel.FATAL]);
+      expect(error.err.message).toEqual('Token does not have an expiration date');
+      expect(error.msg).toEqual('Error setting authentication cookie');
+
       expect(result).toEqual({
         error: { message: 'An unexpected error occurred, please try again', status: HttpStatus.INTERNAL_SERVER_ERROR },
       });
     });
 
-    it('should return fatal error if no Set-Cookie header', async () => {
+    it('should return and error message and log fatal error when no Set-Cookie header found in the response', async () => {
       // INIT
-      const loginData: LoginUserDto = { username: 'testUser', password: 'Chocolat123!' };
-      (safeFetch as Mock).mockResolvedValue({ data: { ok: true, headers: { get: vi.fn().mockReturnValue(null) } } });
-
-      // RUN
-      const result = await loginAction(loginData);
-
-      // CHECK RESULTS
-      expect(result).toEqual({
-        error: { message: 'An unexpected error occurred, please try again', status: HttpStatus.INTERNAL_SERVER_ERROR },
-      });
-    });
-
-    it('should return validation error on bad request', async () => {
-      // INIT
-      const loginData: LoginUserDto = { username: 'testUser', password: 'Chocolat123!' };
       const mockResponse = {
-        ok: false,
+        raw: {
+          headers: {
+            get: vi.fn().mockReturnValue(null),
+          },
+        },
+      };
+      vi.mocked(backendApi.authControllerLoginRaw).mockResolvedValue(mockResponse as any);
+
+      // RUN
+      const result = await loginAction(loginData);
+
+      // CHECK RESULTS
+      const error = getLogs()[0] as { level: number; err: Error; msg: string };
+      expect(error.level).toEqual(getLogger().levels.values[LogLevel.FATAL]);
+      expect(error.err.message).toEqual('No Set-Cookie header found in the response');
+      expect(error.msg).toEqual('Error setting authentication cookie');
+
+      expect(result).toEqual({
+        error: { message: 'An unexpected error occurred, please try again', status: HttpStatus.INTERNAL_SERVER_ERROR },
+      });
+    });
+
+    it('should handle StandardizedApiError', async () => {
+      // INIT
+      const mockErrorInfo: ServerActionResponseErrorInfo = {
         status: HttpStatus.BAD_REQUEST,
-        json: vi.fn().mockResolvedValue({ username: ['Username is required'] }),
+        message: 'Validation failed',
       };
-      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
+      const mockError = new StandardizedApiError(mockErrorInfo);
+      vi.mocked(backendApi.authControllerLoginRaw).mockRejectedValue(mockError);
 
       // RUN
       const result = await loginAction(loginData);
 
       // CHECK RESULTS
       expect(result).toEqual({
-        error: {
-          message: 'Validation error',
-          status: HttpStatus.BAD_REQUEST,
-        },
-        data: { username: ['Username is required'] },
+        error: mockErrorInfo,
       });
     });
 
-    it('should return unauthorized error if password is incorrect', async () => {
+    it('should handle ResponseError for unauthorized access', async () => {
       // INIT
-      const loginData: LoginUserDto = { username: 'testUser', password: 'Chocolat123!' };
-      const resDto: DtoValidationError<LoginUserDto> = { password: ['Incorrect password'] };
-      const mockResponse = {
-        ok: false,
-        status: HttpStatus.UNAUTHORIZED,
-        json: vi.fn().mockResolvedValue(resDto),
-      };
-      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
+      const mockError = new ResponseError(new Response(JSON.stringify({}), { status: HttpStatus.UNAUTHORIZED }));
+      vi.mocked(backendApi.authControllerLoginRaw).mockRejectedValue(mockError);
 
       // RUN
       const result = await loginAction(loginData);
@@ -134,20 +141,14 @@ describe('login.service', () => {
       // CHECK RESULTS
       expect(result).toEqual({
         error: { message: 'Unauthorized', status: HttpStatus.UNAUTHORIZED },
-        data: resDto,
+        data: { password: ['Incorrect password'] },
       });
     });
 
-    it('should return unauthorized/not found error if username is not found', async () => {
+    it('should handle ResponseError for user not found', async () => {
       // INIT
-      const loginData: LoginUserDto = { username: 'testUser', password: 'Chocolat123!' };
-      const resDto: DtoValidationError<LoginUserDto> = { username: ['User not found'] };
-      const mockResponse = {
-        ok: false,
-        status: HttpStatus.NOT_FOUND,
-        json: vi.fn().mockResolvedValue(resDto),
-      };
-      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
+      const mockError = new ResponseError(new Response(JSON.stringify({}), { status: HttpStatus.NOT_FOUND }));
+      vi.mocked(backendApi.authControllerLoginRaw).mockRejectedValue(mockError);
 
       // RUN
       const result = await loginAction(loginData);
@@ -155,26 +156,39 @@ describe('login.service', () => {
       // CHECK RESULTS
       expect(result).toEqual({
         error: { message: 'Unauthorized', status: HttpStatus.NOT_FOUND },
-        data: resDto,
+        data: { username: ['User not found'] },
       });
     });
 
-    it('should return default error if unknown error', async () => {
+    it('should handle ResponseError for bad request', async () => {
       // INIT
-      const loginData: LoginUserDto = { username: 'testUser', password: 'Chocolat123!' };
-      const mockResponse = {
-        ok: false,
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        json: vi.fn().mockResolvedValue({}),
-      };
-      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
+      const mockErrorData = { username: ['Username is required'] };
+      const mockError = new ResponseError(
+        new Response(JSON.stringify(mockErrorData), { status: HttpStatus.BAD_REQUEST }),
+      );
+      vi.mocked(backendApi.authControllerLoginRaw).mockRejectedValue(mockError);
 
       // RUN
       const result = await loginAction(loginData);
 
       // CHECK RESULTS
       expect(result).toEqual({
-        error: { message: 'An unexpected error occurred, please try again', status: HttpStatus.INTERNAL_SERVER_ERROR },
+        error: { message: 'Validation error', status: HttpStatus.BAD_REQUEST },
+        data: mockErrorData,
+      });
+    });
+
+    it('should handle unhandled errors', async () => {
+      // INIT
+      const mockError = new Error('Unhandled error');
+      vi.mocked(backendApi.authControllerLoginRaw).mockRejectedValue(mockError);
+
+      // RUN
+      const result = await loginAction(loginData);
+
+      // CHECK RESULTS
+      expect(result).toEqual({
+        error: { status: HttpStatus.INTERNAL_SERVER_ERROR, message: 'Failed to login' },
       });
     });
   });

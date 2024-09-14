@@ -4,7 +4,7 @@ import {
   getUserByIdAction as defaultGetUserByIdAction,
   deleteUserAction as defaultDeleteUserAction,
 } from '@web/app/user/user.service';
-import { UserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto } from '@web/lib/backend-api/index';
 import { useAuth as defaultUseAuth, AuthContextInterface } from '@web/app/auth/AuthContext';
 import { Role } from '@web/app/auth/role.enum';
 import { useServerAction } from '@web/common/helpers/server-action.hook';

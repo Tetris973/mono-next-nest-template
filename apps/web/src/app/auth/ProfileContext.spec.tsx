@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { ProfileProvider, useProfile, ProfileProviderDependencies } from './ProfileContext';
-import { UserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto } from '@web/lib/backend-api/index';
 
 describe('ProfileContext', () => {
   const mockGetProfileAction = vi.fn();

@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { profileFormSchema } from './validation';
 import { zodResolver } from 'mantine-form-zod-resolver';
 import {
-  getUserByIdActionNew as defaultGetUserByIdAction,
+  getUserByIdAction as defaultGetUserByIdAction,
   updateUserAction as defaultUpdateUserAction,
 } from '@web/app/user/user.service';
-import { UserDto, UpdateUserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto, UpdateUserDto } from '@web/lib/backend-api/index';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { FormSubmitResult } from '@web/common/interfaces/form-submit-result.interface';
 import { useServerAction } from '@web/common/helpers/server-action.hook';
@@ -40,7 +40,7 @@ export const useProfileForm = (
     mutate: mutateUser,
   } = useServerActionSWR(`getUserById/${userId}`, () => getUserByIdAction(userId));
 
-  const form = useForm<UpdateUserDto>({
+  const form = useForm({
     initialValues: {
       username: '',
     },
