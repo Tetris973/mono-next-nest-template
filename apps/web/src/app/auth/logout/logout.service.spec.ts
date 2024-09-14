@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { logoutAction } from './logout.service';
 import { cookies } from 'next/headers';
 
@@ -7,13 +7,9 @@ describe('logout.service', () => {
     set: vi.fn(),
   };
 
-  vi.mock('next/headers', () => ({
-    cookies: vi.fn(),
-  }));
-
   beforeEach(() => {
     vi.clearAllMocks();
-    (cookies as Mock).mockReturnValue(mockCookies);
+    vi.mocked(cookies).mockReturnValue(mockCookies as any);
   });
 
   describe('logoutAction', () => {

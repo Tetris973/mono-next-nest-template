@@ -1,10 +1,8 @@
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getProfileAction } from './profile.service';
-import { getConfig } from '@web/config/configuration';
-import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
-import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
-import { UserDto } from '@web/common/dto/backend-index.dto';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
+import { backendApi, StandardizedApiError, UserDto } from '@web/lib/backend-api/index';
+import { ServerActionResponseErrorInfo } from '@web/common/types/server-action-response.type';
 
 describe('profile.service', () => {
   beforeEach(() => {
@@ -12,44 +10,44 @@ describe('profile.service', () => {
   });
 
   describe('getProfileAction', () => {
-    it('should return profile data on successful fetch', async () => {
+    it('should return user profile on successful fetch', async () => {
       // INIT
-      const mockToken = 'mockToken';
       const mockProfile: UserDto = {
         id: 1,
         username: 'testUser',
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      (checkAuthentication as Mock).mockReturnValue({ data: mockToken });
-      const mockResponse = {
-        ok: true,
-        json: vi.fn().mockResolvedValue(mockProfile),
-      };
-      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
+      vi.mocked(backendApi).authControllerGetProfile.mockResolvedValue(mockProfile);
 
       // RUN
       const result = await getProfileAction();
 
       // CHECK RESULTS
       expect(result).toEqual({ data: mockProfile });
-      expect(safeFetch).toHaveBeenCalledWith(`${getConfig().BACKEND_URL}/auth/profile`, {
-        headers: {
-          Cookie: `Authentication=${mockToken}`,
-        },
-      });
+      expect(backendApi.authControllerGetProfile).toHaveBeenCalled();
     });
 
-    it('should return error if response is not ok', async () => {
+    it('should handle StandardizedApiError and return error info', async () => {
       // INIT
-      const mockToken = 'mockToken';
-      const mockResponse = {
-        ok: false,
-        status: HttpStatus.NOT_FOUND,
-        json: vi.fn().mockResolvedValue({}),
+      const mockErrorInfo: ServerActionResponseErrorInfo = {
+        status: HttpStatus.UNAUTHORIZED,
+        message: 'Unauthorized',
       };
-      (checkAuthentication as Mock).mockReturnValue({ data: mockToken });
-      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
+      const mockError = new StandardizedApiError(mockErrorInfo);
+      vi.mocked(backendApi).authControllerGetProfile.mockRejectedValue(mockError);
+
+      // RUN
+      const result = await getProfileAction();
+
+      // CHECK RESULTS
+      expect(result).toEqual({ error: mockErrorInfo });
+    });
+
+    it('should handle unhandled errors and return a standard error message', async () => {
+      // INIT
+      const mockError = new Error('Unhandled error');
+      vi.mocked(backendApi).authControllerGetProfile.mockRejectedValue(mockError);
 
       // RUN
       const result = await getProfileAction();
@@ -57,7 +55,7 @@ describe('profile.service', () => {
       // CHECK RESULTS
       expect(result).toEqual({
         error: {
-          status: HttpStatus.NOT_FOUND,
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
           message: 'Failed to fetch profile',
         },
       });

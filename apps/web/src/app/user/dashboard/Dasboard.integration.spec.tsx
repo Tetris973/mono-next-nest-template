@@ -1,23 +1,16 @@
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@webRoot/test/common/unit-test/helpers/index';
 import { Dashboard } from './Dashboard';
-import { UserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto } from '@web/lib/backend-api/index';
 import { AuthContextInterface } from '@web/app/auth/AuthContext';
 import { Role } from '@web/app/auth/role.enum';
 import { UseDashboardDependencies, useDashboard } from './dashboard.hook';
 import { ProfileContextInterface } from '@web/app/auth/ProfileContext';
-import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
-import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 
 /**
  * Example of how an integration test would be done
- * Unfortunately, it's not possible to test the Dashboard component without mocking the checkAuthentication and safeFetch functions
- * because they are used by the useProfile hook, which is used by the ProfileForm component.
- *
- * We could add as props to the Dahboard component the useProfile hook and pass it to the ProfileForm.
- * But this could lead to explosion of number of mocking and to much boilerplate just for testing.
- *
- * The best approach seems to be to test the composed components such as Dashboard in e2e tests
+ * Not complete as for the moment is has been decided that to test the composed components such as Dashboard with mocking
+ * is not worth it as it may benefit from being only e2e tests.
  */
 describe('Dashboard Integration', () => {
   const mockUsers: UserDto[] = [
@@ -149,13 +142,6 @@ describe('Dashboard Integration', () => {
     });
 
     // Click edit button
-    // Mocking the checkAuthentication and safeFetch functions that are used by the useProfile hook, by the ProfileForm
-    // This is were testing composed components such as Dashboard with mocking becomes a hasle and may benefit from being only e2e tests.
-    const jwtToken = 'token';
-    (checkAuthentication as Mock).mockReturnValue({ data: jwtToken });
-    const responseMock = { result: { ok: true, json: () => Promise.resolve(mockUsers[0]) } };
-    (safeFetch as Mock).mockResolvedValue(responseMock);
-
     fireEvent.click(screen.getByLabelText('Edit user'));
 
     // Check if ProfileForm is rendered

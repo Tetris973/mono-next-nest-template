@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { LogLevel, LogTarget } from '@server/config/log.config';
+import { LogLevel, LogTarget } from '@web/config/log.enum';
 
 export enum NodeEnv {
   Development = 'development',

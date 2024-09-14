@@ -4,7 +4,7 @@ import { ProfileForm, ProfileFormProps } from '@web/app/auth/profile/ProfileForm
 import { mockUsers } from '@webRoot/test/common/unit-test/mocks/users.mock';
 import { fn } from '@storybook/test';
 import { useForm, UseFormReturnType } from '@mantine/form';
-import { UpdateUserDto } from '@web/common/dto/backend-index.dto';
+import { UpdateUserDto } from '@web/lib/backend-api/index';
 import { profileFormSchema } from '@web/app/auth/profile/validation';
 import { zodResolver } from 'mantine-form-zod-resolver';
 
@@ -40,7 +40,7 @@ const mockUseProfileForm = (form: UseFormReturnType<UpdateUserDto>) => ({
 });
 
 const createMockForm = () =>
-  useForm<UpdateUserDto>({
+  useForm({
     initialValues: { username: mockUsers[0].username },
     validate: zodResolver(profileFormSchema),
   });

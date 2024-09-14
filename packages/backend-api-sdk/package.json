@@ -1,0 +1,16 @@
+{
+    "name": "@mono-next-nest-template/backend-api-sdk",
+    "version": "1.0.0",
+    "private": true,
+    "main": "src/index.ts",
+    "types": "src/index.ts",
+    "scripts": {
+      "preinstall": "npx only-allow pnpm",
+      "generate-schema": "cd ../../apps/server && pnpm generate-openapi",
+      "generate-sdk": "openapi-generator-cli generate -i ../../apps/server/src/lib/swagger/openapi.json -g typescript-fetch -o src",
+      "generate": "pnpm run generate-schema && pnpm run generate-sdk"
+    },
+    "devDependencies": {
+      "@openapitools/openapi-generator-cli": "^2.5.2"
+    }
+  }

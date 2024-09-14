@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { signupFormSchema, SignupFormValues } from './validation';
 import { zodResolver } from 'mantine-form-zod-resolver';
-import { CreateUserDto } from '@web/common/dto/backend-index.dto';
+import { CreateUserDto } from '@web/lib/backend-api/index';
 import { signupAction as defaultSignupAction } from './signup.service';
 import { useRouter } from 'next/navigation';
 import { AuthContextInterface, useAuth as defaultUseAuth } from '@web/app/auth/AuthContext';

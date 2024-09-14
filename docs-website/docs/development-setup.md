@@ -79,18 +79,8 @@ For instructions on how to test the server, login, and API using Swagger, please
    pnpm install
    ```
 
-4. Generate DTOs from the backend:
+4. Start the development server:
    ```bash
-   cd ../server
-   pnpm run build:dto
-   ```
-   :::caution
-   The `build:dto` command may display type errors from Prisma. This is normal as long as all the `.d.ts` type files are generated for each DTO of the backend in the `shared` folder.
-   :::
-
-5. Return to the web directory and start the development server:
-   ```bash
-   cd ../web
    pnpm run dev
    ```
 

@@ -1,46 +1,42 @@
 'use server';
+
 import { ServerActionResponseDto } from '@web/common/types/server-action-response.type';
-import { getConfig } from '@web/config/configuration';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { CreateUserDto } from '@web/common/dto/backend-index.dto';
-import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
+import { backendApi, StandardizedApiError, ResponseError, CreateUserDto, UserDto } from '@web/lib/backend-api/index';
+import { standardizeAndLogError } from '@web/common/helpers/unhandled-server-action-error.helper';
+import { getLogger } from '@web/lib/logger';
 
-export const signupAction = async (createUserDto: CreateUserDto): Promise<ServerActionResponseDto<CreateUserDto>> => {
-  const { data: res, error: fetchError } = await safeFetch(`${getConfig().BACKEND_URL}/auth/signup`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(createUserDto),
-  });
+const logger = getLogger('signup.service');
 
-  if (fetchError) {
-    return { error: fetchError };
-  }
+export const signupAction = async (createUserDto: CreateUserDto): Promise<ServerActionResponseDto<UserDto>> => {
+  try {
+    const user = await backendApi.authControllerSignup({ createUserDto });
+    return { data: user };
+  } catch (error: unknown) {
+    if (error instanceof StandardizedApiError) return { error: error.uiErrorInfo };
 
-  if (!res.ok) {
-    if (res.status === HttpStatus.CONFLICT) {
-      return {
-        error: {
-          message: 'User already exists',
-          status: HttpStatus.CONFLICT,
-        },
-        data: { username: ['User already exists'] },
-      };
+    if (error instanceof ResponseError) {
+      if (error.response.status === HttpStatus.CONFLICT) {
+        return {
+          error: {
+            status: HttpStatus.CONFLICT,
+            message: 'User already exists',
+          },
+          data: { username: ['User already exists'] },
+        };
+      }
+
+      if (error.response.status === HttpStatus.BAD_REQUEST) {
+        return {
+          error: {
+            status: HttpStatus.BAD_REQUEST,
+            message: 'Invalid user data',
+          },
+          data: await error.response.json(),
+        };
+      }
     }
-    if (res.status === HttpStatus.BAD_REQUEST) {
-      return {
-        error: {
-          message: 'Bad request',
-          status: res.status,
-        },
-        data: await res.json(),
-      };
-    }
-    return { error: { message: 'Failed to sign up', status: res.status } };
-  }
 
-  // Empty userDto as, backend returns 204 no content on success for the moment
-  const userDto = await res.json();
-  return { data: userDto };
+    return standardizeAndLogError('Failed to sign up', error, logger);
+  }
 };

@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@webRoot/test/common/unit-test/helpers/index';
 import { Header } from './Header';
 import { mockRouter } from '@testWeb/common/unit-test/mocks/router.mock';
-import { UserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto } from '@web/lib/backend-api/index';
 
 describe('Header', () => {
   const mockLogout = vi.fn();

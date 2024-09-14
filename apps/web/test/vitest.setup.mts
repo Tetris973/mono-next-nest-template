@@ -2,12 +2,17 @@
 import '@testing-library/jest-dom/vitest'
 import { afterEach, vi, beforeEach } from 'vitest';
 import { cleanup } from '@testing-library/react';
-import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
 import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
 import { mockRouter } from '@testWeb/common/unit-test/mocks/router.mock';
 import { getLogger, clearLogs, getLogs } from '@webRoot/test/common/unit-test/helpers/test-logger.helpers';
 import { mockGetConfig } from '@testWeb/common/unit-test/mocks/config.mock';
 import { getConfig } from '@web/config/configuration';
+import { backendApi } from '@web/lib/backend-api/backend-api';
+import { cookies } from 'next/headers';
+
+vi.mock('next/headers');
+vi.mock('@web/lib/backend-api/backend-api')
+
 
 /**
  * Configuration provided by mantine documentation https://mantine.dev/guides/vitest/#configuration
@@ -37,7 +42,6 @@ class ResizeObserver {
   unobserve() {}
   disconnect() {}
 }
-
 window.ResizeObserver = ResizeObserver;
 
 // END OF MANTINE CONFIGURATION
@@ -72,36 +76,6 @@ function exampleMock() {
 }
 
 /**
- * Mock for the safeFetch utility function.
- * 
- * @see {@link exampleMock}
- * 
- * @example
- * // In your test file:
- * import { safeFetch } from '@web/app/utils/safe-fetch.utils';
- * import { vi } from 'vitest';
- * 
- * const mockData = {
- *   key: 'value',
- *   anotherKey: 123,
- * };
- * 
- * const mockResponse = {
- *   ok: true,
- *   json: vi.fn().mockResolvedValue(mockData),
- * };
- * 
- * (safeFetch as jest.Mock).mockResolvedValue(mockResponse);
- * 
- */
-function mockSafeFetch() {
-    throw new Error('safeFetch was called but not mocked in this test, refer to the documentaion in vitest.setup.mts');
-}
-vi.mock('@web/common/helpers/safe-fetch.helpers', () => ({
-    safeFetch: vi.fn().mockImplementation(mockSafeFetch),
-}));
-
-/**
  * Mock for the checkAuthentication utility function.
  * 
  * @see {@link exampleMock}
@@ -123,6 +97,20 @@ vi.mock('@web/common/helpers/check-authentication.helpers', () => ({
 }));
 
 beforeEach(() => {
+  /**
+   * Reset all mocked function of the backendApi
+   */
+    Object.values(backendApi).forEach((func) => {
+        if (typeof func === 'function' && vi.isMockFunction(func)) {
+          vi.mocked(func).mockReset();
+        }
+    });
+
+    /**
+     * Reset the mock for the cookies from next/headers
+     */
+    vi.mocked(cookies).mockReset();
+
     /** 
      * Sometimes we mock the console.error because jsdom display error from component in the console as error even if catched, which pollutes the test output.
      * So to prevent forgetting about resetting the console.error, we reset it here before each test.

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { SignupForm, SignupFormProps } from '@web/app/auth/signup/SignupForm';
 import { UseSignup } from '@web/app/auth/signup/signup.hook';
-import { CreateUserDto } from '@web/common/dto/backend-index.dto';
+import { CreateUserDto } from '@web/lib/backend-api/index';
 import { UseFormReturnType, useForm } from '@mantine/form';
 import { signupFormSchema, SignupFormValues } from '@web/app/auth/signup/validation';
 import { zodResolver } from 'mantine-form-zod-resolver';

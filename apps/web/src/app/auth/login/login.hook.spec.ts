@@ -2,7 +2,7 @@ import { vi, describe, beforeEach, it, expect } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useLogin, UseLoginDependencies } from './login.hook';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { LoginUserDto } from '@web/common/dto/backend-index.dto';
+import { LoginUserDto } from '@web/lib/backend-api/index';
 import { mockRouter } from '@testWeb/common/unit-test/mocks/router.mock';
 
 describe('useLogin', () => {

@@ -5,7 +5,7 @@ import { UseLogin } from '@web/app/auth/login/login.hook';
 import { loginFormSchema, LoginFormValues } from '@web/app/auth/login/validation';
 import { zodResolver } from 'mantine-form-zod-resolver';
 import { useForm, UseFormReturnType } from '@mantine/form';
-import { LoginUserDto } from '@web/common/dto/backend-index.dto';
+import { LoginUserDto } from '@web/lib/backend-api/index';
 
 const meta = {
   title: 'Components/LoginForm',

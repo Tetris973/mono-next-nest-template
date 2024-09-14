@@ -3,7 +3,7 @@ import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { ServerActionResponse } from '@web/common/types/server-action-response.type';
 
 /**
- * Checks if the user is logged in by verifying the presence of an authentication token.
+ * Checks if the user is logged in by verifying the presence of an authentication token from the auth cookie.
  *
  * @remarks
  * This action should never be called on the client side to get the token, as it is a breach of security.

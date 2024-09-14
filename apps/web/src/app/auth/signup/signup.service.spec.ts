@@ -1,9 +1,8 @@
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { signupAction } from './signup.service';
-import { getConfig } from '@web/config/configuration';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { CreateUserDto } from '@web/common/dto/backend-index.dto';
-import { safeFetch } from '@web/common/helpers/safe-fetch.helpers';
+import { ServerActionResponseErrorInfo } from '@web/common/types/server-action-response.type';
+import { backendApi, StandardizedApiError, ResponseError, UserDto, CreateUserDto } from '@web/lib/backend-api/index';
 
 describe('signup.service', () => {
   beforeEach(() => {
@@ -18,106 +17,99 @@ describe('signup.service', () => {
         password: 'Password123!',
         confirmPassword: 'Password123!',
       };
-      const mockResponse = {
-        ok: true,
-        status: HttpStatus.CREATED,
-        json: vi.fn().mockResolvedValue(createUserDto),
+      const mockUser: UserDto = {
+        id: 1,
+        username: createUserDto.username,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
-      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
+      vi.mocked(backendApi).authControllerSignup.mockResolvedValue(mockUser);
 
       // RUN
       const result = await signupAction(createUserDto);
 
       // CHECK RESULTS
-      expect(result).toEqual({ data: createUserDto });
-      expect(safeFetch).toHaveBeenCalledWith(`${getConfig().BACKEND_URL}/auth/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(createUserDto),
-      });
+      expect(result).toEqual({ data: mockUser });
+      expect(backendApi.authControllerSignup).toHaveBeenCalledWith({ createUserDto });
+    });
+
+    it('should handle StandardizedApiError and return error info', async () => {
+      // INIT
+      const fakeCreateUserDto = {} as CreateUserDto;
+      const mockErrorInfo: ServerActionResponseErrorInfo = {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Internal server error',
+      };
+      const mockError = new StandardizedApiError(mockErrorInfo);
+      vi.mocked(backendApi).authControllerSignup.mockRejectedValue(mockError);
+
+      // RUN
+      const result = await signupAction(fakeCreateUserDto);
+
+      // CHECK RESULTS
+      expect(result).toEqual({ error: mockErrorInfo });
     });
 
     it('should return error if user already exists', async () => {
       // INIT
-      const createUserDto: CreateUserDto = {
-        username: 'existingUser',
-        password: 'Password123!',
-        confirmPassword: 'Password123!',
-      };
-      const mockResponse = {
-        ok: false,
-        status: HttpStatus.CONFLICT,
-        json: vi.fn().mockResolvedValue({}),
-      };
-      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
+      const fakeCreateUserDto = {} as CreateUserDto;
+      const mockError = new ResponseError(new Response(JSON.stringify({}), { status: HttpStatus.CONFLICT }));
+      vi.mocked(backendApi).authControllerSignup.mockRejectedValue(mockError);
 
       // RUN
-      const result = await signupAction(createUserDto);
+      const result = await signupAction(fakeCreateUserDto);
 
       // CHECK RESULTS
       expect(result).toEqual({
         error: {
-          message: 'User already exists',
           status: HttpStatus.CONFLICT,
+          message: 'User already exists',
         },
         data: { username: ['User already exists'] },
       });
     });
 
-    it('should return error on bad request', async () => {
+    it('should return correct message error on BAD_REQUEST', async () => {
       // INIT
-      const createUserDto: CreateUserDto = {
-        username: 'badUser',
-        password: 'badPassword',
-        confirmPassword: 'notSamePassword',
-      };
+      const fakeCreateUserDto = {} as CreateUserDto;
       const mockErrorDetails = {
         username: ['Username is required'],
         password: ['Password is required'],
         confirmPassword: ['Passwords do not match'],
       };
-      const mockResponse = {
-        ok: false,
-        status: HttpStatus.BAD_REQUEST,
-        json: vi.fn().mockResolvedValue(mockErrorDetails),
-      };
-      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
+      const mockError = new ResponseError(
+        new Response(JSON.stringify(mockErrorDetails), { status: HttpStatus.BAD_REQUEST }),
+      );
+      vi.mocked(backendApi).authControllerSignup.mockRejectedValue(mockError);
 
       // RUN
-      const result = await signupAction(createUserDto);
+      const result = await signupAction(fakeCreateUserDto);
 
       // CHECK RESULTS
       expect(result).toEqual({
         error: {
-          message: 'Bad request',
           status: HttpStatus.BAD_REQUEST,
+          message: 'Invalid user data',
         },
         data: mockErrorDetails,
       });
     });
 
-    it('should return error if response is not ok and not handled specifically', async () => {
+    it('should handle unhandled errors and return a standard error message', async () => {
       // INIT
-      const createUserDto: CreateUserDto = {
-        username: 'newUser',
-        password: 'Password123!',
-        confirmPassword: 'Password123!',
-      };
-      const mockResponse = {
-        ok: false,
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        json: vi.fn().mockResolvedValue({}),
-      };
-      (safeFetch as Mock).mockResolvedValue({ data: mockResponse });
+      const fakeCreateUserDto = {} as CreateUserDto;
+      const mockError = new Error('Unhandled error');
+      vi.mocked(backendApi).authControllerSignup.mockRejectedValue(mockError);
 
       // RUN
-      const result = await signupAction(createUserDto);
+      const result = await signupAction(fakeCreateUserDto);
 
       // CHECK RESULTS
       expect(result).toEqual({
-        error: { message: 'Failed to sign up', status: HttpStatus.INTERNAL_SERVER_ERROR },
+        error: {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Failed to sign up',
+        },
       });
     });
   });

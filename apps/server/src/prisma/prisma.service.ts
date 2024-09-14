@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { Kysely, PostgresAdapter, PostgresIntrospector, PostgresQueryCompiler } from 'kysely';
 import kyselyExtension from 'prisma-extension-kysely';
@@ -12,6 +12,7 @@ type Keys<T extends Entity> = Extract<keyof (typeof Prisma)[keyof Pick<typeof Pr
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
+  private readonly logger = new Logger(PrismaService.name);
   public readonly $kysely: Kysely<DB>;
 
   constructor() {
@@ -35,7 +36,11 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   }
 
   async onModuleInit() {
-    await this.$connect();
+    try {
+      await this.$connect();
+    } catch (error) {
+      this.logger.fatal(error, 'Error connecting to the database');
+    }
   }
 }
 

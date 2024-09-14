@@ -18,6 +18,7 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
     'development-setup',
     'setup-docker-dev',
     'api-testing',
+    'backend-api-sdk-update',
     'testing',
     'production-setup',
     'continuous-integration',

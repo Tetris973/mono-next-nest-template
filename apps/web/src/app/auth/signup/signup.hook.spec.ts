@@ -2,7 +2,7 @@ import { vi, describe, beforeEach, it, expect } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { useSignup, UseSignupDependencies } from './signup.hook';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
-import { CreateUserDto } from '@web/common/dto/backend-index.dto';
+import { CreateUserDto } from '@web/lib/backend-api/index';
 import { mockRouter } from '@testWeb/common/unit-test/mocks/router.mock';
 
 describe('useSignup', () => {

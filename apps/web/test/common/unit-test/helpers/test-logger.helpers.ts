@@ -1,11 +1,12 @@
 import pino, { DestinationStream } from 'pino';
+export { LogLevel } from '@web/config/log.enum';
 
 interface LogEntry extends Record<string, unknown> {
   context?: string;
 }
 
 /**
- * Custom strem for pino that stores the logs in memory
+ * Custom stream for pino that stores the logs in memory
  */
 export class TestStream implements DestinationStream {
   messages: LogEntry[] = [];

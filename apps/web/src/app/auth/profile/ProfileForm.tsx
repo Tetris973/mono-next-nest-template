@@ -3,7 +3,7 @@ import { Button, Stack, Paper, Avatar } from '@mantine/core';
 import { useProfileForm as defaultUseProfileForm } from './profile.hook';
 import { ProfileField } from '@web/components/ProfileField';
 import { showSuccessNotification, showErrorNotification } from '@web/common/helpers/notifications.helpers';
-import { UserDto, UpdateUserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto, UpdateUserDto } from '@web/lib/backend-api/index';
 import { getColorFromName } from '@web/utils/get-color-from-name.utils';
 import { UseFormReturnType } from '@mantine/form';
 

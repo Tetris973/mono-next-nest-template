@@ -2,7 +2,7 @@ import React from 'react';
 import { Paper, Stack, Button, Text, Tooltip, Checkbox, Anchor, Group, TextInput, PasswordInput } from '@mantine/core';
 import { UseLogin, useLogin as defaultUseLogin } from './login.hook';
 import { showErrorNotification } from '@web/common/helpers/notifications.helpers';
-import { LoginUserDto } from '@web/common/dto/backend-index.dto';
+import { LoginUserDto } from '@web/lib/backend-api/index';
 
 export interface LoginFormProps {
   useLogin?: () => UseLogin;

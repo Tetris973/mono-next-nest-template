@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UserDto } from '@web/common/dto/backend-index.dto';
+import { UserDto } from '@web/lib/backend-api/index';
 import { TextInput, List, Text, Box, ScrollArea, Loader } from '@mantine/core';
 import classes from './FilteredUserList.module.css';
 

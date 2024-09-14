@@ -6,7 +6,7 @@ import {
 } from '@web/app/auth/login/login.service';
 import { logoutAction as defaultLogoutAction } from '@web/app/auth/logout/logout.service';
 import { Role } from './role.enum';
-import { LoginUserDto } from '@web/common/dto/backend-index.dto';
+import { LoginUserDto } from '@web/lib/backend-api/index';
 import { ServerActionResponseErrorDto } from '@web/common/types/server-action-response.type';
 import { useServerAction } from '@web/common/helpers/server-action.hook';
 
