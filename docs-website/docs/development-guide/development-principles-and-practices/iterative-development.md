@@ -21,4 +21,4 @@ Use iterative approach to development, which allows to continuously improve the 
        
        > Note: Not every method needs to be tested, and project resources may not always allow for comprehensive testing. However, thinking about testability often results in better architecture. Be mindful that some areas, like frequently changing component designs, may not benefit from extensive testing. The goal is to structure your code in a way that would make testing straightforward if needed in the future.
 
-     - See the [Code Review Process](/docs/collaboration/code-review-process) for exaustive guidelines.
+     - See the [Code Review Process](../collaboration/code-review-process) for exaustive guidelines.

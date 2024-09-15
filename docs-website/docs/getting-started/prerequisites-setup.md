@@ -69,11 +69,19 @@ source ~/.zshrc  # or source ~/.bash_profile
 
 ### Node.js
 
-This project uses Node.js version 20.x.
+This project uses a specific Node.js version defined in the `.nvmrc` file.
+
+To use the correct version, run inside root folder:
 
 ```bash
-nvm install 20
-nvm use 20
+nvm use
+```
+
+If the specified version isn't installed:
+
+```bash
+nvm install
+nvm use
 ```
 
 ### Package Manager for Node.js

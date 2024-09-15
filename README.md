@@ -13,10 +13,16 @@
   <p align="center">
     A monorepo with NestJS backend and Next.js frontend deployed with Docker.
     <br />
-    <a href="https://tetris973.gitlab.io/mono-next-nest-template/docs"><strong>Explore the docs »</strong></a>
+    <br />
+    <a href="https://tetris973.gitlab.io/mono-next-nest-template/docs/getting-started/">
+      🚀 Getting Started
+    </a>
     <br />
     <br />
-    <a href="https://tetris973.gitlab.io/mono-next-nest-template/docs">Getting Started</a>
+    <strong>To learn how to use this project, follow the link above!</strong>
+    <br />
+    <br />
+    <a href="https://tetris973.gitlab.io/mono-next-nest-template/docs">Explore the Docs</a>
     |
     <a href="https://gitlab.com/tetris973/mono-next-nest-template/-/issues/new">Report Bug</a>
     |
@@ -45,6 +51,7 @@
 - [Kysely](https://kysely.dev/) extension for Prisma, providing type-safe query building
 - [Swagger](https://swagger.io/) integration for API documentation and testing
 - [Vitest](https://vitest.dev/) for unit testing and end-to-end (E2E) testing
+- [OpenAPI](https://openapi-generator.tech/) integration for client SDK generation from swagger openapi schema.
 
 ## Frontend Features ([Next.js](https://nextjs.org/))
 
@@ -54,6 +61,7 @@
 - [Playwright](https://playwright.dev/) for end-to-end (E2E) testing
 - [Vitest](https://vitest.dev/) for unit and component testing
 - [Storybook](https://storybook.js.org/) for component development and visualization
+- [OpenAPI](https://openapi-generator.tech/) integration for client sdk api calls.
 
 ## Development and Tooling
 
@@ -62,22 +70,22 @@
 - Custom Docker images for development and CI environments
 - Documentation as close as possible to the code using [Docusaurus](https://docusaurus.io/) and [JSDoc](https://jsdoc.app/)
 
-## Usage
+<!-- ## Usage
 
-[This section needs to be completed with specific usage examples, screenshots, or demos of the project in action. Consider adding code snippets, API usage examples, or links to more comprehensive documentation.]
+[This section needs to be completed with specific usage examples, screenshots, or demos of the project in action. Consider adding code snippets, API usage examples, or links to more comprehensive documentation.] -->
 
-## Roadmap
+<!-- ## Roadmap
 
 - [ ] Feature 1
 - [ ] Feature 2
 - [ ] Feature 3
     - [ ] Nested Feature
 
-See the [open issues](https://gitlab.com/tetris973/mono-next-nest-template/-/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://gitlab.com/tetris973/mono-next-nest-template/-/issues) for a full list of proposed features (and known issues). -->
 
-## Contributing
+<!-- ## Contributing
 
-[This section needs to be completed with guidelines for contributing to the project. Consider including information about the coding style, pull request process, and any other relevant details.]
+[This section needs to be completed with guidelines for contributing to the project. Consider including information about the coding style, pull request process, and any other relevant details.] -->
 
 ## License
 
@@ -87,9 +95,9 @@ Mono Next Nest Template is [MIT licensed](LICENSE).
 
 Project Link: [https://gitlab.com/tetris973/mono-next-nest-template/](https://gitlab.com/tetris973/mono-next-nest-template/)
 
-## Acknowledgments
+<!-- ## Acknowledgments
 
-[This section needs to be completed with acknowledgments to resources, libraries, or individuals that have been helpful in the development of this project.]
+[This section needs to be completed with acknowledgments to resources, libraries, or individuals that have been helpful in the development of this project.] -->
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [license-shield]: https://img.shields.io/badge/license-MIT-green?style=for-the-badge

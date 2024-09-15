@@ -23,7 +23,7 @@ date-format.pipe.ts
 
 ### 2. Naming Convention
 
-Use descriptive names that clearly indicate the content of the file. Follow the naming conventions outlined in the [file naming conventions](/docs/code-organization/naming-conventions#file-naming).
+Use descriptive names that clearly indicate the content of the file. Follow the naming conventions outlined in the [file naming conventions](./naming-conventions.md#file-naming).
 
 ### 3. Related Responsability
 

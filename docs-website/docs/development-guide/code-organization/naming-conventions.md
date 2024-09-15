@@ -31,4 +31,4 @@ http-status.enum.ts
 
 ## Naming elements inside the code
 
-See [Naming Convention](/docs/code-quality/naming-conventions) for more details.
+See [Naming Convention](../code-quality/naming-conventions) for more details.
