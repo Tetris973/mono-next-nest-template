@@ -6,8 +6,8 @@ This section contains common issues and their solutions that don't fit into spec
 
 When looking for, using, or updating troubleshooting information, verify that it does not already exist in these sections:
 
-- [Testing Troubleshooting](../testing#troubleshooting)
-- [API Testing Troubleshooting](../api-testing#troubleshooting)
+- [Testing Troubleshooting](../getting-started/testing#troubleshooting)
+- [API Testing Troubleshooting](../getting-started/api-testing#troubleshooting)
 
 ## Common Issues
 
