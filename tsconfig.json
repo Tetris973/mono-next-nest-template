@@ -124,25 +124,5 @@
     //"strictFunctionTypes": true, // Enables strict checking of function types.
     //"strictPropertyInitialization": true, // Ensures class properties are correctly initialized.
     //"strictNullChecks": true, // Enforces strict null and undefined checks.
-    "paths": {
-      "@webRoot/*": [
-        "./apps/web/*"
-      ],
-      "@web/*": [
-        "./apps/web/src/*"
-      ],
-      "@testWeb/*": [
-        "./apps/web/test/*"
-      ],
-      "@server/*": [
-        "./apps/server/src/*"
-      ],
-      "@testServer/*": [
-        "./apps/server/test/*"
-      ],
-      "@dto/*": [
-        "./apps/server/shared/dto/*"
-      ]
-    }
   }
 }

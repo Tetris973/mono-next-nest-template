@@ -14,7 +14,7 @@
     "env:test": "export NODE_ENV=test && dotenv -e .env.test.local",
     "preinstall": "npx only-allow pnpm",
     "build": "nest build",
-    "generate-openapi": "pnpm env:dev -- ts-node -r tsconfig-paths/register src/lib/swagger/generate-openapi.ts",
+    "build-openapi": "pnpm env:dev -- ts-node -r tsconfig-paths/register src/lib/swagger/generate-openapi.ts",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "pnpm env:dev -- nest start",
     "dev": "pnpm env:dev -- nest start --watch",

@@ -23,6 +23,17 @@
      * TODO: A check for using storybook for testing component and unit tests still need to be done.
      */
     "types": ["@testing-library/jest-dom"],
+    "paths": {
+      "@webRoot/*": [
+        "./apps/web/*"
+      ],
+      "@web/*": [
+        "./apps/web/src/*"
+      ],
+      "@testWeb/*": [
+        "./apps/web/test/*"
+      ],
+    }
   },
   "include": [
     "next-env.d.ts",

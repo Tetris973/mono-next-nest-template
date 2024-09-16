@@ -199,10 +199,10 @@ importers:
         version: 1.4.5(@swc/core@1.7.6(@swc/helpers@0.5.5))(rollup@4.20.0)
       vite-tsconfig-paths:
         specifier: ^4.3.2
-        version: 4.3.2(typescript@5.5.4)(vite@5.3.5(@types/node@20.14.14)(sugarss@4.0.1)(terser@5.31.3))
+        version: 4.3.2(typescript@5.5.4)(vite@5.3.5(@types/node@20.14.14)(sugarss@4.0.1(postcss@8.4.41))(terser@5.31.3))
       vitest:
         specifier: ^2.0.5
-        version: 2.0.5(@types/node@20.14.14)(jsdom@24.1.1)(sugarss@4.0.1)(terser@5.31.3)
+        version: 2.0.5(@types/node@20.14.14)(jsdom@24.1.1)(sugarss@4.0.1(postcss@8.4.41))(terser@5.31.3)
 
   apps/web:
     dependencies:
@@ -230,7 +230,7 @@ importers:
       '@mantine/notifications':
         specifier: ^7.12.1
         version: 7.12.1(@mantine/core@7.12.1(@mantine/hooks@7.12.1(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.12.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@mono-next-nest-template/backend-api-sdk':
+      backend-api-sdk:
         specifier: workspace:*
         version: link:../../packages/backend-api-sdk
       framer-motion:
@@ -408,7 +408,7 @@ importers:
     devDependencies:
       '@openapitools/openapi-generator-cli':
         specifier: ^2.5.2
-        version: 2.13.5(@nestjs/platform-express@10.3.10)(class-transformer@0.5.1)(class-validator@0.14.1)
+        version: 2.13.5(@nestjs/platform-express@10.3.10(@nestjs/common@10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1)))(class-transformer@0.5.1)(class-validator@0.14.1)
 
 packages:
 
@@ -12505,7 +12505,7 @@ snapshots:
       lodash: 4.17.21
       rxjs: 7.8.1
 
-  '@nestjs/core@10.3.0(@nestjs/common@10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1))(@nestjs/platform-express@10.3.10)(reflect-metadata@0.1.13)(rxjs@7.8.1)':
+  '@nestjs/core@10.3.0(@nestjs/common@10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1))(@nestjs/platform-express@10.3.10(@nestjs/common@10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1)))(reflect-metadata@0.1.13)(rxjs@7.8.1)':
     dependencies:
       '@nestjs/common': 10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nuxtjs/opencollective': 0.3.2
@@ -12517,7 +12517,7 @@ snapshots:
       tslib: 2.6.2
       uid: 2.0.2
     optionalDependencies:
-      '@nestjs/platform-express': 10.3.10(@nestjs/common@10.3.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.3.10)
+      '@nestjs/platform-express': 10.3.10(@nestjs/common@10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1))
     transitivePeerDependencies:
       - encoding
 
@@ -12555,6 +12555,18 @@ snapshots:
     dependencies:
       '@nestjs/common': 10.3.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       passport: 0.7.0
+
+  '@nestjs/platform-express@10.3.10(@nestjs/common@10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1))':
+    dependencies:
+      '@nestjs/common': 10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      body-parser: 1.20.2
+      cors: 2.8.5
+      express: 4.19.2
+      multer: 1.4.4-lts.1
+      tslib: 2.6.3
+    transitivePeerDependencies:
+      - supports-color
+    optional: true
 
   '@nestjs/platform-express@10.3.10(@nestjs/common@10.3.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.3.10)':
     dependencies:
@@ -12727,11 +12739,11 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@openapitools/openapi-generator-cli@2.13.5(@nestjs/platform-express@10.3.10)(class-transformer@0.5.1)(class-validator@0.14.1)':
+  '@openapitools/openapi-generator-cli@2.13.5(@nestjs/platform-express@10.3.10(@nestjs/common@10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1)))(class-transformer@0.5.1)(class-validator@0.14.1)':
     dependencies:
       '@nestjs/axios': 3.0.2(@nestjs/common@10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1))(axios@1.7.4)(rxjs@7.8.1)
       '@nestjs/common': 10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1)
-      '@nestjs/core': 10.3.0(@nestjs/common@10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1))(@nestjs/platform-express@10.3.10)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/core': 10.3.0(@nestjs/common@10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1))(@nestjs/platform-express@10.3.10(@nestjs/common@10.3.0(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.1.13)(rxjs@7.8.1)))(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nuxtjs/opencollective': 0.3.2
       axios: 1.7.4
       chalk: 4.1.2
@@ -14222,7 +14234,7 @@ snapshots:
       std-env: 3.7.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.0.5(@types/node@20.14.14)(jsdom@24.1.1)(sugarss@4.0.1)(terser@5.31.3)
+      vitest: 2.0.5(@types/node@20.14.14)(jsdom@24.1.1)(sugarss@4.0.1(postcss@8.4.41))(terser@5.31.3)
     transitivePeerDependencies:
       - supports-color
 
@@ -21077,9 +21089,6 @@ snapshots:
       postcss: 8.4.40
       postcss-selector-parser: 6.1.2
 
-  sugarss@4.0.1:
-    optional: true
-
   sugarss@4.0.1(postcss@8.4.41):
     dependencies:
       postcss: 8.4.41
@@ -21740,23 +21749,6 @@ snapshots:
       - supports-color
       - terser
 
-  vite-node@2.0.5(@types/node@20.14.14)(sugarss@4.0.1)(terser@5.31.3):
-    dependencies:
-      cac: 6.7.14
-      debug: 4.3.6
-      pathe: 1.1.2
-      tinyrainbow: 1.2.0
-      vite: 5.3.5(@types/node@20.14.14)(sugarss@4.0.1)(terser@5.31.3)
-    transitivePeerDependencies:
-      - '@types/node'
-      - less
-      - lightningcss
-      - sass
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-
   vite-tsconfig-paths@4.3.2(typescript@5.5.4)(vite@5.3.5(@types/node@20.14.14)(sugarss@4.0.1(postcss@8.4.41))(terser@5.31.3)):
     dependencies:
       debug: 4.3.6
@@ -21764,17 +21756,6 @@ snapshots:
       tsconfck: 3.1.1(typescript@5.5.4)
     optionalDependencies:
       vite: 5.3.5(@types/node@20.14.14)(sugarss@4.0.1(postcss@8.4.41))(terser@5.31.3)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
-
-  vite-tsconfig-paths@4.3.2(typescript@5.5.4)(vite@5.3.5(@types/node@20.14.14)(sugarss@4.0.1)(terser@5.31.3)):
-    dependencies:
-      debug: 4.3.6
-      globrex: 0.1.2
-      tsconfck: 3.1.1(typescript@5.5.4)
-    optionalDependencies:
-      vite: 5.3.5(@types/node@20.14.14)(sugarss@4.0.1)(terser@5.31.3)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -21788,17 +21769,6 @@ snapshots:
       '@types/node': 20.14.14
       fsevents: 2.3.3
       sugarss: 4.0.1(postcss@8.4.41)
-      terser: 5.31.3
-
-  vite@5.3.5(@types/node@20.14.14)(sugarss@4.0.1)(terser@5.31.3):
-    dependencies:
-      esbuild: 0.21.5
-      postcss: 8.4.41
-      rollup: 4.20.0
-    optionalDependencies:
-      '@types/node': 20.14.14
-      fsevents: 2.3.3
-      sugarss: 4.0.1
       terser: 5.31.3
 
   vitest@2.0.5(@types/node@20.14.14)(jsdom@24.1.1)(sugarss@4.0.1(postcss@8.4.41))(terser@5.31.3):
@@ -21821,39 +21791,6 @@ snapshots:
       tinyrainbow: 1.2.0
       vite: 5.3.5(@types/node@20.14.14)(sugarss@4.0.1(postcss@8.4.41))(terser@5.31.3)
       vite-node: 2.0.5(@types/node@20.14.14)(sugarss@4.0.1(postcss@8.4.41))(terser@5.31.3)
-      why-is-node-running: 2.3.0
-    optionalDependencies:
-      '@types/node': 20.14.14
-      jsdom: 24.1.1
-    transitivePeerDependencies:
-      - less
-      - lightningcss
-      - sass
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-
-  vitest@2.0.5(@types/node@20.14.14)(jsdom@24.1.1)(sugarss@4.0.1)(terser@5.31.3):
-    dependencies:
-      '@ampproject/remapping': 2.3.0
-      '@vitest/expect': 2.0.5
-      '@vitest/pretty-format': 2.0.5
-      '@vitest/runner': 2.0.5
-      '@vitest/snapshot': 2.0.5
-      '@vitest/spy': 2.0.5
-      '@vitest/utils': 2.0.5
-      chai: 5.1.1
-      debug: 4.3.6
-      execa: 8.0.1
-      magic-string: 0.30.11
-      pathe: 1.1.2
-      std-env: 3.7.0
-      tinybench: 2.9.0
-      tinypool: 1.0.0
-      tinyrainbow: 1.2.0
-      vite: 5.3.5(@types/node@20.14.14)(sugarss@4.0.1)(terser@5.31.3)
-      vite-node: 2.0.5(@types/node@20.14.14)(sugarss@4.0.1)(terser@5.31.3)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 20.14.14

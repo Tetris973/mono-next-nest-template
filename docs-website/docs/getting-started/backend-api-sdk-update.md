@@ -15,12 +15,12 @@ The backend uses Swagger to document its API. A package is available to provide 
 
 2. Generate the SDK:
    ```bash
-   pnpm run generate
+   pnpm run build
    ```
    This command generates the `openapi.json` schema in the backend and uses it to create the SDK.
 
    :::info
-   To run the generate command, you must have completed the [backend development setup](./development-setup.md#backend-setup).
+   To run the generate build, you must have completed the [backend development setup](./development-setup.md#backend-setup).
    :::
 
 3. Update dependent packages:

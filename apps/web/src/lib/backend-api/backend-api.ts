@@ -1,4 +1,4 @@
-import { DefaultApi, ConfigurationParameters, Configuration } from '@mono-next-nest-template/backend-api-sdk';
+import { DefaultApi, ConfigurationParameters, Configuration } from 'backend-api-sdk';
 import { getConfig } from '@web/config/configuration';
 import { authMiddleware } from './middlewares/auth.middleware';
 import { errorMiddleware } from './middlewares/error.middleware';

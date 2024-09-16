@@ -169,7 +169,7 @@
         }
       },
       "delete": {
-        "operationId": "UserController_remove",
+        "operationId": "UserController_delete",
         "parameters": [
           {
             "name": "id",

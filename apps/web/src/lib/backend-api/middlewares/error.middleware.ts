@@ -1,7 +1,7 @@
 import { ServerActionResponseErrorInfo } from '@web/common/types/server-action-response.type';
 import { HttpStatus } from '@web/common/enums/http-status.enum';
 import { logoutAction } from '@web/app/auth/logout/logout.service';
-import { Middleware, ResponseError } from '@mono-next-nest-template/backend-api-sdk';
+import { Middleware, ResponseError } from 'backend-api-sdk';
 import { getLogger } from '@web/lib/logger';
 
 const logger = getLogger('errorMiddleware');

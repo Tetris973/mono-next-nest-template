@@ -1,5 +1,5 @@
 import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
-import { Middleware } from '@mono-next-nest-template/backend-api-sdk';
+import { Middleware } from 'backend-api-sdk';
 
 /**
  * Middleware to automatically add the authentication token to API requests.
