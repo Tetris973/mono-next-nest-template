@@ -18,5 +18,13 @@
       Useful for: Optimizing the output for modern runtime environments and leveraging the latest ECMAScript features.
     */
     "target": "es2021",
+    "paths": {
+      "@server/*": [
+        "./apps/server/src/*"
+      ],
+      "@testServer/*": [
+        "./apps/server/test/*"
+      ]
   }
+  },
 }

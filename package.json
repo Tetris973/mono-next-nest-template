@@ -66,7 +66,7 @@
       "files": "Used with pnpm deploy --prod out, put dist/ in out directory and all the node_module required for dependency ",
       "dependencies.prisma": "prisma is needed as prod dependecy, otherwise the prisma-migrate install the latest version, which can cause unexpected behavior",
       "devDependencies.unplugin-swc": "unplugin-swc version 1.5^ causes problems with wallabyJs, removing swc plugin for vitest wallaby config causes Env variable not found error",
-      "scripts.generate-openapi": "Generates OpenAPI schema. Uses dev env for consistency with swagger UI, also needed for bootsraping the whole app otherwise error. tsconfig-paths/register for alias otherwise error "
+      "scripts.build-openapi": "Generates OpenAPI schema. Uses dev env for consistency with swagger UI, also needed for bootsraping the whole app otherwise error. tsconfig-paths/register for alias otherwise error "
     },
     "apps/web/package.json": {
       "scripts.preinstall": "to prevent from installing packages without pnpm",

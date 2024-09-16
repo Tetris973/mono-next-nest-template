@@ -68,7 +68,7 @@ export const getAllUsersAction = async (): Promise<ServerActionResponse<UserDto[
 
 export const deleteUserAction = async (id: number): Promise<ServerActionResponse<undefined>> => {
   try {
-    await backendApi.userControllerRemove({ id: id.toString() });
+    await backendApi.userControllerDelete({ id: id.toString() });
     return { data: undefined };
   } catch (error: unknown) {
     if (error instanceof StandardizedApiError) return { error: error.uiErrorInfo };

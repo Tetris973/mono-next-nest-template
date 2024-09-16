@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@server/prisma/prisma.service';
 import { Prisma, User } from '@prisma/client';
-import { FieldAlreadyInUseException } from '@server/common/exceptions/field-already-in-use.exception';
+import { FieldAlreadyInUseException, RecordNotFoundException } from '@server/common/exceptions';
 
 @Injectable()
 export class UserRepository {
@@ -53,9 +53,8 @@ export class UserRepository {
 
       switch (error.code) {
         case 'P2002': {
-          // TODO: add an helper function to get the field name from the error message
-          const field = Array.isArray(error.meta?.target) ? error.meta.target.join(', ') : '';
-          throw new FieldAlreadyInUseException(field, data[field as keyof typeof data]);
+          const { field, value } = FieldAlreadyInUseException.extractFieldAndValue(error, data);
+          throw new FieldAlreadyInUseException(field, value);
         }
         default:
           throw error;
@@ -84,9 +83,7 @@ export class UserRepository {
 
       switch (error.code) {
         case 'P2025':
-          // TODO: map to an custom app exception
-          throw new Error(`The role with ID ${roleId} does not exist when creating user.`);
-
+          throw new RecordNotFoundException('role', roleId as number);
         default:
           throw error;
       }
@@ -109,15 +106,13 @@ export class UserRepository {
 
       switch (error.code) {
         // Handle "Record to update not found" case
-        // TODO: map to an custom app exception
         case 'P2025':
-          throw new Error('The user to update was not found.');
+          throw new RecordNotFoundException('user', where.id as number);
 
         // Handle unique constraint violation
         case 'P2002': {
-          // TODO: add an helper function to get the field name from the error message
-          const field = Array.isArray(error.meta?.target) ? error.meta.target.join(', ') : '';
-          throw new FieldAlreadyInUseException(field, data[field as keyof typeof data]);
+          const { field, value } = FieldAlreadyInUseException.extractFieldAndValue(error, data);
+          throw new FieldAlreadyInUseException(field, value);
         }
 
         default:

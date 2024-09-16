@@ -39,11 +39,11 @@ export interface AuthControllerSignupRequest {
     createUserDto: CreateUserDto;
 }
 
-export interface UserControllerFindOneRequest {
+export interface UserControllerDeleteRequest {
     id: string;
 }
 
-export interface UserControllerRemoveRequest {
+export interface UserControllerFindOneRequest {
     id: string;
 }
 
@@ -178,6 +178,36 @@ export class DefaultApi extends runtime.BaseAPI {
 
     /**
      */
+    async userControllerDeleteRaw(requestParameters: UserControllerDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling userControllerDelete().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/users/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async userControllerDelete(requestParameters: UserControllerDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.userControllerDeleteRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
     async userControllerFindAllRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<UserDto>>> {
         const queryParameters: any = {};
 
@@ -229,36 +259,6 @@ export class DefaultApi extends runtime.BaseAPI {
     async userControllerFindOne(requestParameters: UserControllerFindOneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserDto> {
         const response = await this.userControllerFindOneRaw(requestParameters, initOverrides);
         return await response.value();
-    }
-
-    /**
-     */
-    async userControllerRemoveRaw(requestParameters: UserControllerRemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling userControllerRemove().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/users/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async userControllerRemove(requestParameters: UserControllerRemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.userControllerRemoveRaw(requestParameters, initOverrides);
     }
 
     /**

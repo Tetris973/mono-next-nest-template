@@ -233,14 +233,14 @@ describe('user.service', () => {
     it('should return undefined on successful delete', async () => {
       // INIT
       const userId = 1;
-      vi.mocked(backendApi).userControllerRemove.mockResolvedValue(undefined);
+      vi.mocked(backendApi).userControllerDelete.mockResolvedValue(undefined);
 
       // RUN
       const result = await deleteUserAction(userId);
 
       // CHECK RESULTS
       expect(result).toEqual({ data: undefined });
-      expect(vi.mocked(backendApi).userControllerRemove).toHaveBeenCalledWith({ id: userId.toString() });
+      expect(vi.mocked(backendApi).userControllerDelete).toHaveBeenCalledWith({ id: userId.toString() });
     });
 
     it('should handle error from StandardizedApiError and return message from the error to the UI', async () => {
@@ -251,7 +251,7 @@ describe('user.service', () => {
         message: 'Failed to delete user',
       };
       const mockError = new StandardizedApiError(mockErrorInfo);
-      vi.mocked(backendApi).userControllerRemove.mockRejectedValue(mockError);
+      vi.mocked(backendApi).userControllerDelete.mockRejectedValue(mockError);
 
       // RUN
       const result = await deleteUserAction(userId);
@@ -264,7 +264,7 @@ describe('user.service', () => {
       // INIT
       const userId = 1;
       const mockError = new Error('Unhandled error');
-      vi.mocked(backendApi).userControllerRemove.mockRejectedValue(mockError);
+      vi.mocked(backendApi).userControllerDelete.mockRejectedValue(mockError);
 
       // RUN
       const result = await deleteUserAction(userId);

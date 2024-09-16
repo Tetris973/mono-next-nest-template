@@ -118,7 +118,7 @@ describe('UserRepository', () => {
         await repository.createWithRole(user, roleId);
       } catch (error) {
         // CHECK RESULTS
-        expect((error as Error).message).toBe(`The role with ID ${roleId} does not exist when creating user.`);
+        expect((error as Error).message).toBe(`role with id ${roleId} not found`);
       }
     });
   });
@@ -158,7 +158,7 @@ describe('UserRepository', () => {
         });
       } catch (error) {
         // CHECK RESULTS
-        expect((error as Error).message).toBe('The user to update was not found.');
+        expect((error as Error).message).toBe(`user with id ${user.id} not found`);
       }
     });
 
