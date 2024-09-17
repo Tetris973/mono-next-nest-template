@@ -11,7 +11,7 @@ This guide will help you set up a local copy of the Mono Next Nest Template proj
 Before you begin, ensure you have the following tools and software installed on your system:
 
 - **Git**: Version control system
-- **Node.js**: JavaScript runtime (version 20.x recommended)
+- **Node.js**: JavaScript runtime (see .nvmrc for the recommended version)
 - **pnpm**: Package manager
 - **Docker**: Containerization platform
 - **Visual Studio Code** (recommended): IDE
