@@ -66,7 +66,7 @@ export class UserController {
   @CheckPermissions([Action.DELETE, 'User'])
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  remove(@Param('id') id: string): void {
+  delete(@Param('id') id: string): void {
     if (!Number.isInteger(Number(id))) throw new HttpException('Invalid user id', HttpStatus.BAD_REQUEST);
     this.userService.delete({ id: Number(id) });
   }

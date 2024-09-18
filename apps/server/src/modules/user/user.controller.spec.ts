@@ -139,7 +139,7 @@ describe('UserController', () => {
   describe('delete', () => {
     it('should delete the user', () => {
       // RUN
-      controller.remove('1');
+      controller.delete('1');
 
       // CHECK RESULT
       expect(mockedUserService.delete).toHaveBeenCalledWith({ id: 1 });
