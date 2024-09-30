@@ -1,6 +1,6 @@
 import { ModuleMetadata } from '@nestjs/common';
 import { Test, TestingModule, TestingModuleBuilder } from '@nestjs/testing';
-import { TestLoggerModule } from '@testServer/common/helpers/test-logger.module';
+import { TestLoggerModule } from './test-logger.module';
 import { Logger } from 'nestjs-pino';
 
 /**
@@ -24,7 +24,8 @@ import { Logger } from 'nestjs-pino';
  *
  * @example
  * ```ts
- * import { getTestLogs } from '@testServer/utils/test-logger.module';
+ * import { getTestLogs } from '@testServer/common/helpers/test-logger.module';
+ * import { createTestingModuleWithLogger } from '@testServer/common/helpers/create-testing-module-with-logger.helpers';
  *
  * const module = await createTestingModuleWithLogger({
  *   providers: [UserService],

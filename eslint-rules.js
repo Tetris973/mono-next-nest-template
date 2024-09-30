@@ -81,9 +81,46 @@ module.exports = {
   "no-case-declarations": "error",
   "no-nested-ternary": "error",
   "no-unneeded-ternary": ["error", { "defaultAssignment": false }],
-  "no-mixed-operators": "error",
+  "no-mixed-operators": [
+    "error",
+    {
+      /**
+       * @description
+       * Custom configuration for the 'no-mixed-operators' rule:
+       * - Rules for bitwise, comparison, and logical operators remain unchanged from ESLint defaults.
+       * - Rules for arithmetic operators are more permissive, specifically targeting cases involving '**' and '%'.
+       * 
+       * @see https://github.com/airbnb/javascript/issues/1071
+       * 
+       * @rationale
+       * This configuration was implemented because:
+       * 1. Prettier was automatically removing necessary parentheses, causing conflicts.
+       * 2. Excessive use of '// prettier-ignore' comments was required to maintain desired behavior.
+       * 
+       * @benefit
+       * This setup allows for handling more complex cases while reducing the need for '// prettier-ignore' comments.
+       * It strikes a balance between code clarity and practical formatting concerns.
+       */
+        "groups": [
+          ["%", "**"],
+          ["%", "+"],
+          ["%", "-"],
+          ["%", "*"],
+          ["%", "/"],
+          ["**", "+"],
+          ["**", "-"],
+          ["**", "*"],
+          ["**", "/"],
+          ["&", "|", "^", "~", "<<", ">>", ">>>"], // Bitwise operators
+          ["==", "!=", "===", "!==", ">", ">=", "<", "<="], // Comparison operators
+          ["&&", "||"], // Logical operators
+          ["in", "instanceof"],
+        ],
+        "allowSamePrecedence": true
+    }
+],
   // "nonblock-statement-body-position": Conflict/Already managed by eslint/prettier plugin
-  // brace-style: Alredy managed by prettier
+  // brace-style: Already managed by prettier
   "no-else-return": "error",
   "spaced-comment": ["error", "always"],
   // "indent": Conflict, Managed by prettier
