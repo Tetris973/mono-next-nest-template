@@ -12,12 +12,7 @@ import {
 } from 'class-validator';
 import { Logger } from '@nestjs/common';
 import { LogLevel, LogTarget } from './log.enum';
-
-enum NodeEnv {
-  Development = 'development',
-  Production = 'production',
-  Test = 'test',
-}
+import { NodeEnv } from './node.enum';
 
 /**
  * Schema for validating parsed environment variables

@@ -16,33 +16,33 @@ async function seedPermissions(prisma: PrismaService, doLog: boolean = false) {
     {
       id: Permissions.USER_MANAGE,
       action: Action.manage,
-      resourceId: StaticResources.User,
+      resourceId: StaticResources.USER,
     },
     {
       id: Permissions.USER_CREATE,
       action: Action.CREATE,
-      resourceId: StaticResources.User,
+      resourceId: StaticResources.USER,
     },
     {
       id: Permissions.USER_READ,
       action: Action.READ,
-      resourceId: StaticResources.User,
+      resourceId: StaticResources.USER,
     },
     {
       id: Permissions.USER_UPDATE,
       action: Action.UPDATE,
-      resourceId: StaticResources.User,
+      resourceId: StaticResources.USER,
     },
     {
       id: Permissions.USER_UPDATE_OWN,
       action: Action.UPDATE,
-      resourceId: StaticResources.User,
+      resourceId: StaticResources.USER,
       condition: { id: '${userId}' },
     },
     {
       id: Permissions.USER_DELETE,
       action: Action.DELETE,
-      resourceId: StaticResources.User,
+      resourceId: StaticResources.USER,
     },
   ];
 

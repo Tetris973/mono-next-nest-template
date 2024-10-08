@@ -42,18 +42,18 @@ const loggerConfig: LoggerModuleAsyncParams = {
 
     let transport;
     switch (logTarget) {
-      case LogTarget.PinoPretty:
+      case LogTarget.PINO_PRETTY:
         transport = consoleTransport;
         break;
-      case LogTarget.PinoFile:
+      case LogTarget.PINO_FILE:
         transport = fileTransport;
         break;
-      case LogTarget.PinoPrettyAndFile:
+      case LogTarget.PINO_PRETTY_AND_FILE:
         transport = {
           targets: [fileTransport, consoleTransport],
         };
         break;
-      case LogTarget.PinoDefaultAndFile:
+      case LogTarget.PINO_DEFAULT_AND_FILE:
         transport = {
           targets: [fileTransport, defaultConsoleTransport],
         };

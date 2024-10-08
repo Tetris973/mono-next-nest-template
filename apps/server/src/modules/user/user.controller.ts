@@ -29,7 +29,7 @@ export class UserController {
     private abilityFactory: CaslAbilityFactory,
   ) {}
 
-  @CheckPermissions([Action.READ, 'User'])
+  @CheckPermissions([Action.READ, 'USER'])
   @HttpCode(HttpStatus.OK)
   @Get()
   async findAll(): Promise<UserDto[]> {
@@ -37,7 +37,7 @@ export class UserController {
     return users.map((user) => plainToClass(UserDto, user));
   }
 
-  @CheckPermissions([Action.READ, 'User'])
+  @CheckPermissions([Action.READ, 'USER'])
   @HttpCode(HttpStatus.OK)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<UserDto> {
@@ -54,7 +54,7 @@ export class UserController {
     @LoggedInUser() user: User,
   ): Promise<UserDto> {
     const ability = await this.abilityFactory.createForUser(user);
-    const canUpdate = ability.can(Action.UPDATE, subject('User', { id: Number(id) }));
+    const canUpdate = ability.can(Action.UPDATE, subject('USER', { id: Number(id) }));
     if (!canUpdate) throw new HttpException('Unauthorized', HttpStatus.FORBIDDEN);
     const update = await this.userService.update({
       where: { id: Number(id) },
@@ -63,7 +63,7 @@ export class UserController {
     return plainToClass(UserDto, update);
   }
 
-  @CheckPermissions([Action.DELETE, 'User'])
+  @CheckPermissions([Action.DELETE, 'USER'])
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   delete(@Param('id') id: string): void {

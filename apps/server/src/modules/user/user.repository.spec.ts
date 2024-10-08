@@ -225,7 +225,7 @@ describe('UserRepository', () => {
       // CHECK RESULTS
       expect(permissions[0].id).toBe(Permissions.USER_MANAGE);
       expect(permissions[0].action).toBe('manage');
-      expect(permissions[0].resourceName).toBe('User');
+      expect(permissions[0].resourceName).toBe('USER');
     });
   });
 

@@ -12,7 +12,7 @@ export default () => ({
   // Run swagger only in development mode
   RUN_SWAGGER: process.env.NODE_ENV === 'development',
   // Log to console prettified by default
-  LOG_TARGET: (process.env.LOG_TARGET as LogTarget) || LogTarget.PinoPretty,
+  LOG_TARGET: (process.env.LOG_TARGET as LogTarget) || LogTarget.PINO_PRETTY,
   // Log level is set to INFO by default
   LOG_LEVEL: (process.env.LOG_LEVEL as LogLevel) || LogLevel.INFO,
 });

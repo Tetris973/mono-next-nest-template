@@ -11,5 +11,5 @@ export enum StaticResources {
   /**
    * User resource, corresponds to index 1 in the database.
    */
-  User = 1,
+  USER = 1,
 }
