@@ -4,7 +4,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   test: {
-    include: ['**/*.e2e-spec.ts', 'src/**/*.repository.spec.ts'],
+    include: ['**/*.e2e-spec.ts'],
     // Prevent concurrent access of database when end-to-end testing
     fileParallelism: false,
     root: './',

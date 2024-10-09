@@ -2,11 +2,10 @@ import swc from 'unplugin-swc';
 import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-// Run all the test, including the e2e-spec.ts and repository.ts
+// Run all the unit test only, excluding the e2e-spec.ts and repository.ts
 export default defineConfig({
   test: {
     include: ['src/**/*.spec.ts'],
-    exclude: ['src/**/*.repository.spec.ts'],
     root: './',
   },
   plugins: [
