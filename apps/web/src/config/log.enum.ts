@@ -80,24 +80,24 @@ export enum LogTarget {
    * Use this target when you want to see well-formatted logs in the console.
    * @example loggerConfig: { target: LogTarget.PinoPretty, options: { colorize: true, singleLine: true } }
    */
-  PinoPretty = 'pino-pretty',
+  PINO_PRETTY = 'pino-pretty',
 
   /**
    * Directs the logs to a file, useful for production environments where logs need to be persisted.
    * Use this target when you want to save logs to a file for later analysis.
    * @example loggerConfig: { target: LogTarget.PinoFile, options: { destination: '/var/log/app.log', mkdir: true } }
    */
-  PinoFile = 'pino/file',
+  PINO_FILE = 'pino/file',
 
   /**
    * Pretty-prints the logs for better readability during development and saves them to a file.
    * Use this target when you want to see well-formatted logs in the console and save them to a file for later analysis.
    */
-  PinoPrettyAndFile = 'pino-pretty-and-file',
+  PINO_PRETTY_AND_FILE = 'pino-pretty-and-file',
 
   /**
    * Uses default Pino logging (without pretty-printing) for console output and saves logs to a file.
    * Ideal for production environments where pino-pretty is not available.
    */
-  PinoDefaultAndFile = 'pino-default-and-file',
+  PINO_DEFAULT_AND_FILE = 'pino-default-and-file',
 }
