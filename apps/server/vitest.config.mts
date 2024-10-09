@@ -6,8 +6,19 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 // used for wallabysJs
 export default defineConfig({
   test: {
-    include: ['**/*.e2e-spec.ts', 'src/**/*.spec.ts'],
-    fileParallelism: false,
+    /**
+     * Configuration for running tests:
+     * - For unit tests only (no database/worker or heavy tests):
+     *   Use the first 'include' and 'fileParallelism' settings.
+     * - For all tests (including e2e and repository tests):
+     *   Uncomment the second 'include' and 'fileParallelism' settings.
+     *
+     * Adjust these settings to optimize WallabyJs test execution speed.
+     */
+    include: ['src/**/*.spec.ts'],
+    fileParallelism: true,
+    // include: ['**/*.e2e-spec.ts', 'src/**/*.spec.ts'],
+    // fileParallelism: false,
     root: './',
     setupFiles: ['./test/vitest.setup.ts'],
   },
