@@ -11,7 +11,7 @@ import { StaticRoles } from '@server/authz/static-roles.enum';
 export type ResourceType = keyof typeof StaticResources;
 // Here define the subjects availabe for casl authorization checking
 type AppSubjects = Subjects<{
-  User: User;
+  USER: User;
 }>;
 
 export type AppAbility = PureAbility<[Action, AppSubjects | ForcedSubject<AppSubjects> | 'all'], PrismaQuery>;
@@ -116,7 +116,7 @@ export class CaslAbilityFactory {
           break;
         case StaticRoles.USER:
           can(Action.READ, 'all');
-          can(Action.UPDATE, 'User', { id: user.id });
+          can(Action.UPDATE, 'USER', { id: user.id });
           break;
       }
     });
