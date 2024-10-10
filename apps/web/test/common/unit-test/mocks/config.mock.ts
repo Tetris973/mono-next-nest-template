@@ -1,7 +1,7 @@
-import { Env, NodeEnv } from '@web/config/env';
+import { ServerEnv, NodeEnv } from '@web/config/env';
 import { LogLevel, LogTarget } from '@web/config/log.enum';
 
-export const mockGetConfig = (): Env => {
+export const mockGetConfig = (): ServerEnv => {
   return {
     NODE_ENV: NodeEnv.Test,
     LOG_TARGET: LogTarget.PINO_FILE,
