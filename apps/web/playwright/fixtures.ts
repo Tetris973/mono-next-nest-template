@@ -1,6 +1,6 @@
 import { createTestUser, FullUserDto } from '@webRoot/test/common/helpers/create-user.helpers';
 import { deleteTestUser } from '@webRoot/test/common/helpers/delete-user.helpers';
-import { getConfig } from '@web/config/configuration';
+import { getServerConfig } from '@web/config/configuration';
 import { test as baseTest, request } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
@@ -48,7 +48,7 @@ export const test = baseTest.extend<{ account: FullUserDto }, { workerStorageSta
       account = await createTestUser(testName + id);
 
       // Login the account direclty from the backend
-      await context.post(`${getConfig().BACKEND_URL}/auth/login`, {
+      await context.post(`${getServerConfig().BACKEND_URL}/auth/login`, {
         form: {
           username: account.username,
           password: account.password,

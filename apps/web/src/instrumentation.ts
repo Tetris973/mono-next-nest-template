@@ -1,4 +1,5 @@
-import { getConfig, getBrowserConfig, ConfigError } from './config/configuration';
+import { getServerConfig, getBrowserDynamicConfig } from './config/configuration';
+import { ConfigError } from './config/config.error';
 import { getLogger } from './lib/logger';
 
 export function register() {
@@ -7,8 +8,8 @@ export function register() {
     return;
   }
   try {
-    const config = getConfig(); // Load the configuration singleton
-    getBrowserConfig(); // Load the browser configuration singleton
+    const config = getServerConfig(); // Load the configuration singleton
+    getBrowserDynamicConfig(); // Load the browser configuration singleton
     const logger = getLogger('instrumentation');
 
     logger.info({ config: Object.keys(config) }, 'Configuration loaded');

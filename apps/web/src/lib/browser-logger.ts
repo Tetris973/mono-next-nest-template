@@ -1,5 +1,5 @@
 import pino from 'pino';
-import { getBrowserConfig } from '@web/config/configuration';
+import { getBrowserStaticConfig } from '@web/config/configuration';
 
 const levelColors = {
   TRACE: '#848484',
@@ -51,7 +51,7 @@ export function createBrowserLogger() {
     },
   };
 
-  const { BROWSER_LOG_LEVEL } = getBrowserConfig();
+  const { BROWSER_LOG_LEVEL } = getBrowserStaticConfig();
   const logger = pino({
     level: BROWSER_LOG_LEVEL,
     browser,

@@ -6,7 +6,7 @@ import { checkAuthentication } from '@web/common/helpers/check-authentication.he
 import { mockRouter } from '@testWeb/common/unit-test/mocks/router.mock';
 import { getLogger, clearLogs, getLogs } from '@webRoot/test/common/unit-test/helpers/test-logger.helpers';
 import { mockGetConfig } from '@testWeb/common/unit-test/mocks/config.mock';
-import { getConfig } from '@web/config/configuration';
+import { getServerConfig } from '@web/config/configuration';
 import { backendApi } from '@web/lib/backend-api/backend-api';
 import { cookies } from 'next/headers';
 
@@ -47,7 +47,7 @@ window.ResizeObserver = ResizeObserver;
 // END OF MANTINE CONFIGURATION
 
 vi.mock('@web/config/configuration', () => ({
-    getConfig: mockGetConfig,
+    getServerConfig: mockGetConfig,
 }));
 
 vi.mock('next/navigation', () => ({

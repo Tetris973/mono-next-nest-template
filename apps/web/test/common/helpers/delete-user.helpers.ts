@@ -1,5 +1,5 @@
 import { request, APIRequestContext } from '@playwright/test';
-import { getConfig } from '@web/config/configuration';
+import { getServerConfig } from '@web/config/configuration';
 import { UserDto } from '@web/lib/backend-api/index';
 
 /**
@@ -17,7 +17,7 @@ export async function deleteTestUser(user: UserDto): Promise<void> {
   try {
     // Login as admin to delete the user
     adminContext = await request.newContext({
-      baseURL: getConfig().BACKEND_URL,
+      baseURL: getServerConfig().BACKEND_URL,
     });
 
     const loginResponse = await adminContext.post('/auth/login', {
