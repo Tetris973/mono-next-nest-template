@@ -1,5 +1,5 @@
 import { request, APIRequestContext, APIResponse } from '@playwright/test';
-import { getConfig } from '@web/config/configuration';
+import { getServerConfig } from '@web/config/configuration';
 import { UserDto } from '@web/lib/backend-api/index';
 
 export interface FullUserDto extends UserDto {
@@ -28,7 +28,7 @@ export async function createTestUser(testName: string): Promise<FullUserDto> {
 
   try {
     apiContext = await request.newContext({
-      baseURL: getConfig().BACKEND_URL,
+      baseURL: getServerConfig().BACKEND_URL,
     });
 
     console.log('Creating user', username, password);
