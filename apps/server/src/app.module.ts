@@ -9,7 +9,7 @@ import { UserModule } from './modules/user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthzModule } from './authz/authz.module';
 import { RoleModule } from './modules/role/role.module';
-import { ConfigModule } from './config/config.module';
+import { ConfigModule, AllConfig } from './config/config.module';
 import { APP_INTERCEPTOR, APP_PIPE, Reflector, APP_FILTER, APP_GUARD } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
 import { AllExceptionsFilter } from './common/exceptions/all-exceptions.filter';
@@ -25,9 +25,9 @@ import { LoggerErrorInterceptor } from 'nestjs-pino';
     JwtModule.registerAsync({
       global: true,
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.getOrThrow<string>('JWT_SECRET'),
-        signOptions: { expiresIn: configService.getOrThrow<string>('JWT_EXPIRATION') },
+      useFactory: (configService: ConfigService<AllConfig, true>) => ({
+        secret: configService.getOrThrow('main.JWT_SECRET', { infer: true }),
+        signOptions: { expiresIn: configService.getOrThrow('main.JWT_EXPIRATION', { infer: true }) },
       }),
     }),
     AuthModule,
