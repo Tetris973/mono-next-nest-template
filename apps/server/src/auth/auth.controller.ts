@@ -11,13 +11,14 @@ import { CreateUserDto } from '@server/modules/user/dto/create-user.dto';
 import { LoginUserDto } from '@server/modules/user/dto/log-in-user.dto';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { AllConfig } from '@server/config/config.module';
 import ms from 'ms';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private configService: ConfigService,
+    private configService: ConfigService<AllConfig>,
   ) {}
 
   @Public()
@@ -35,6 +36,7 @@ export class AuthController {
   @Post('login')
   async login(@LoggedInUser() user: User, @Res({ passthrough: true }) response: Response) {
     const expires = new Date();
+    const jwtExpiration = this.configService.getOrThrow('main.JWT_EXPIRATION', { infer: true });
     /**
      * TODO: Implement token refresh mechanism:
      * - Set different expiration for cookie (longer) and JWT (shorter)
@@ -42,7 +44,7 @@ export class AuthController {
      * - Issue new JWT and update cookie if needed
      * - JWT: 15 minutes, HTTP-only cookie: 7 days for example
      */
-    expires.setMilliseconds(expires.getMilliseconds() + ms(this.configService.getOrThrow<string>('JWT_EXPIRATION')));
+    expires.setMilliseconds(expires.getMilliseconds() + ms(jwtExpiration));
 
     const loginPayload = await this.authService.login(user);
     response.cookie('Authentication', loginPayload.accessToken, {

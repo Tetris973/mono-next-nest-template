@@ -5,11 +5,12 @@ import { ConfigService } from '@nestjs/config';
 import { UserService } from '@server/modules/user/user.service';
 import { IJwtPayload } from '@server/auth/interfaces/jwt-payload.interface';
 import { Request } from 'express';
+import { AllConfig } from '@server/config/config.module';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    private configService: ConfigService,
+    private configService: ConfigService<AllConfig>,
     private userService: UserService,
   ) {
     super({
@@ -23,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         },
       ]),
       ignoreExpiration: false,
-      secretOrKey: configService.getOrThrow<string>('JWT_SECRET'),
+      secretOrKey: configService.getOrThrow('main.JWT_SECRET', { infer: true }),
     });
   }
 

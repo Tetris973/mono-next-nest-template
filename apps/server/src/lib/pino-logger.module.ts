@@ -1,7 +1,8 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule, LoggerModuleAsyncParams, Params as PinoParams } from 'nestjs-pino';
 import { join } from 'path';
-import { LogLevel, LogTarget } from '@server/config/log.enum';
+import { LogTarget } from '@server/config/log.enum';
+import { AllConfig } from '@server/config/config.module';
 
 /**
  * Pino logger module for NestJS
@@ -12,10 +13,10 @@ import { LogLevel, LogTarget } from '@server/config/log.enum';
 const loggerConfig: LoggerModuleAsyncParams = {
   imports: [ConfigModule],
   inject: [ConfigService],
-  useFactory: async (configService: ConfigService): Promise<PinoParams> => {
-    const nodeEnv = configService.getOrThrow<string>('NODE_ENV');
-    const logLevel = configService.getOrThrow<LogLevel>('LOG_LEVEL');
-    const logTarget = configService.getOrThrow<LogTarget>('LOG_TARGET');
+  useFactory: async (configService: ConfigService<AllConfig>): Promise<PinoParams> => {
+    const nodeEnv = configService.getOrThrow('main.NODE_ENV', { infer: true });
+    const logLevel = configService.getOrThrow('main.LOG_LEVEL', { infer: true });
+    const logTarget = configService.getOrThrow('main.LOG_TARGET', { infer: true });
 
     const fileTransport = {
       target: 'pino/file',
