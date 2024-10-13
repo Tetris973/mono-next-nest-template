@@ -1,6 +1,6 @@
 import { Module, Logger } from '@nestjs/common';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
-import config from './configuration';
+import config, { AllConfig } from './configuration';
 import { validate } from './env.validation';
 
 @Module({
@@ -22,3 +22,5 @@ export class ConfigModule {
     this.logger.log(`Environment file loaded: ${envFile}`);
   }
 }
+
+export { AllConfig };
