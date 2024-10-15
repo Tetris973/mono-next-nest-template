@@ -5,7 +5,16 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 async function generateOpenAPI() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    /**
+     * Preview mode prevents instantiation and resolution of controllers and providers.
+     * This is beneficial for OpenAPI schema generation as it:
+     * 1. Avoids potential failures caused by unnecessary component initialization.
+     * 2. Results in a lighter process, improving performance.
+     * 3. Focuses solely on metadata required for schema generation.
+     */
+    preview: true,
+  });
 
   const { document } = await setupSwagger(app);
 

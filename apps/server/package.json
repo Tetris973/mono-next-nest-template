@@ -14,7 +14,7 @@
     "env:test": "export NODE_ENV=test && dotenv -e .env.test.local",
     "preinstall": "npx only-allow pnpm",
     "build": "nest build",
-    "build-openapi": "pnpm env:dev -- ts-node -r tsconfig-paths/register src/lib/swagger/generate-openapi.ts",
+    "build-openapi": "pnpm env:dev -- nest start --entryFile ./lib/swagger/generate-openapi",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "pnpm env:dev -- nest start",
     "dev": "pnpm env:dev -- nest start --watch",
@@ -38,7 +38,7 @@
   },
   "prisma": {
     "schema": "src/prisma/schema.prisma",
-    "seed": "ts-node -r tsconfig-paths/register src/prisma/seeding/all.seed.ts"
+    "seed": "nest start --entryFile ./prisma/seeding/all.seed"
   },
   "dependencies": {
     "@casl/ability": "^6.7.1",
