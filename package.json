@@ -59,7 +59,7 @@
       "scripts.dev-env": "To setup dev env variable, to use in other scripts",
       "scripts.prod-env": "To setup prod env variable, to use in other scripts",
       "scripts.db-migrate": "Create and run prisma changes to the DEV database",
-      "prisma.seed": "ts-node is needed, otherwise error, Added -r tsconfig-paths/register  for path alias compilation",
+      "prisma.seed": "Using Nest CLI to run the seeding file. Replaces need for ts-node & tsconfig-paths/register. Requires seeding files to be kept in the /dist after build.",
       "scripts.db-seed:force": "ERASE DB and seed the tables from specified seed script inf src/prisma/seeding (sh -c is needed to load env variable in both command call)",
       "scripts.db-seed": "seed tables from specified seed script in src/prisma/seeding",
       "scripts.db-generate": "Generates the prisma client types, needed when building for production in CI",

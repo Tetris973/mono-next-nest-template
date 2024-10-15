@@ -1,4 +1,5 @@
 import { LogLevel, LogTarget } from './log.enum';
+import { NodeEnv } from './node.enum';
 
 /**
  * Defines the environment variables for the main app.
@@ -8,7 +9,7 @@ import { LogLevel, LogTarget } from './log.enum';
  * Here, for instance, they are stored under the `main` key.
  */
 export interface MainConfig {
-  NODE_ENV: string;
+  NODE_ENV: NodeEnv;
   PORT: number;
   JWT_SECRET: string;
   JWT_EXPIRATION: string;
@@ -34,7 +35,7 @@ export interface AllConfig {
 export default (): AllConfig => {
   const config: AllConfig = {
     main: {
-      NODE_ENV: process.env.NODE_ENV!,
+      NODE_ENV: process.env.NODE_ENV! as NodeEnv,
       // Use port 4000 for development as frontend uses 3000
       PORT: parseInt(process.env.PORT || '4000', 10),
       JWT_SECRET: process.env.JWT_SECRET!,
