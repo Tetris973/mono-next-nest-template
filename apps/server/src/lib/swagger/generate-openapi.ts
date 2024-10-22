@@ -18,7 +18,12 @@ async function generateOpenAPI() {
 
   const { document } = await setupSwagger(app);
 
-  const outputPath = path.join(__dirname, 'openapi.json');
+  let outputPath = path.join(__dirname, 'openapi.json');
+
+  // When using nestjs cli, it compiles and run the file from dist folder, but we need to save the file to src folder for git tracking.
+  if (outputPath.includes('dist/')) {
+    outputPath = outputPath.replace('dist/', 'src/');
+  }
 
   fs.writeFileSync(outputPath, JSON.stringify(document, null, 2));
 

@@ -12,6 +12,7 @@ export function createServerLogger() {
 
   const fileTransport = {
     target: 'pino/file',
+    level: LOG_LEVEL,
     options: {
       destination: join(process.cwd(), 'logs', `${NODE_ENV}.log`),
       mkdir: true,
@@ -20,6 +21,7 @@ export function createServerLogger() {
 
   const consoleTransport = {
     target: 'pino-pretty',
+    level: LOG_LEVEL,
     options: {
       colorize: true,
       singleLine: true,
@@ -28,6 +30,7 @@ export function createServerLogger() {
 
   const defaultConsoleTransport = {
     target: 'pino/file',
+    level: LOG_LEVEL,
     options: {
       destination: 1, // stdout
     },
@@ -56,6 +59,11 @@ export function createServerLogger() {
   }
 
   const logger = pino({
+    /**
+     * Warning, for the log level to correctly be applied, it should be set in the root pinoHttp config and for each target!
+     * If only applied in just one place, it defaults to info level.
+     * @see https://stackoverflow.com/questions/78091936/why-pino-logger-debug-doesnt-work-in-nestjs
+     */
     level: LOG_LEVEL,
     transport,
     redact: ['req.headers.authorization'], // Redact sensitive information

@@ -20,6 +20,7 @@ const loggerConfig: LoggerModuleAsyncParams = {
 
     const fileTransport = {
       target: 'pino/file',
+      level: logLevel,
       options: {
         destination: join(process.cwd(), 'logs', `${nodeEnv}.log`),
         mkdir: true,
@@ -28,6 +29,7 @@ const loggerConfig: LoggerModuleAsyncParams = {
 
     const consoleTransport = {
       target: 'pino-pretty',
+      level: logLevel,
       options: {
         colorize: true,
         singleLine: true,
@@ -36,6 +38,7 @@ const loggerConfig: LoggerModuleAsyncParams = {
 
     const defaultConsoleTransport = {
       target: 'pino/file',
+      level: logLevel,
       options: {
         destination: 1, // stdout
       },
@@ -65,12 +68,17 @@ const loggerConfig: LoggerModuleAsyncParams = {
 
     return {
       pinoHttp: {
+        /**
+         * Warning, for the log level to correctly be applied, it should be set in the root pinoHttp config and for each target!
+         * If only applied in just one place, it defaults to info level.
+         * @see https://stackoverflow.com/questions/78091936/why-pino-logger-debug-doesnt-work-in-nestjs
+         */
+        level: logLevel,
         customProps: (req) => ({
           context: 'HTTP',
           body: (req as any).body,
         }),
         transport,
-        level: logLevel,
         redact: ['req.headers.authorization'],
       },
     };
