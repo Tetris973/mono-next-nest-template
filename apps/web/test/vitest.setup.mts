@@ -4,7 +4,7 @@ import { afterEach, vi, beforeEach } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import { checkAuthentication } from '@web/common/helpers/check-authentication.helpers';
 import { mockRouter } from '@testWeb/common/unit-test/mocks/router.mock';
-import { getLogger, clearLogs, getLogs } from '@webRoot/test/common/unit-test/helpers/test-logger.helpers';
+import { getLogger, clearLogs, getLogs } from '@webRoot/test/common/unit-test/helpers/test-logger.helper';
 import { mockGetConfig } from '@testWeb/common/unit-test/mocks/config.mock';
 import { getServerConfig } from '@web/config/configuration';
 import { backendApi } from '@web/lib/backend-api/backend-api';
