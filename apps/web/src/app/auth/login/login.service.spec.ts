@@ -5,7 +5,7 @@ import { Role } from '@web/app/auth/role.enum';
 import { cookies } from 'next/headers';
 import { jwtDecode } from 'jwt-decode';
 import { backendApi, StandardizedApiError, ResponseError, LoginUserDto } from '@web/lib/backend-api/index';
-import { getLogs, getLogger, LogLevel } from '@testWeb/common/unit-test/helpers/test-logger.helpers';
+import { getLogs, getLogger, LogLevel } from '@testWeb/common/unit-test/helpers/test-logger.helper';
 import { ServerActionResponseErrorInfo } from '@web/common/types/server-action-response.type';
 
 describe('login.service', () => {

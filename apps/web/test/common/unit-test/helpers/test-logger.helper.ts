@@ -1,4 +1,4 @@
-import pino, { DestinationStream } from 'pino';
+import pino, { DestinationStream, LoggerOptions } from 'pino';
 export { LogLevel } from '@web/config/log.enum';
 
 interface LogEntry extends Record<string, unknown> {
@@ -18,12 +18,11 @@ export class TestStream implements DestinationStream {
 
 export const testStream = new TestStream();
 
-export const rootLogger = pino(
-  {
-    messageKey: 'msg',
-  },
-  testStream,
-);
+const options: LoggerOptions = {
+  messageKey: 'msg',
+  level: 'trace', // Set the level t trace to capture all logs for tests
+};
+export const rootLogger = pino(options, testStream);
 
 /**
  * Function mocking the getLogger function from development/production logger
