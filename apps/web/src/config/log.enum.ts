@@ -49,14 +49,20 @@ export enum LogLevel {
   /**
    * For error messages indicating a problem that occurred.
    * Use for errors that prevent normal operation but don't crash the application.
+   * Note: Pino only serializes Error objects in two ways:
+   * 1. Passing the Error directly: logger.error(error)
+   * 2. Using the 'err' property name: logger.error({ err: error })
+   * Other property names will not properly serialize the Error stack trace and properties.
    * @example logger.error({ orderId, errorMessage }, 'Failed to process payment');
+   * @example logger.error(new Error('Payment failed')); // Full error serialization
+   * @example logger.error({ err: new Error('Payment failed') }); // Full error serialization
    */
   ERROR = 'error',
 
   /**
    * For critical issues that require immediate attention.
    * Use for errors that will cause the application to crash or become unusable.
-   * @example logger.fatal({ error }, 'Database connection failed, shutting down application');
+   * @example logger.fatal({ err }, 'Database connection failed, shutting down application');
    */
   FATAL = 'fatal',
 
