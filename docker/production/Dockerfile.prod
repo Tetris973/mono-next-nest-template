@@ -11,7 +11,7 @@ FROM registry.gitlab.com/tetris973/mono-next-nest-template/custom-node-image:lat
 FROM base AS deps
 WORKDIR /usr/src/app
 # Copy only package files first to leverage Docker cache
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .nvmrc ./
 COPY patches ./patches
 COPY apps/server/package.json ./apps/server/
 COPY apps/web/package.json ./apps/web/

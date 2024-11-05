@@ -41,7 +41,7 @@ export function standardizeAndLogError(message: string, error: unknown, logger: 
      * Currently this does not display lots of information like the stack trace or the response object
      * If needed usage of the logger or how the error is processed shall be improved
      */
-    originalError: error,
+    err: error,
   });
 
   return responseError;

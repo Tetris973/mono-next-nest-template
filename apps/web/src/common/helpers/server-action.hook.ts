@@ -57,9 +57,9 @@ export const useServerAction = <P extends any[], R>(
         }
         if (onFinished) onFinished(result);
         return result;
-      } catch (error) {
-        logger.error(error, 'Error during server action execution');
-        throw error;
+      } catch (err) {
+        logger.error({ err }, 'Error during server action execution');
+        throw err;
       } finally {
         setSubmitLoading(false);
       }

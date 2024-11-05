@@ -101,8 +101,8 @@ export const getRolesAction = async (): Promise<Role[]> => {
   try {
     const decodedToken = jwtDecode<JwtPayload>(token);
     return decodedToken.roles;
-  } catch (error) {
-    logger.error({ error }, 'Error decoding token for roles');
+  } catch (err) {
+    logger.error({ err }, 'Error decoding token for roles');
     return [];
   }
 };

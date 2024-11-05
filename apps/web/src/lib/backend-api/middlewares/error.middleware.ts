@@ -119,7 +119,7 @@ export const errorMiddleware: Middleware = {
        * Use ERROR for fetch errors because they indicate a problem that prevents normal operation but doesn't crash the application.
        */
       logger.error(
-        { commonFetchError, onErrorContext: context },
+        { err: commonFetchError, onErrorContext: context },
         'Call to backend api fetch failed with a common known error',
       );
       throw commonFetchError;
